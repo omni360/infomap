@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>僵尸网络</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/style_no_stats.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+	</head>
+	
+	<body>
+		<div id="title">
+			<span>·</span> 僵尸网络
+		</div>
+		
+		<div id="logo">
+			<!-- <img src="assets/images/antiylogo.png" alt="" id="antiylogo"> -->
+			<!--img src="assets/images/weblogo.png" alt="" id="wblogo"-->
+		</div>
+		
+		<div id="css-legend-panel">
+		</div>
+		
+		<div id="change_button_panel">
+			<div id = "parallaxModel" class="legend" data="0">开启3D</div>
+		</div>
+
+		<div id="statisticsCard" class="statistics-card">
+			<div class="statistics-card-label">
+				<span class="statistics-card-label-num color-yellow">0</span>
+				<span class="statistics-card-label-title ">Level 1</span>
+			</div>
+			<div class="statistics-card-label">
+				<span class="statistics-card-label-num color-red">0</span>
+				<span class="statistics-card-label-title">Level 2</span>
+			</div>
+			<div class="statistics-card-label">
+				<span class="statistics-card-label-num color-blue">0</span>
+				<span class="statistics-card-label-title">Level 3</span>
+			</div>
+			<div class="statistics-card-label">
+				<span class="statistics-card-label-num color-green">0</span>
+				<span class="statistics-card-label-title">Level 4</span>
+			</div>
+			<div class="statistics-card-btn">
+				<i class="icon-angle-right">&nbsp;</i>
+			</div>
+			<div class="statistics-card-btn-border">
+				&nbsp;
+			</div>
+		</div>
+
+		<div id="detailpanel" class="detail-panel">
+			<div class="detail-title">
+				详情
+				<div class="detail-title-btline"></div>
+			</div>
+			<div class="detail-hosts">
+				主机信息 : 
+				<label for="" id='detailIp' class='detail-hosts-info'>
+					<!-- Ip ： 10.255.80.5 &nbsp;&nbsp;&nbsp;&nbsp; 级别 ： 主控节点 -->
+				</label>
+			</div>
+			<div class="detail-hosts">
+				地理位置 : 
+				<label for="" id='detailAddress' class='detail-hosts-info'> <!-- 黑龙江省 哈尔滨市 --> </label>
+			</div>
+			<div class="detail-hosts">
+				详情记录 : <br>
+			</div>
+			<div id="detailrapheal"></div>
+			<div class="detail-buttonbar">
+				<button id="openAllbtn" class="detail-button">
+					<i class="icon-circle-arrow-left"></i>
+				</button>
+				<button id="detailclosebtn" class="detail-button">
+					<i class="icon-remove-sign"></i>
+				</button>
+			</div>	
+		</div>
+
+		<div id="detailpanelAll" class="detail-panel">
+			<div class="detail-title">
+				全局预览
+				<div class="detail-title-btline"></div>
+			</div>
+
+			<div class="detail-tree" id='detailtreepanel'>
+				<div id="detailtree" class="detail-tree-content"></div>
+			</div>
+
+			<div class="detail-buttonbar">
+				<button id="detailAllclosebtn" class="detail-button">
+					<i class="icon-remove-sign"></i>
+				</button>
+			</div>	
+		</div>
+		<script src="scripts/libs/jquery-1.9.1.js"></script>
+		<script src="scripts/libs/jquery.mCustomScrollbar.js"></script>
+		<script src="scripts/libs/jquery.mousewheel.js"></script>
+		<script src="scripts/libs/raphael-min.js"></script>
+		<script src="scripts/libs/aw.min.js"></script>
+		<script src="scripts/libs/AWParallax.js"></script>
+		<script src="scripts/libs/tween.min.js"></script>
+		<script src="scripts/libs/AWx.WR.js"></script>
+		<script src="scripts/shaders/vertexshader.js"></script>
+		<script src="scripts/shaders/fragmentshader.js"></script>
+		<script src="scripts/main.js"></script>
+		<script src="scripts/scene.js"></script>
+		<script src="scripts/MyTree.js"></script>
+		<script src="scripts/DetaildPanel.js"></script>
+	</body>
+</html>

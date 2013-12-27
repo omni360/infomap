@@ -1,0 +1,410 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+</head>
+<body>
+    <div id="grid"></div>
+    <div id="webgl_div"></div>
+    <div class="project-list" id="projectList">
+        <ul>
+<!--             <li><div class="color-a"></div>蜜网系统</li>
+            <li><div class="color-b"></div>网站监测系统</li>
+            <li><div class="color-c"></div>路由监测系统</li>
+            <li><div class="color-d"></div>域名监测系统</li>
+            <li><div class="color-e"></div>协同联动系统</li>
+            <li><div class="color-f"></div>恶意代码分析系统</li>
+            <li><div class="color-g"></div>流监测系统</li>
+            <li><div class="color-h"></div>轻载扫描系统</li>
+            <li><div class="color-i"></div>报文检测和恶意代码捕获系统</li> -->
+        </ul>
+    </div>
+    <div class="card" id="Card">
+        <div class="cardbg">
+<!--             <div class="sysname" id="sysName">报文检测和恶意代码捕获系统</div>
+            <div class="location" id="LocationName">北京(国家中心)</div> -->
+            <div class="sysnum" id="sysNum">3</div>
+        </div>
+    </div>
+<!--     <div class="detail-panel">
+        <table>
+            <thead>
+                <tr>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+<!--     <div class="button-group" id="bottomBar">
+        <div class="button" id="systemLine">
+            <div class="frame top">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+            <div class="gradient7">系统辅助线</div>
+            <div class="frame bottom">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+        </div>
+
+        <div class="button" id="detailCard">
+            <div class="frame top">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+            <div class="gradient7">详细标签</div>
+            <div class="frame bottom">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+        </div>
+        <div class="button" id="">
+            
+        </div>
+        <div class="button" id="">
+            <i class="fa fa-ticket "></i>
+        </div>
+        
+    </div> -->
+    <div id="btngroup">
+        <div id="mianline" flag = "0" class="sbtn">
+            <div class="micon" ><i class="fa fa-outdent"></i></div>
+            <div class="info"><span>打开</span>系统标 <br> 识辅助线</div>
+        </div>
+
+        <div id="numc" flag = "0" class="sbtn">
+            <div class="micon" ><i class="fa fa-ticket"></i></div>
+            <div class="info"><span>打开</span>详细数 <br> 字标签</div>
+        </div>
+    </div>
+    
+
+<!--     <div class="load-frame" id="loadFrame">
+        <div class="load-bar"></div>
+        <div class="load-bar-active" id="loadBarActive"></div>
+        <span class="load-num" id="loadNum">0%</span>
+    </div> -->
+    <ul class="select-warp" id="selectWarp">
+        
+    </ul>
+    <div class="location-label" title="单机选中,将显示一个城市数据.再次单机已选中的区域将取消背选中效果,显示全部数据.">
+        <label for="" >
+            展示特定地区
+            <!-- <div class="rod"></div> -->
+        </label>
+        <div class="line"></div>
+        <div class="select-location" id="selectLocation" >
+            <table cellspacing="4"></table>
+        </div>
+    </div>
+    
+    <div class="system-label" title="单机选中,将显示一个系统数据.再次单机已选中的区域将取消背选中效果,显示全部数据.">
+        <label for="">
+            展示特定系统
+            <!-- <div class="rod"></div> -->
+        </label>
+        <div class="line"></div>
+        <ul class="select-system" id="selectSystem">
+        </ul>
+    </div>
+    
+    
+    
+    
+</body>
+    <div id="raphael_div"></div>
+<script src="js/lib/jquery-1.7.1.min.js"></script>
+<script src="js/lib/three.r62.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/tween.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="js/lib/CrossCircle.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/HexagonGeometry.js"></script>
+<script src="js/data.js"></script>
+<script src="js/system_data.js"></script>
+
+<script src="js/lib/jquery-1.7.1.min.js"></script>
+<script src="js/lib/raphael.js"></script>
+<!-- // <script src="js/raphael_graph.js"></script> -->
+<script src="js/lib/html2canvas.js"></script>
+<script src="js/sense.js"></script>
+<script>
+    //屏蔽鼠标事件，防止右键移动3d场景时弹出右键菜单
+    document.oncontextmenu = function (){
+        return false;
+    }
+
+    var source_flag = false;
+    var cardFlag = false;
+
+    var GlobalLoadNum = 0,
+        GlobalLoadNumDom = $('#loadNum'),
+        GlobalBarDom = $('#loadBarActive');
+
+    var paddtop = paddleft = 10;
+    
+    $(document).ready(function(){
+
+        $('#mianline').click(function(){
+            source_flag = !source_flag;
+            topo.setSysInfo(source_flag);
+            if($(this).attr('flag') == 0){
+                $(this).addClass('selected');
+                
+                $(this).find('.info span').html('关闭');
+                $(this).attr({'flag': 1});
+            }else{
+                $(this).removeClass('selected');
+                $(this).find('.info span').html('打开');
+                $(this).attr({'flag': 0});
+            }
+        });
+        $('#numc').click(function(){
+            cardFlag = !cardFlag;
+            topo.setCard(cardFlag);
+            if($(this).attr('flag') == 0){
+                $(this).addClass('selected');
+                $(this).find('.info span').html('关闭');
+                $(this).attr({'flag': 1});
+            }else{
+                $(this).removeClass('selected');
+                $(this).find('.info span').html('打开');
+                $(this).attr({'flag': 0});
+            }
+        });
+        
+        var _id = 0,_html = '';
+        while(_id < data_list.length){
+            _html += '<tr>';
+            for(var i = 0;i < 3; i++){ 
+                if(_id == data_list.length) break;
+                _html += ('<td colspan="'+(_id == 3 ? 2 : 1)+'" data="'+_id+'" flag="0">' + data_list[_id][0] +'</td>');
+                _id++;
+                if(_id == 5) break;
+            }
+            _html += '</tr>';
+        }
+        $('#selectLocation table').html(_html);
+
+        _html = '';
+        for(var i = 0,s; s = sys_text_li[i]; i++ ){
+            _html += ('<li data="'+i+'" flag="0"><div class="color-'+String.fromCharCode(97+i)+'"></div>'+s[0]+'</li>');
+        }
+        $('#projectList ul').html(_html);
+        $('#selectSystem').html(_html);
+
+        init();
+
+        $('#selectSystem li').hover(
+            function(){
+                $(this).addClass('runtext');
+            },
+            function(){
+                ($(this).attr('flag') == 0) && ( $(this).removeClass('runtext') );
+            }
+        );
+        var activeSystem = activeLocation = -1;
+        $('#selectSystem li').click(function(){
+            if(activeLocation != -1){
+                $('#selectLocation td').eq(activeLocation).removeClass('showborder');
+                $('#selectLocation td').eq(activeLocation).attr({'flag': 0});
+                topo.ShwoALLLocation();
+            }
+            if(activeSystem != -1 && activeSystem == $(this).attr('data')){
+                $(this).removeClass('runtext');
+                $(this).attr({'flag': 0});
+                topo.ShwoALLSystem();
+                activeSystem = -1;
+                return false;
+            }
+            if(activeSystem != $(this).attr('data')){
+                $('#selectSystem li').eq(activeSystem).removeClass('runtext');
+                $('#selectSystem li').eq(activeSystem).attr({'flag': 0});
+            }
+
+            $(this).addClass('runtext');
+            topo.ShwoOneSystem($(this).attr('data'));
+            $(this).attr({'flag': 1});
+            activeSystem = $(this).attr('data');
+        });
+
+        $('#selectLocation td').hover(
+            function(){
+                $(this).addClass('showborder');
+            },
+            function(){
+                ($(this).attr('flag') == 0) && ( $(this).removeClass('showborder') );
+            }
+        );
+
+        $('#selectLocation td').click(function(){
+            if(activeSystem != -1){
+                $('#selectSystem li').eq(activeSystem).removeClass('runtext');
+                $('#selectSystem li').eq(activeSystem).attr({'flag': 0});
+                topo.ShwoALLSystem();
+            }
+            if(activeLocation != -1 && activeLocation == $(this).attr('data')){
+                $(this).removeClass('showborder');
+                $(this).attr({'flag': 0});
+                topo.ShwoALLLocation();
+                activeLocation = -1;
+                return false;
+            }
+            if(activeLocation != $(this).attr('data')){
+                $('#selectLocation td').eq(activeLocation).removeClass('showborder');
+                $('#selectLocation td').eq(activeLocation).attr({'flag': 0});
+            }
+
+            $(this).addClass('showborder');
+            topo.ShowOneLocation($(this).attr('data'));
+            $(this).attr({'flag': 1});
+            activeLocation = $(this).attr('data');
+        });
+
+        function init(){
+            new SvgBg();
+            
+            topo = new ClassTPlatform({
+                parentElementId: 'webgl_div',
+                padding: [paddtop,paddleft]
+            });
+            
+            var loader = new THREE.JSONLoader();
+            
+            loader.load( 'js/china_model.js', function ( geometry) {
+                topo.loadChinaModel(geometry);
+                
+
+                ido = document.getElementById('grid');
+
+                ido.addEventListener('mousedown', function (e){
+                    topo.onMouseDown(e)
+                })
+
+                function onMouseMove(e){
+                    topo.onMouseMove(e)
+                }
+
+                ido.addEventListener('mousemove',onMouseMove)
+                ido.addEventListener('mouseup', function (e){
+                    ido.removeEventListener('mousemove', onMouseMove)
+                })
+
+                ido.addEventListener('mousewheel', function (e){
+                    topo.onMouseWheel(e);
+                })
+            });
+            
+            document.onkeydown = topo.onKeyDown;
+        }
+        
+        //$("#raphael_div").hide();
+    });
+
+var SvgBg = function(){
+//svg绘制屏幕背景
+var me = this;
+
+var width = window.innerWidth,
+    height = window.innerHeight,
+    centerpoint = [width/2,height/2];
+
+me.domid = 'grid';
+me.paper = Raphael(me.domid,width,height);
+
+var options = {
+    gird: 110
+}
+
+
+me.draw = function(){
+    var path = '';
+    var point = '';
+    var p = 3;
+
+    var _tempx = _tempy = 0;
+    for(var i = (centerpoint[0] + options.gird/2); i < width; i += options.gird ){
+        path += ('M'+ (i + 0.5) +',0v'+ height);
+        path += ('M'+ (i + 0.5 - (i - centerpoint[0])*2) +',0v'+ height);
+        _tempx = (i - (i - centerpoint[0])*2);
+    }
+    for(var i = (centerpoint[1] + options.gird/2); i < height; i += options.gird ){
+        path += ('M0,'+(i + 0.5)+'h'+ width);
+        path += ('M0,'+(i + 0.5 - (i - centerpoint[1])*2) +'h'+ width);
+        _tempy = (i - (i - centerpoint[1])*2);
+    }
+
+    for(var i = (centerpoint[0] + options.gird/2); i < width; i += options.gird ){
+        for(var j = (centerpoint[1] + options.gird/2); j < height; j += options.gird ){
+            _p = [
+                [(i + 0.5),(j + 0.5)],
+                [(i + 0.5 - (i - centerpoint[0])*2),(j + 0.5)],
+                [(i + 0.5),(j + 0.5 - (j - centerpoint[1])*2)],
+                [(i + 0.5 - (i - centerpoint[0])*2),(j + 0.5 - (j - centerpoint[1])*2)]
+            ];
+            for(var m in _p){
+                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'v' + p;
+                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'v-' + p;
+                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'h-' + p;
+                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'h' + p;
+            }
+            
+        }
+    }
+
+    paddtop = _tempy;
+    paddleft = _tempx;
+
+    $('.location-label').css({
+        top: 10
+    })
+
+    $('.system-label').css({
+        top: 345
+    })
+
+    $('#btngroup').css({
+        bottom: (paddtop + 1)
+    })
+
+    // $('.location-label').css({
+    //     left: _tempx + 1,
+    //     top: paddtop + 1 
+    // })
+
+    // $('.system-label').css({
+    //     left: _tempx + 1,
+    //     bottom: (paddtop + 1)
+    // })
+
+    // $('#btngroup').css({
+    //     right: _tempx + 1,
+    //     bottom: (paddtop + 1)
+    // })
+
+    me.paper.path(path).attr({
+        stroke: 'rgba(205,205,205,0.15)',
+        opacity: 0.4
+    })
+
+    me.paper.path(point).attr({
+        stroke: 'rgba(205,205,205,0.2)',
+        opacity: 0.6
+    })
+}
+me.draw();
+}
+
+
+</script>
+</html>

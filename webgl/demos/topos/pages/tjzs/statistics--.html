@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>统计数据展示</title>
+	<link rel="stylesheet" href="../../css/base.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<style type="text/css" media="screen">
+		/*body{
+			background:#333;
+		}*/
+		.total-area{
+			position : relative;
+		}
+		.example-area{
+			position : relative;
+			height: 298px;
+		}
+		.total-svg{
+			position : absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: -1;
+		}
+		.total-title-all,
+		.total-title{
+			color:#FFF;
+			margin: 34px 22px 10px 36px;
+			padding: 2px 5px;
+			line-height: 20px;	
+			height:20px;
+			border-radius: 1px;
+			letter-spacing: 1px;
+			font-weight: bold;
+			font:bold 15px '微软雅黑';
+			background: rgba(14,165,204,0.7);
+			display:inline-block;
+		}
+		.total-title-all{
+			margin: 22px 22px 10px 32px;
+		}
+		.total-title-all > span,.total-title > span{
+			border-radius: 1px;
+			background: rgba(255, 151, 18, 0.84);
+			margin: -2px 3px 2px 0;
+			font-size: 8px;
+			font-weight: normal;
+			line-height: 10px;
+		}
+		.node-status{
+			position: absolute;
+			top: 18px;
+			right: 30px;
+			height: 10px;
+			width: 198px;
+			border-radius: 4px;
+		}
+		.node-status-0{
+			background: #BE1655;
+		}
+		.node-status-1{
+			background: #EDE72D;
+		}
+		.node-status-2{
+			background: #258A54;
+		}
+		.node-status-3{
+			background: #22BDDD;
+		}
+		#container{
+			width: 400px;
+			height: 85px;
+			position: absolute;
+			top: 37px;
+			right: 34px;
+		}
+		.mapimg{
+			position: absolute;
+			top: 30px;
+			width: 240px;
+			height: 130px;
+			margin: 50px 22px 10px 45px;
+			background: url('../../image/topo_event_timer.png');
+			background-size: contain;
+			border-radius: 5px;
+			border: 5px solid rgba(0,0,0,0.1);
+		}
+		#container1{
+			width: 400px;
+			height: 85px;
+			position: absolute;
+			top: 141px;
+			right: 34px;
+		}
+		#pie{
+			
+			width: 190px;
+			height: 190px;
+			position: absolute;
+			top: 50px;
+			right: 33px;
+		}
+		#pie1{
+			/*border-top: 1px solid #FFF;*/
+			width: 180px;
+			height: 88px;
+			position: absolute;
+			top: 55px;
+			right: 33px;
+			/*background: rgba(0,0,0,0.2);*/
+		}
+		#pie2{
+			/*border-top: 1px solid #FFF;*/
+			width: 180px;
+			height: 88px;
+			position: absolute;
+			top: 150px;
+			right: 33px;
+			/*background: rgba(0,0,0,0.2);*/
+		}
+		#pie3{
+			/*border-top: 1px solid #FFF;*/
+			width: 180px;
+			height: 88px;
+			position: absolute;
+			top: 100px;
+			right: 33px;
+			/*background: rgba(0,0,0,0.2);*/
+		}
+		.status-bar{
+			position: absolute;
+			height: 47px;
+			bottom: 10px;
+			left: 0;
+			margin: 27px 22px 0 36px;
+			/*background: #FFF;*/
+		}
+		
+		.total-panel{
+			margin: 0 38px 10px 32px;
+			background: rgba(0,0,0,0.8);
+			
+		}
+		
+		.total-circle{
+			/*margin: 27px 35px 10px 36px;*/
+		}
+		.total-circle ul{
+			padding: 0;
+			width: 460px;
+			margin: 0 auto;
+			
+		}
+		.total-circle li{
+			float: left;
+			margin: 5px 16px;
+			height: 100px;
+		}
+		.total-circle-title{
+			color: #E78901;
+			padding: 7px 10px 10px;
+			border-bottom: 1px solid #1D647C;
+		}
+		.total-foot{
+			color: #E78901;
+			padding: 7px 10px 10px;
+			border-top: 1px solid #1D647C;
+			text-align: right;
+		}
+	</style>
+</head>
+<body>
+<div class="fluid">
+	<div class="row-fluid">
+		<div class="span span8 total-area first-child">
+			<div id="slzs1" class="total-svg"></div>
+			<div class="total-title-all"><span>&nbsp;</span>全局统计</div>
+			<div class="total-panel">
+				<div class="total-circle">
+					<div class="total-circle-title">实例状态统计</div>
+					<ul>
+						<li>
+							<input class="knob" data-width="80" data-fgColor="#BE1655" data-skin="tron" data-max="13" data-thickness=".15" value="5" data-readOnly=true>
+								
+						</li>
+						<li>
+							<input class="knob" data-width="80" data-fgColor="#EDE72D" data-skin="tron" data-max="13" data-thickness=".15" value="3" data-readOnly=true>
+							
+						</li>
+						<li>
+							<input class="knob" data-width="80" data-fgColor="#258A54" data-skin="tron" data-max="13" data-thickness=".15" value="1" data-readOnly=true>
+						
+						</li>
+						<li>
+							<input class="knob" data-width="80" data-fgColor="#22BDDD" data-skin="tron" data-max="13" data-thickness=".15" value="4" data-readOnly=true>
+						
+						</li>
+					</ul>
+					
+				</div>
+				<div class="total-table">
+					<table border="0" cellspacing="0" cellpadding="0" class='table table-striped'>
+						<thead>
+							<th>实例名称</th>
+							<th>软件安装数量</th>
+							<th>当前状态</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Data</td>
+								<td>Data</td>
+								<td>Data</td>
+							</tr>
+							<tr>
+								<td>Data</td>
+								<td>Data</td>
+								<td>Data</td>
+							</tr>
+							<tr>
+								<td>Data</td>
+								<td>Data</td>
+								<td>Data</td>
+							</tr>
+							<tr>
+								<td>Data</td>
+								<td>Data</td>
+								<td>Data</td>
+							</tr>
+						</tbody>
+						
+					</table>
+				</div>
+				<div class="total-foot">共有N个场景</div>
+			</div>
+		</div>
+		<div class="span span16 total-area">
+			<div class="example-area">
+				<div id="slzs-1" class='total-svg'></div>
+				<div class="mapimg"></div>
+				<div class="total-title"><span>&nbsp;</span>全局统计</div>
+				<div id="nodeStatus" class="node-status node-status-0"></div>
+				<div id="container" ></div>
+				<div id="container1" ></div>
+				<div id="pie" ></div>
+				<div id="pie1" ></div>
+				<div id="pie2" ></div>
+				<div id="pie3" ></div>
+
+				
+				<div id="statusbar1" class="status-bar"></div>
+			</div>
+			<div class="example-area">
+				<div id="slzs-2" class='total-svg'></div>
+				<div class="total-title"><span>&nbsp;</span>全局统计</div>
+				<div id="nodeStatus" class="node-status node-status-1"></div>
+			</div>
+			<div class="example-area">
+				<div id="slzs-3" class='total-svg'></div>
+				<div class="total-title"><span>&nbsp;</span>全局统计</div>
+				<div id="nodeStatus" class="node-status node-status-2"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="display:none">
+	<!-- Source: http://or.water.usgs.gov/cgi-bin/grapher/graph_windrose.pl -->
+	<table id="freq" border="0" cellspacing="0" cellpadding="0">
+		<tr nowrap bgcolor="#CCCCFF">
+			<th colspan="4" class="hdr">Table of Frequencies (percent)</th>
+		</tr>
+		<tr nowrap bgcolor="#CCCCFF">
+			<th class="freq">Direction</th>
+			<th class="freq">&lt; 0.5 m/s</th>
+			<th class="freq">0.5-2 m/s</th>
+			<th class="freq">2-4 m/s</th>
+			<th class="freq">Total</th>
+		</tr>
+		<tr nowrap>
+			<td class="dir">N</td>
+			<td class="data">30</td>
+			<td class="data">30</td>
+			<td class="data">40</td>
+
+		</tr>
+		<tr nowrap>
+			<td class="dir">.</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+
+		</tr>
+		<tr nowrap>
+			<td class="dir">E</td>
+			<td class="data">20</td>
+			<td class="data">50</td>
+			<td class="data">30</td>
+
+		</tr>
+		<tr nowrap bgcolor="#DDDDDD">
+			<td class="dir">.</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+
+		</tr>
+
+		<tr nowrap>
+			<td class="dir">S</td>
+			<td class="data">10</td>
+			<td class="data">30</td>
+			<td class="data">60</td>
+
+		</tr>
+		<tr nowrap bgcolor="#DDDDDD">
+			<td class="dir">.</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+			<td class="data">0</td>
+
+		</tr>
+
+	
+	</table>
+</div>
+</body>
+<script type="text/javascript" src="../../js/lib/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" src="../../js/lib/raphael-min.js"></script>
+<script type="text/javascript" src="../../js/lib/highcharts.js"></script>
+<script type="text/javascript" src="../../js/lib/jquery.knob.js"></script>
+<script type="text/javascript" src="statistics.js"></script>
+</html>

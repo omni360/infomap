@@ -1,0 +1,252 @@
+body{
+	color: #FFF;
+	overflow: hidden;
+}
+.navbar-inner{
+	/*border-bottom: 2px solid #0EA5CC;*/
+}
+
+.navbar .nav > li > a {
+	padding: 4px 10px 6px;
+	height: 18px;
+	line-height: 15px;
+	color: #ffffff;
+	text-decoration: none;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	border-radius: 1px;
+	margin: 0 5px;
+}
+
+.navbar .nav > li > a:hover {
+	color: #ffffff;
+	text-shadow: 0 0 2px rgba(255,255,255,0.7);
+	-webkit-box-shadow: 0 0 10px 2px #0EA5CC;
+	background: #0EA5CC;
+}
+
+.navbar .nav > li > a.selected{
+	color: #FB9D15;
+	text-shadow: 0 0 3px rgba(255,255,255,0.5);
+}
+
+/*	webgl背景需要的，此canvas它自己加载		*/
+canvas{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: -1000;
+}
+
+
+.login_main {
+  	position: absolute;
+  	top: 0px;
+  	left: 0px;
+  	width:100%;
+  	height:100%;
+  	opacity:1;
+}
+
+.login_div {
+  	position: absolute;
+  	float: right;
+    right: 10%;
+    bottom: 16%;
+  	width:300px;
+  	height:205px;
+	border-radius: 1;
+	/*background-color: rgba(18, 25, 37, 0.8);*/
+	background-color: rgba(12, 15, 17, 0.85);
+  	opacity:0.96;
+}
+
+.login_div input{
+	background-color: rgba(255, 255, 255, 0);
+	width: 150px;
+	margin-top: 8px;
+	border-radius: 1px;
+	height: 16px;
+	line-height: 16px;
+}
+
+.login_div input.error{
+	border-color: rgba(252, 30, 0, 0.81);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(252, 30, 0, 0.81);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(252, 30, 0, 0.81);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(252, 30, 0, 0.81);
+}
+
+.login_div i{
+	font-size: 20px;
+	margin: 0 12px 0 20px;
+}
+
+.login_div_1 {
+  	top: 0px; 
+  	width:100%;
+  	height: 58px;
+  	border: 0px;
+	/*background-color: rgba(12, 15, 17, 0.85);*/
+	background-color: rgba(46, 62, 77, 0.91);
+}
+.login_div_2 {
+  	top: 60px; 
+  	width:100%;
+  	height:45px;
+  	line-height: 45px;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+#username{
+	margin: 13px;
+}
+#password{
+
+}
+
+.login_div_3 {
+  	top: 105px; 
+  	width:100%;
+  	height:45px;
+  	line-height: 45px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.login_div_3 span{
+	letter-spacing: 16px;
+}
+
+.login_div_4 {
+  	top: 150px; 
+  	width:100%;
+  	height:50px;
+  	border: 0px;
+	background-color: rgba(46, 62, 77, 0.91);
+}
+#wrong_warn{
+	margin-top: 17px;
+	margin-left: 8px;
+	color: rgba(252, 30, 0, 0.81);
+}
+.login_text_1 {
+	
+	height: 15px;
+}
+.login_text_2 {
+	font-size: 25px;
+	height: 30px;
+	line-height: 30px;
+	padding: 8px 18px 0;
+	letter-spacing: 13px;
+}
+
+.sys_div {
+    left: 10%;
+    top: 16%;
+    opacity: 1;
+    position: absolute;
+}
+
+.project-name{
+    font-weight: bold;
+    font-size: 70px;
+    opacity: 1;
+    line-height: 70px;
+    letter-spacing: 8px;
+    cursor: default;
+    color: transparent;
+	text-shadow:0 0 6px #FFF, -1px -1px  #FFF, 1px -1px  #444;
+}
+
+.copyright_div {
+    bottom: 0;
+    width: 100%;
+    height:50px;
+    opacity: 1;
+    position: absolute;
+}
+
+.copyright_label {
+    font-weight: bold;
+    font-size: 12px;
+    opacity: 1;
+    text-align:center;
+    letter-spacing: 2px;
+}
+
+.main_div{
+	position: absolute;
+	left: 0px;
+	top: -2000px;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.menu_div {
+    top: 0px;
+  	left: 0px;
+    width:100%;
+  	height:40px;
+  	opacity:1;
+  	border: 0px;
+  	position: absolute;
+  	padding: 0;
+}
+
+.ifarme_div {
+  	width:100%;
+  	height: 100%;
+  	height: calc( 100% - 53px );
+	height: -moz-calc( 100% - 53px );
+  	height: -webkit-calc( 100% - 53px );
+  	opacity:1;
+  	border: 0px;
+  	margin: 2px 0 0;
+	padding-top: 53px;
+	
+}
+
+.main_iframe {
+	height:100%;
+    width:100%;
+  	opacity:1;
+  	border: 0 solid;
+}
+
+.modal-footer{
+	background: rgba(18, 25, 37, 0.9);
+}
+#lab{
+	display: inline;
+	float: left;
+	margin-top: 9px;
+}
+#user{
+	display: inline;
+	float: left;
+	margin-bottom: 0px;
+	margin-top: 8px;
+	font-weight: bold;
+	font-size: 16px;
+	color:#08c;
+}
+
+.login-out,.login-setting{
+	padding: 10px 0 2px;
+	font-size: 23px;
+	line-height: 23px;
+	margin-left: 22px;
+}
+
+.login-out:hover,.login-setting:hover{
+	color: #2FB5E9;
+	text-shadow: 0 0 5px #2FB5E9;
+}
+
+#group_ul{
+	margin: 10px 10px 0;
+}
+

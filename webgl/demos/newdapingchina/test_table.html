@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>ANTIY LABS</title>
+        <link href="css/world_table.css" rel="stylesheet">
+        <link href="css/world_style.css" rel="stylesheet">
+        
+        
+        <script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/world_data.js"></script>
+        <script>
+            var _myHeader,
+                url,
+                _new,
+                _tbodydom;
+                
+            function begin(){
+            //    _myHeader = document.getElementById("myHeader");
+            //    url ='';
+          //      _new='';
+           //       _tbodydom = $('#scrolltalbe tbody');
+            }   
+            
+         function getAlarmData() {
+                // for(var i = 0; i < alarm_list.length; i++){
+                    // alert(alarm_list[i]);
+                // }
+                for (x in alarm_list) {
+                    monitor_data = alarm_list[x];
+                    lon = monitor_data[2];
+                    lat = monitor_data[3];
+                    
+                    monitor_location = getXY(parseFloat(lon), parseFloat(lat));
+                    //monitor_data['cx'] = monitor_location['cx'];
+                    //monitor_data['cy'] = monitor_location['cy'];
+                    monitor_data.push(monitor_location['cx']);
+                    monitor_data.push(monitor_location['cy']);
+                    
+                    alarm_data.push(monitor_data);
+                }
+            }
+            
+            getXY = function (lon, lat) {
+                return {
+                    cx: (lon+169)*(1900 - 50)/349,
+                    cy: (84-lat)*(760 - 20)/140
+                };
+                
+            };
+            
+            
+            // 捕获数据列表   
+            var alarm_data = [];
+            getAlarmData();
+            
+            
+           
+            
+            
+        </script>
+        
+    </head>
+    
+    <body onload='begin()'>
+        
+        
+        <script>
+            
+            //为表格添加事件
+            function scroll_table(alarm_data){
+                //time = (new Date()).toLocaleTimeString();
+                var url = alarm_data['0'];
+                if(url.length > 40){
+                    url = url.substr(0, 40) + '...';
+                }
+               
+                
+                _tbodydom = $('#scrolltalbe tbody');
+                _trdom = $('#scrolltalbe tbody tr');
+    
+                _trdom.eq(0).remove();
+    
+                _old = _tbodydom.html();
+                
+                //var x = document.getElementById("myHeader");
+              //  console.info(x.innerHTML);
+                _new = 
+                    '<tr><td style="width: 45px"></td>'+
+                        '<td style="width: 228px">' + alarm_data['5'] + '</td>'+
+                        '<td style="width: 135px">' + alarm_data['1'] + '</td>'+
+                        '<td style="width: 135px">' + alarm_data['8'] + '</td>'+
+                        '<td style="width: 220px">' + url + '</td>'+
+                        '<td style="width: 250px">' + alarm_data['7'] + '</td></tr>';
+                        //'<td style="width: 80px" ><div style="width: 80px">'+time+'</div></td></tr>';
+                //_tbodydom.remove();
+                
+                //_tbodydom.empty();
+                _tbodydom.html(_old + _new);
+                //url = null;
+                //_tbodydom = null;
+                //_trdom = null;
+                //_old = null;
+                //_new = null;
+                
+                //console.info(_myHeader);
+                
+               // _myHeader.innerHTML = _new + _new + _new + _new + _new;
+                //_myHeader = null;
+                //_new = null;
+                //url = null;
+
+                
+                
+                
+              //  $('#scrolltalbe tbody') = null;
+                
+            };
+            
+            
+            
+            
+            var now_flash_num = 0;
+            setInterval(start_alarm, 50);
+            
+            function start_alarm(){
+                //console.info(Math.floor(Math.random()*10));
+                for(var w = 0; w < (Math.floor(Math.random()*10) + 12); w += 1){
+                    scroll_table(alarm_data[now_flash_num]);
+                    now_flash_num += 1;
+                    if(now_flash_num == alarm_data.length){
+                       now_flash_num = 0
+                    }
+                }
+              
+            }
+        
+        </script>
+        
+        <div id="table_div_1" class="table_div_1">
+            <table id='scrolltalbe' class="table table-striped">
+                <thead>
+                    <tr>
+                        
+                        <th style="width: 45px"></th>
+                        <th style="width: 290px">Malware Name</th>
+                        <th style="width: 110px">Source Address</th>
+                        <th style="width: 110px">Probable Infected Object</th>
+                        <th style="width: 300px">URL</th>
+                        <th style="width: 240px">Sample HASH</th>
+                        <!-- <th style="width: 80px">捕获时间</th> -->
+                    </tr>
+                </thead>
+                <tbody id="myHeader">
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        
+    </body>
+</html>

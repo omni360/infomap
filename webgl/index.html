@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGL Demos By Lvmy. QQ:155145333. TEL:15846317362</title>
+    <link href="css/modern.css" rel="stylesheet">
+    <link href="css/theme-dark.css" rel="stylesheet">
+    <link href="css/modern-responsive.css" rel="stylesheet">
+    <style>
+        .metrouicss .page .page-header .page-header-content .user-login .avatar {
+          border: 0px #ccc solid;
+          width: 80px;
+          height: 40px;
+        }
+        .metrouicss .tile > .tile-content >.card-title{
+            position: absolute;
+            width: 100%;
+            height: 64px;
+            top: 60%;
+            margin-top: -32px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .metrouicss .tile-group .title{
+            font-family: 'Courier New','微软雅黑';
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+<body class="metrouicss">
+<div class="page secondary fixed-header">
+    <div class="page-header ">
+        <div class="page-header-content">
+            <div class="user-login">
+                <a href="#">
+                    <div class="name">
+                        <span class="first-name">数据可视化 & WebGL Demos</span>
+						<br/>
+                        <span class="last-name">By Lvmy | lvmy86@gmail.com</span>
+<!--                         <span class="last-name">TEL: 15846317362</span>
+                        <span class="last-name"><a href="tencent://message/?uin=155145333&Site=&Menu=yes">QQ: 155145333</a></span> -->
+                    </div>
+<!--                     <div class="avatar">
+                        img src="img/weblogo.png"/
+                        <i class="icon-user fg-color-white"></i>
+                    </div> -->
+                </a>
+            </div>
+
+            <h1 class="fg-color-white"></h1>
+        </div>
+    </div>
+    <div class="page-region">
+        <div class="page-region-content tiles" id='cardIndex'>
+
+        </div>
+    </div>
+</div>
+<script src="js/assets/jquery-1.8.2.min.js"></script>
+<script src="js/linkData.js"></script>
+<script>
+$(function(){
+
+    var colors = [
+        // 'blue',
+        'blueDark',
+        // 'orangeDark',
+        // 'orange',
+        // 'yellow',
+        'red',
+        // 'redLight',
+        'greenDark',
+        // 'greenLight',
+        // 'green',
+        // 'teal',
+        // 'grayDark',
+        // 'purple',
+        // 'pinkDark',
+        // 'pink'
+    ] ,
+    direction = ['up', 'down', 'left' , 'right'];
+
+    var cardHtml = '',color,doubleFlag,data,preColor = -1,randomnum = 0;
+
+    for(var i = 0 ; i < linkDatas.length ; i++){
+        cardHtml += '<div class="tile-group">';
+        cardHtml += '<div class="title">'+linkDatas[i]['group-name']+'</div>';
+        
+        data = linkDatas[i]['group-data'];
+        for(var j = 0 ; j < data.length ; j++){
+
+            doubleFlag = data[j]['card'];
+
+            randomTime = parseInt(Math.random()*3) * 1000 + 5000;
+
+            if( !data[j]['color'] || data[j]['color'] == ''){
+                
+                while(true){
+                    randomnum = parseInt(Math.random()*((colors.length-1)-0+1)+0);
+                    if(preColor != randomnum){
+                        color = colors[randomnum];
+                        preColor = randomnum;
+                        break;
+                    }
+                }
+                
+            }else{
+                color = data[j]['color'];
+            }
+
+            if( data[j]['images'] && data[j]['images'] != '' ){
+                cardHtml += 
+                '<a target="_blank" href="'+data[j]['href']+'" class="tile image-slider '+doubleFlag+' bg-color-'+color+' " data-role="tile-slider" data-param-period="'+randomTime+'" data-param-direction="'+ direction[parseInt(Math.random()*4)] +'">' +
+                    '<div class="tile-content ">' +
+                        // '<div class="card-title">'+ data[j]['name'] +'</div>' +
+                        '<img src="img/'+ data[j]['images'] +'" alt="">' +
+                        // '<div class="brand">' +
+                        //     '<span class="name">'+ data[j]['name'] +'</span>' +
+                        // '</div>' +
+                    '</div>' +
+                    '<div class="tile-content  bg-color-'+color+'">' +
+                        '<div class="card-title">'+ data[j]['name'] +'</div>' +
+                        // '<img src="img/dpworld.png" alt="">' +
+                        // '<div class="brand">' +
+                        //     '<span class="name">'+ data[j]['name'] +'</span>' +
+                        // '</div>' +
+                    '</div>' +
+                '</a>';
+            }else{
+
+                cardHtml += 
+                '<a target="_blank" href="'+data[j]['href']+'" class="tile icon '+doubleFlag+' bg-color-'+color+' ">' +
+                    '<div class="tile-content ">' +
+                        '<div class="card-title">'+ data[j]['name'] +'</div>' +
+                        // '<div class="brand">' +
+                        //     '<span class="name">YouTube</span>' +
+                        // '</div>' +
+                    '</div>' +
+                '</a>';
+            }
+
+        }
+        
+        cardHtml += '</div>';
+    }
+
+    $('#cardIndex').append(cardHtml);
+
+});
+</script>
+<script src="js/assets/jquery.mousewheel.min.js"></script>
+<script src="js/modern/tile-slider.js"></script>
+<script src="js/modern/start-menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    
+    <script type="x-shader/x-vertex" id="flash_vertexshader">
+        uniform float amplitude;
+        attribute float size;
+        attribute vec3 customColor;
+
+        varying vec3 vColor;
+
+        void main() {
+
+        vColor = customColor;
+
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+        gl_PointSize = size;
+
+        gl_Position = projectionMatrix * mvPosition;
+
+        }
+    </script>
+    
+    <script type="x-shader/x-fragment" id="flash_fragmentshader">
+        uniform vec3 color;
+        uniform sampler2D texture;
+
+        varying vec3 vColor;
+
+        void main() {
+
+        gl_FragColor = vec4( color * vColor, 1.0 );
+        gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+        }
+    </script>
+    
+    
+    
+</head>
+<body>
+    <div id="webgl_div"></div>
+    <div class="location-label" id="locationLabel">
+        <div class="select-location" id="selectLocation" >
+            <table cellspacing="2"></table>
+        </div>
+    </div>
+    <div class="system-label" title="">
+        <ul class="select-system" id="selectSystem">
+        </ul>
+    </div>
+    <div class="load-panel" id="loadPanel">
+        <div id="loagText">模型载入中,请稍后...</div>
+        <div class="progress-bar blue stripes">
+            <span style="width: 100%;"></span>
+          
+        </div>
+    </div>
+    <script src="js/lib/jquery-1.7.1.min.js"></script>
+    <script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/lib/Collisions.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/lib/HexagonGeometry.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/datalocation.js"></script>
+    <script src="js/system_data.js"></script>
+    <script src="js/scene.js"></script>
+    <script>
+        //屏蔽鼠标事件，防止右键移动3d场景时弹出右键菜单
+        document.oncontextmenu = function (){
+            return false;
+        }
+        
+        var the_scene ;
+        $(document).ready(function(){
+            init();
+
+            // IceOrange add table
+            var _id = 0,_html = '';
+            while(_id < location_data_list.length){
+                _html += '<tr>';
+                for(var i = 0;i < 3; i++){ 
+                    if(_id == location_data_list.length) break;
+                    _html += ('<td colspan="'+(_id == 3 ? 2 : 1)+'" data="'+_id+'" flag="0"><span class="text">' + location_data_list[_id][0] +'</span><span class="num">314</span></td>');
+                    _id++;
+                    if(_id == 5) break;
+                }
+                _html += '</tr>';
+            }
+            $('#selectLocation table').html(_html);
+
+            _html = '';
+            for(var i = 0,s; s = sys_text_li[i]; i++ ){
+                _html += ('<li data="'+i+'" flag="0" ><div class="color-'+String.fromCharCode(97+i)+'"></div>'+s[0]+'</li>');
+            }
+            $('#selectSystem').html(_html);
+
+            $('#selectSystem li').click(function(){
+                the_scene.runCamera($(this).attr('data'));
+            })
+
+            function init(){
+
+                var list = [    
+                	{'uid': '4', 	'model': 'js/new_model/mainSys.js', 		'position': [0, 		0, 		3], 	'legendPos': [12000,     500,      35000],         'color': 0xC8A237, 'name': '协 同 联 动 系 统', 'scale': [1, 4, 1]},
+                	{'uid': '1', 	'model': 'js/new_model/flowSys.js', 		'position': [10, 	0.1, 	0.5], 		'legendPos': [125000,    500,      5000],          'color': 0x8131B5, 'name': '流 监 测 系 统'},
+                	{'uid': '7', 	'model': 'js/new_model/analysisSys.js', 	'position': [-0.54, 	0.08, 	9.5], 	'legendPos': [-10000,    500,      80000],         'color': 0xC84D37, 'name': '恶 意 代 码 分 析 系 统'},
+                	{'uid': '3', 	'model': 'js/new_model/siteSys.js', 		'position': [-10, 	0.1, 	0.5], 		'legendPos': [-120000,   500,      5000],          'color': 0x83BC33, 'name': '网 站 监 测 系 统'},
+                	{'uid': '6', 	'model': 'js/new_model/routerSys.js', 		'position': [4.5, 	0.02, 	0], 		'legendPos': [45000,     500,      -3000],         'color': 0xC87E37, 'name': '路 由 监 测 系 统'},
+                	{'uid': '0', 	'model': 'js/new_model/capture.js', 		'position': [-10.5, 	0.05, 	8], 	'legendPos': [-115000,   500,      60000],         'color': 0x33B96C, 'name': '报 文 监 测 和 恶 意 代 码 捕 获 系 统'},
+                	{'uid': '2', 	'model': 'js/new_model/honeynetSys.js', 	'position': [10, 	0.05, 	10],	'legendPos': [125000,    500,      100000],        'color': 0xC8C837, 'name': '蜜 网 系 统'},
+                	{'uid': '5', 	'model': 'js/new_model/domainSys.js', 		'position': [-5, 	0, 		0], 		'legendPos': [-60000,    500,      15000],         'color': 0xBF357B, 'name': '域 名 监 测 系 统'},
+                	{'uid': '8', 	'model': 'js/new_model/scanSys.js', 		'position': [9.5, 	0, 		5], 	'legendPos': [87000,     500,      45000],         'color': 0x314AB7, 'name': '轻 载 扫 描 系 统'},
+                ];
+                
+                the_scene = new ClassTPlatform({
+                    parentElementId: 'webgl_div',
+                    systemList: list,
+                    usedWireframe: true	// true or false
+                });
+                
+                var loader = new THREE.JSONLoader();
+                
+                loader.load( 'js/new_model/china_model.js', function ( geometry) {
+                    //the_scene.loadChinaModel(geometry);
+                });
+                
+                loader.load( 'js/model/newconic(4).js', function ( geometry ) {
+
+                    //the_scene.loadReceive(geometry);
+                    
+                });
+
+                document.onkeydown = the_scene.onKeyDown;
+                
+            }
+
+        });
+    </script>
+    
+</body>
+    <div id="raphael_div"></div>
+</html>

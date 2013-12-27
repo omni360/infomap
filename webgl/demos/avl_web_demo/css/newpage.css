@@ -1,0 +1,227 @@
+body {
+  background: #002b36;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+ul {
+  list-style: none;
+}
+.warp {
+  width: 1350px;
+  margin: 0 auto;
+}
+.user-select {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+.toper {
+  background-color: #002B36;
+  padding: 5px;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+}
+.logo {
+  background: url("../img/Antiy.png") no-repeat;
+  background-size: contain;
+  padding: 15px 45px;
+  font-size: 28px;
+  font-family: inherit;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #CB4B16;
+}
+.logo:after {
+  content: "";
+}
+.mybtn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  padding: 4px;
+  margin: 10px 5px 0;
+  font-size: 18px;
+}
+/*------------------content---------------------- */
+.content {
+  background: #073642;
+  /*border: @main-border;*/
+
+  border-radius: 3px;
+  margin: 5px auto;
+  padding: 5px;
+  position: relative;
+}
+#mainWindows {
+  width: 1348px;
+  height: 540px;
+  position: absolute;
+  left: -15px;
+  top: 40px;
+  z-index: 1;
+}
+.area {
+  margin-right: 1px;
+  height: 594px;
+  padding: 0px;
+}
+.area .area-title {
+  text-align: center;
+  font-size: 24px;
+  /*font-family: 'Nova Square', cursive;*/
+
+  border: 1px solid #184d5a;
+  border-bottom: 0px solid;
+  border-radius: 4px 4px 0 0;
+  padding: 15px 5px;
+  background-color: whiteSmoke;
+  background: #13424E;
+  color: #FFF;
+}
+.area .area-content {
+  height: 520px;
+  background: #f3f3f3;
+  border-left: 1px solid #FFF;
+  border-right: 1px solid #FFF;
+  position: relative;
+}
+.area .area-content-detail {
+  background: rgba(19, 66, 78, 0.9);
+  color: #FFF;
+  width: 100%;
+  position: absolute;
+  height: 520px;
+  z-index: 2;
+  font-size: 15px;
+}
+.area-content-detail-describe {
+  padding-top: 20px;
+  height: 250px;
+  border-bottom: 1px solid #184d5a;
+}
+.area-content-detail-describe label {
+  padding: 0 20px;
+  cursor: default;
+  margin-bottom: 0;
+}
+.area .describe-value {
+  text-align: right;
+  color: #9CB303;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 0 0px 9px rgba(114, 182, 69, 0.47);
+}
+.area .area-foot {
+  background: #f5f5f5;
+  border: 1px solid #184d5a;
+  border-top: 0px solid;
+  border-radius: 0 0 4px 4px;
+  padding: 1px 5px;
+  text-align: center;
+  background: #13424E;
+  color: #FFF;
+}
+#gauge {
+  width: 180px;
+  height: 180px;
+  background: #13424E;
+  margin: 0 auto;
+}
+#star-area {
+  width: 145px;
+}
+#first-area {
+  width: 230px;
+}
+#second-area {
+  width: 250px;
+}
+#third-area {
+  width: 280px;
+}
+#fourth-area {
+  width: 245px;
+}
+#end-area {
+  width: 185px;
+  margin-right: 0px;
+}
+/* --------------footer------------- */
+.footer {
+  background: #073642;
+  /*border: @main-border;*/
+
+  border-radius: 3px;
+  margin: 5px auto;
+  padding: 5px;
+}
+.footer-toolbar {
+  min-height: 20px;
+  padding: 5px;
+  margin-bottom: 2px;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  color: #93A1A1;
+  font-size: 18px;
+  font-family: inherit;
+  font-weight: bold;
+  background: #13424E;
+}
+.footer-content {
+  height: 92px;
+  padding: 5px;
+  background-color: whiteSmoke;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  overflow: auto;
+  background: #13424E;
+  color: #FFF;
+}
+.footer-content ul {
+  margin: 0;
+}
+.footer-content ul li {
+  line-height: 25px;
+  font: 11px "微软雅黑";
+  padding: 2px 8px;
+  color: #cccccc;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+.footer-content ul li:hover {
+  background: #ccc;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+.bluefont {
+  color: blue;
+  font-style: italic;
+}
+/* ---------------custom scroll color--------------- */
+.jqx-gauge-label {
+  color: #FFF;
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+  /*background: #fff;*/
+
+  background: rgba(48, 134, 243, 0.65);
+  filter: "alpha(opacity=75)";
+  -ms-filter: "alpha(opacity=75)";
+}
+.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
+  background: rgba(48, 134, 243, 0.75);
+  filter: "alpha(opacity=85)";
+  -ms-filter: "alpha(opacity=85)";
+}

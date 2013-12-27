@@ -1,0 +1,10 @@
+html, body  {position: relative; height:100%; }
+body { margin:0px 0px 0px 0px; padding:0px 0px 0px 0px; overflow:auto; text-align:center; 
+       background-color: #000000;}   
+object:focus { outline:none; }
+#flashContent { display:none; }
+
+#ie_historyFrame { width: 0px; height: 0px; display:none }
+#firefox_anchorDiv { width: 0px; height: 0px; display:none }
+#safari_formDiv { width: 0px; height: 0px; display:none }
+#safari_rememberDiv { width: 0px; height: 0px; display:none }

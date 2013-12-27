@@ -1,0 +1,71 @@
+#checkhost{
+	position: absolute;
+	left: 10px;
+	top: 205px;
+	height: 52px;
+	width: 162px;
+}
+
+/*#checkbtn{
+	background: url('colored-pins.png') -340px -122px;
+	width: 20px;
+	height: 39px;
+	z-index: 1;
+}*/
+ 
+#checkdiv{
+    width: 140px;
+    z-index: 0;
+    opacity: 1;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background-color: rgba(14, 39, 65, 1);
+    border-radius: 1px;
+    padding: 5px 10px;
+    /*padding-left: 10px;*/
+}
+#checkdiv input{
+    float: left;
+    width: 92px;
+    border: 1px solid rgba(63, 83, 102, 1);
+    line-height: 20px;
+    color: white;
+	font: 8px '微软雅黑';
+    background-color: rgba(18, 158, 252, 0.12);
+}
+#checkdiv a{
+    float: right;
+    line-height: 17px;
+    margin-top: 2px;
+}
+#checkhost #errortip .tipatr{
+    height:0;
+    width:0;
+    border-width:6px;
+    border-style:solid;
+    border-color: rgba(255, 91, 0, 0) 
+                  rgba(14, 39, 65, 0) 
+                  rgba(0, 136, 204, 0.6)
+                  rgba(255, 255, 255, 0);
+    margin-left: 10px;
+}
+
+#checkhost #errortip{
+    width: 100px;
+    position: absolute;
+    right: 50px;
+    top: 28px;
+    opacity: 0;
+    z-index: 0;
+}
+#checkhost #errortip .tipcon{
+    width: 100%;
+    line-height: 18px;
+    border-radius: 2px;
+    padding: 3px;
+    font-size: 12px;
+    color: #FF5C00;
+    text-align: center;
+    background-color: rgba(0, 136, 204, 0.6);
+}

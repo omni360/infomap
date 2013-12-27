@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>RebuildWb</title>
+	<style type="text/css">
+		html,body {
+		    background-color: #000000;
+		    padding:0;
+		    margin:0;
+		    overflow:hidden;
+		    height: 100%;
+			font-family: '微软雅黑';
+			-webkit-user-select: none;
+		}
+		
+		#iframe_panel{
+			width: 100%;
+			height: calc( 100% - 60px );
+			border: none;
+		}
+		
+		#step_panel{
+			width: 612px;
+			height: 50px;
+			text-align:center;
+			margin: 0 auto;
+		}
+		
+		.step_div{
+			width: 100px;
+			height: 50px;
+			border-radius: 25px;
+			border: 2px solid #aaa;
+			background-color: #252F3A;
+			float: left;
+			text-align: center;
+			margin: 0 auto;
+			line-height: 50px;
+		}
+		
+		.step_div:hover{
+			cursor: pointer;
+		}
+		
+		.arrow_img{
+			width: 150px;
+			height: 50px;
+			float: left;
+		}
+		
+		.step_label{
+			color: #FFFFFF;
+		}
+		
+		.step_label:hover{
+			cursor: pointer;
+		}
+		
+	</style>
+	<script src="../js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		
+		//屏蔽鼠标事件
+        document.oncontextmenu = function (){
+            return false;
+        };
+		
+		
+		function init(){
+			
+			$("#iframe_panel").attr('src', 'draw_topo/index.html');
+			
+			var step_btns = $('#step_panel').children('.step_div');
+						
+			$(step_btns[0]).css('border', '2px solid #FF0000')
+			
+			
+			step_btns.each(function (i, domEle){
+				
+				$(domEle).click(function (e){
+					
+					step_btns.each(function (j, dom){
+						
+						if (dom.id != domEle.id){
+							$(dom).css('border', '2px solid #FFFFFF');
+						}else{
+							$(dom).css('border', '2px solid #FF0000');
+						}
+						
+					})
+					
+					switch(domEle.id){
+						case 'step_1':
+							$("#iframe_panel").attr('src', 'draw_topo/index.html');
+							break;
+						case 'step_2':
+							$("#iframe_panel").attr('src', 'example_config/example_config.html');
+							break;
+						case 'step_3':
+							$("#iframe_panel").attr('src', 'example_config/example_config.html');
+							break;
+					}
+					
+				})
+				
+			})
+		}
+		
+	</script>
+</head>
+<body onload="init()">
+	<iframe id="iframe_panel">
+	</iframe>
+	<div id="step_panel">
+		<div id="step_1" class="step_div">
+			<label class="step_label">实例绘制</label>
+		</div>
+		<img src="../image/arrow_right.png" class="arrow_img"/>
+		<div id="step_2" class="step_div">
+			<label class="step_label">实例配置</label>
+		</div>
+		<img src="../image/arrow_right.png" class="arrow_img"/>
+		<div id="step_3" class="step_div">
+			<label class="step_label">实例实施展示</label>
+		</div>
+	</div>
+</body>
+</html>

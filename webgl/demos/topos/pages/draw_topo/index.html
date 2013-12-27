@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
+    <!-- 
+    Smart developers always View Source. 
+    
+    This application was built using Adobe Flex, an open source framework
+    for building rich Internet applications that get delivered via the
+    Flash Player or to desktops via Adobe AIR. 
+    
+    Learn more about Flex at http://flex.org 
+    // -->
+    <head>
+        <title></title>
+        <meta name="google" value="notranslate" />         
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="../../css/tuopu.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+        <style type="text/css" media="screen">
+            .step_div{
+            	position: absolute;
+				width: 100px;
+				height: 50px;
+				border-radius: 25px;
+				border: 2px solid #aaa;
+				background-color: #252F3A;
+				float: left;
+				text-align: center;
+				margin: 0 auto;
+				line-height: 50px;
+				left: calc(50% - 50px);
+				bottom: 10px;
+			}
+			
+			.step_div:hover{
+				cursor: pointer;
+			}
+			
+			.arrow_img{
+				position: absolute;
+				width: 150px;
+				height: 50px;
+				float: left;
+				left: calc(50% - 75px);
+				bottom: 20px;
+			}
+			
+			.arrow_img:hover{
+				cursor: pointer;
+			}
+        </style>
+		<script type="text/javascript" src="../../js/lib/swfobject.js"></script>
+		<script src="../../rebuild/src/libs/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../Process.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+        	
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            var swfVersionStr = "10.2.0";
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+            var xiSwfUrlStr = "playerProductInstall.swf";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.wmode = 'transparent';
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            var attributes = {};
+            attributes.id = "index";
+            attributes.name = "index";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "index.swf", "flashContent", 
+                "98%", "93%", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+            function init(){
+            	//console.log(window.parent.document.getElementById('main_iframe'))
+            	//window.parent.document.getElementById('main_iframe').style.opacity = 1;
+				//document.addEventListener( 'mousemove', window.parent.onDocumentMouseMove, false );
+				/*
+				document.getElementById('jump_btn').addEventListener('mousedown', function (){
+					parent.page_jump('pages/example_config/example_app_config.html');
+				})
+				*/
+				var p = new Process(1);
+				
+			}
+			
+        </script>
+    </head>
+    <body onload="init()">
+        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
+             JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
+             when JavaScript is disabled.
+        -->
+        <div id="flashContent">
+            <p>
+                To view this page ensure that Adobe Flash Player version 
+                10.2.0 or greater is installed. 
+            </p>
+            <script type="text/javascript"> 
+                var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://"); 
+                document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+                                + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+            </script> 
+        </div>
+        
+        <noscript>
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="index">
+            	<param name="wmode" value="transparent" />
+                <param name="movie" value="index.swf" />
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="allowFullScreen" value="true" />
+                <!--[if !IE]>-->
+                <object type="application/x-shockwave-flash" data="index.swf" width="100%" height="100%">
+                    <param name="quality" value="high" />
+                    <param name="bgcolor" value="#ffffff" />
+                    <param name="allowScriptAccess" value="sameDomain" />
+                    <param name="allowFullScreen" value="true" />
+                <!--<![endif]-->
+                <!--[if gte IE 6]>-->
+                    <p> 
+                        Either scripts and active content are not permitted to run or Adobe Flash Player version
+                        10.2.0 or greater is not installed.
+                    </p>
+                <!--<![endif]-->
+                    <a href="http://www.adobe.com/go/getflashplayer">
+                        <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+                    </a>
+                <!--[if !IE]>-->
+                </object>
+                <!--<![endif]-->
+            </object>
+        </noscript>
+        
+        <!--div style="height: 5%">
+        	<img id="jump_btn" src="../../image/arrow_right.png" class="arrow_img"/>
+        </div-->
+   </body>
+</html>

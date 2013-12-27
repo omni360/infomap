@@ -1,0 +1,134 @@
+/*菜单*/
+
+.menu-node{
+	margin: 0 0 9px 25px;
+}
+
+.sub-menu{
+    position: fixed;
+    left: 0px;
+    top: 60px;
+    z-index: 1002;
+}
+
+.sub-menu ul{
+    list-style: none;
+    float: left;
+}
+
+.sub-menu li{
+    width: 210px;
+    height: 50px;
+    /*border: 1.5px solid rgba(50, 130, 210, 0.6);*/
+    border: 1.5px solid rgba(50, 130, 210, 0.6);
+    -webkit-box-shadow: 0 0 3px rgba(50, 130, 210, 0.8);
+    background-color: rgba(18, 25, 37, 0.7);
+    border-radius: 3px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    /*opacity: 0;*/
+}
+
+.sub-menu li:hover{
+    opacity: 1!important;
+    -webkit-box-shadow: 0 0 15px #4BBBF3;
+    border: 1px solid rgba(65, 190, 255, 1);
+    background-color: rgba(3, 13, 26, 0.8);
+    color: #4BBBF3!important;
+}
+.sub-menu img{
+    float: right;
+    width: 80px;
+    height: 50px;
+}
+.sub-menu span{
+    float:left;
+    
+    width: 110px;
+    height: 25px;
+    
+    border-bottom: 1px solid #099;
+    border-left: 4px solid #079;
+    
+    padding-bottom: 2px;
+    padding-left: 10px;
+    
+    margin-top: 20px;
+    margin-right: 5px;
+
+    color: #ffffff;
+}
+
+.sub-menu li:hover span{
+	color:#4BBBFF;
+	border-bottom:1px solid #4BBBF3;
+	border-left:4px solid #4BBBF3;
+}
+
+/*.sub-menu span:hover{
+    color: #4BBBF3;
+    border-bottom: 1px solid #4BBBF3;
+    border-left: 4px solid #4BBBF3;
+}*/
+.navbar-inner{
+  min-height: 40px;
+  /*background-color: rgba(16, 21, 32, 0.3);*/
+  /*background-color: rgba(44, 87, 130, 0.2);*/
+  background-color: rgba(29, 29, 29, 0.2);
+  border-bottom: 1px solid rgba(90, 123, 160, 0.5);
+  background-image: none;
+  padding: 5px 0;
+}
+
+.first_menu_label{
+    font-size: 16px!important;
+}
+
+/*遮罩*/
+.overflow{
+    margin: 0px; 
+    padding: 0px; 
+    position: fixed; 
+    left: 0px; 
+    top:  0px; 
+    width: 100%; 
+    height: 100%;
+}
+.overflowback{
+    /*background-image: url("../image/02.png");*/
+    background: rgba(14, 14, 14, 0.92);
+    /*background: #000;*/
+    opacity: 0.8;
+    z-index: 999;
+}
+.overflowfont{
+    /*background: url("../image/opacity.png") top left repeat;
+    z-index: 1000;*/
+}
+
+.sys-menu-logo{
+	background: url('../image/logo.png') center left no-repeat;
+    background-size: contain;
+    height: 38px;
+    width: 247px;
+    display: block;
+    float: left;
+    margin: 4px 0 0px -14px;
+}
+.sys-menu-label {
+    color: #2FB5E9;
+    display: block;
+    float: left;
+    font-size: 25px;
+    font-weight: 200;
+    
+    line-height: 26px;
+    
+    margin-top: 9px;
+    font-weight: bold;
+}
+
+

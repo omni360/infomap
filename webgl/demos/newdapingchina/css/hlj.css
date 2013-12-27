@@ -1,0 +1,162 @@
+/**
+ * @author whenlove
+ */
+
+body {
+    color: #2B9FA9;
+    background-color: #000;
+    font-size: 8px;
+    width: 1900px;
+    height: 1060px;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    /*border-bottom: 0.5px solid #fff;*/
+}
+
+#container {
+    position: absolute;
+    top:720px;
+    left:1540px;
+}
+
+#china_raphael{
+    position: absolute;
+    top:60px;
+    left:10px;
+    width:1440px;
+    height:960px;
+}
+
+#hlj_raphael{
+    position: absolute;
+    top:60px;
+    left:10px;
+    width:1440px;
+    height:960px;
+}
+
+#nanhai{
+    position: absolute;
+    top:770px;
+    left:10px;
+    width:240px;
+    height:240px;
+    border: 1px solid #099;
+}
+
+#nanhai_img{
+    width:240px;
+    height:240px;
+}
+
+#hlj_raphael_radar{
+    position: absolute;
+    top:60px;
+    left:10px;
+    width:1440px;
+    height:960px;
+}
+
+#timer_div{
+    position: absolute;
+    left: 36px;
+    top: 915px;
+    width: 52px;
+    height: 80px;
+    font-family: "宋体";
+/*    color: rgb(120, 240, 228);*/
+    color: #FFFFFF;
+    font-size:48px;
+    font-weight: bold;
+    text-align: right;
+    /*background-color: rgba(155, 28, 28, 0.2);*/
+}
+
+#map_name_div{
+    position: absolute;
+    left: 155px;
+    top: 938px;
+    width: 80px;
+    height: 80px;
+    font-family: "微软雅黑";
+/*    color: rgb(120, 240, 228);*/
+    color: #FFFFFF;
+    font-size:16px;
+    font-weight: bold;
+    text-align: center;
+    /*background-color: rgba(155, 28, 28, 0.2);*/
+}
+
+.table_div_hlj{
+    position: absolute;
+    left:1000px;
+    top:825px;
+    width: 450px;
+    height: 175px;
+    background-color: #121415;
+    opacity:0.8;
+    font-size: 12px!important;
+    z-index: 100;
+    color: #80f8eb;
+}
+
+.table_div_china{
+    position: absolute;
+    left:1090px;
+    top:825px;
+    width: 360px;
+    height: 175px;
+    background-color: #121415;
+    opacity:0.8;
+    font-size: 12px!important;
+    z-index: 100;
+    color: #80f8eb;
+}
+
+.sctter{
+    position: absolute;
+    left: 1475px;
+    top: 990px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 430px;
+    height: 80px;
+    background-color: rgba(6, 28, 28, 1);
+}
+
+#scatter_chart{
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 400px;
+    height: 75px;
+    opacity:1;
+}
+.labelbar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #121415;
+    z-index: 1;
+    font-size: 10px;
+    margin-left: 9px;
+    margin-top: 4px;
+    color: #A0A0A0;
+}
+
+#timebar{
+    position: absolute;
+    height: 15px;
+    bottom: 0;
+    left: 0;
+    font-size: 10px;
+    padding-left: 40px; 
+}
+#timebar div{
+    float: left;
+    color: #A0A0A0;
+}
+.timetext{
+    width: 70px;
+    text-align: center;
+
+}

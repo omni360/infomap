@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+	html,body{
+		width: 1920px;
+		height: 1080px;
+		padding: 0;
+		margin: 0;
+		overflow: hidden;
+		background: #111 url('image/background.png') no-repeat;
+		color: #2B9FA9;
+		font-family: "微软雅黑";
+	}
+	#container {
+	    position: absolute;
+	    top: 10px;
+	    left: 0;
+	    width: 1900px;
+	}
+	#canvascontainer{
+	    position: absolute;
+	    left:1480px;
+	    top: 780px;
+	    width: 430px;
+	    height: 320px;
+	    z-index: 2;
+	    color: #80f8eb;
+	    background: url('image/lalala.png') no-repeat;
+	}
+	.console{
+	    position: absolute;
+	    left: 20px;
+	    top: 930px;
+	    width: 1420px;
+	    /*height: 90px;*/
+	    /*background: rgba(0,0,0,0.62);*/
+
+	    background: -webkit-gradient(linear,left center,right center,from(rgba(0,0,0,0.4)), to(rgba(0,0,0,0.1)));
+	    z-index: 100;
+	    padding: 10px 5px;
+	    border-radius: 2px;
+	}
+
+	.console .info{
+	    font-size: 14px;
+	    font-family: "微软雅黑";
+	    letter-spacing: 1px;
+	    height: 18px;
+	    line-height: 18px;
+	    padding-left: 8px;
+	    
+	    /*font-weight: bold;*/
+	}
+
+	.console .infored{
+	    margin: 0 5px;
+	    color: #e5004f;
+	    font-style: italic;
+	}
+	.tl{
+		position: absolute;
+	    left: 20px;
+	    top: 120px;
+	    width: 190px;
+	    height: 70px;
+	    z-index: 100;
+		background: url('image/tl.png') no-repeat;
+		background-size: contain;
+		color: #7fd5f5;
+	}
+	.tl .fm{
+		position: absolute;
+		top: 33px;
+		left: 10px;
+		font-size: 11px;
+	}
+
+	.tl span{
+		width: 25px;
+		height: 12px;
+		display: inline-block;
+		border-radius: 1px;
+		margin-right: 10px;
+		margin-bottom: -2px;
+	}
+	.tl .fm .span{
+		background: #0088CC;
+	}
+	.tl .bfm{
+		position: absolute;
+		top: 52px;
+		left: 10px;
+		font-size: 11px;
+	}
+	.tl .bfm .span{
+		background: #e5004f;
+	}
+	.topbar{
+		position: absolute;
+		width: 100%;
+		line-height: 67px;
+		height: 67px;
+		background: url('image/top.png') no-repeat;
+		font-size: 32px;
+		font-family: '楷体';
+		font-weight: bold;
+		text-align: center;
+		color: rgba(189, 232, 255, 0.89);
+		text-shadow: 0 0 15px #00BAFF;
+		padding-top: 3px;
+	}
+	.topbar span {
+		display: inline-block;
+		width: 170px;
+	}
+/*	.topbar div{
+		width: 644px;
+		height: 67px;
+		background: url('image/font.png') center no-repeat;
+		margin: auto;
+	}*/
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<div class="topbar">
+		拢  态 势 于 眼 底 <span></span>挫 威 胁 于 指 尖
+		<!-- <div>&nbsp;</div> -->
+	</div>
+	<div class="tl">
+		<div class="bfm"><span class='span'></span>感染源</div>
+		<div class="fm"><span class='span'></span>感染目标</div>
+	</div>
+	<div id="canvascontainer"></div>
+	<div class="console" id="consoleDom">
+        <div class="info"></div>
+        <div class="info"></div>
+        <div class="info"></div>
+        <div class="info"></div>
+        <div class="info"></div>
+    </div>
+</body>
+<script src="scripts/libs/jquery-1.9.1.js"></script>
+<script src="js/lib/kinetic-v4.7.4.min.js"></script>
+<script src="scripts/libs/raphael-min.js"></script>
+<script src="scripts/libs/three.min.r58.js"></script>
+<script src="scripts/shaders/vertexshader.js"></script>
+<script src="scripts/shaders/fragmentshader.js"></script>
+<script src="scripts/libs/tween.min.js"></script>
+<script src="scripts/libs/THREEx.WindowResize.js"></script>
+<script src="scripts/libs/ParallaxBarrierEffect.r58.js"></script>
+<script src="scripts/main_timer.js"></script>
+<script type="text/javascript" src="js/china_ready.js"></script>
+<script type="text/javascript" src="js/statis_data.js"></script>
+<script src="js/data2.js"></script>
+<script src="js/canvas.js"></script>
+<script>
+$(function(){
+
+	var world_width = 1900;
+    var world_height = 1100;
+	Raphael(10, 60, world_width, world_height, function () {
+	    // 定义整体空间
+	    raphael = this;
+	    var info_param = {       
+            stroke: "none",
+            fill:"rgba(28,79,122,0.4)"
+        };
+		raphael.rect(1471, 12, 426, 228, 2).attr(info_param);
+
+		(function(x,y){
+			var _t = 5;
+			var attr = {'stroke': 'rgba(28,79,122,0.7)'};
+			// raphael.path('M'+x+','+y+'h'+(_t+2)+'M'+x+','+(y-_t)+'v'+_t*2).attr(attr);
+			// raphael.path('M'+(428+x)+','+y+'h-'+(_t+2)+'M'+(428+x)+','+(y-_t)+'v'+_t*2).attr(attr);
+
+			// raphael.path('M'+x+','+(y+220)+'h'+(_t+2)+'M'+x+','+((y+220)-_t)+'v'+_t*2).attr(attr);
+			// raphael.path('M'+(428+x)+','+(y+220)+'h-'+(_t+2)+'M'+(428+x)+','+((y+220)-_t)+'v'+_t*2).attr(attr);
+		})(1470,11);
+
+		draw_statistics_div(raphael, china_statis);
+
+		(function(x,y){
+			var fontattr = { fill: "#ffffff", "font-size":12, "font-weight": "bold"};
+			var lineattr = {stroke: "#7fd5f5"};
+
+
+
+			raphael.circle(x, y, 70).attr({stroke: "none", fill:"#1C4F7A","fill-opacity": 0.5});
+			raphael.text(x, y - 37, '本年').attr(fontattr);
+
+			raphael.circle(x, y + 30, 40).attr({stroke: "none", fill:"#1C4F7A", "fill-opacity": 0.7});
+			raphael.text(x,  y + 10, '本月').attr(fontattr);
+
+			raphael.circle(x, y + 50, 20).attr({stroke: "none", fill:"#1C4F7A", "fill-opacity": 1});
+			raphael.text(1575, y + 50, '本周').attr(fontattr);
+
+			raphael.path('M'+(x+15)+','+(y-35)+'L'+(x+35)+','+ (y - 50.5)+'h60').attr(lineattr);
+			raphael.text(x+65, y - 60, '8,768,901').attr({fill: "#7fd5f5", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+
+			raphael.path('M'+(x+15)+','+(y+10)+'L'+(x+35)+','+ (y - 10.5)+'h60').attr(lineattr);
+			raphael.text(x+65, y - 20, '95,616').attr({fill: "#7fd5f5", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+
+			raphael.path('M'+(x+15)+','+(y+50)+'L'+(x+35)+','+ (y + 30.5)+'h60').attr(lineattr);
+			raphael.text(x+65, y + 20, '50,855').attr({fill: "#7fd5f5", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+		})(1575,340);
+
+		var data_1 = [1350
+            ,903
+            ,751
+            ,771
+            ,495
+            ,371
+            ,373
+            ,372
+            ,568
+            ,767
+            ,1111
+            ,1387
+            ,1461
+            ,1318
+            ,1446
+            ,1360
+            ,1388
+            ,1417
+            ,1953
+            ,1861
+            ,2115
+            ,2267
+            ,1780
+            ,1475
+        ];//2012年10月31日放马事件真实数据
+        wind_rose("",1720,310, 10, 70, 24, 1, "#2D7EC3", data_1);
+
+        function wind_rose(holderid, x, y, r1, r2, count, stroke_width, colour, data) {
+            var sectorsCount = count || 12,
+                color = colour || "#fff",
+                width = stroke_width || 15,
+                cx = r2 + width + 20,//中心点横坐标
+                cy = r2 + width + 20,//中心点纵坐标
+                beta = 2 * Math.PI / sectorsCount;
+                
+            
+            // 兼容两种定位方法
+            if(holderid != ""){
+                r = Raphael(holderid, r2 * 2 + width * 2 + 35, r2 * 2 + width * 2 + 35);//周围有数字，所以加上30的偏移量
+            }
+            else{
+                r = Raphael(x, y, r2 * 2 + width * 2 + 35, r2 * 2 + width * 2 + 35);//周围有数字，所以加上30的偏移量
+            }                    
+                
+            var paths = r.set();
+                
+            // 绘制每个wind_rose花瓣的函数
+            r.customAttributes.draw_wind_rose = function (cx, cy, r, R, d1, d2, the_color) {
+                /* 
+                 * cx, cy为中心点坐标
+                 * r为内圆半径。R为wind_rose花瓣的半径，注意，不是圆的半径
+                 * d1起点角度
+                 * d2终点角度
+                 * the_color为wind_rose的颜色。默认为统一的 */
+                d1 = d1 + 270;
+                d2 = d2 + 270;
+                a1 = (d1 % 360) * Math.PI / 180;
+                a2 = (d2 % 360) * Math.PI / 180;
+                
+                /*
+                 * 计算四个点的坐标
+                 * */
+                var tx1 = cx + r * Math.cos(a1);
+                var ty1 = cy + r * Math.sin(a1);
+                var tx2 = cx + R * Math.cos(a1);
+                var ty2 = cy + R * Math.sin(a1);
+                var tx3 = cx + R * Math.cos(a2);
+                var ty3 = cy + R * Math.sin(a2);
+                var tx4 = cx + r * Math.cos(a2);
+                var ty4 = cy + r * Math.sin(a2);
+                
+                return {
+                    path: [["M", tx1, ty1], ["L", tx2, ty2], ["A", R, R, 0, 0, 1, tx3, ty3], ["L", tx4, ty4], ["z"]],
+                    fill: the_color
+                };
+            }
+            
+            /*
+             * 绘制底色圆
+             * */
+            var temp_r = (r2 - r1)/100;
+            r.circle(cx, cy, r1).attr({stroke: "#2D7EC3", "stroke-width": 1});
+            r.circle(cx, cy, r2 - 65*temp_r).attr({stroke: "#1C4F7A", "stroke-width": 1});
+            r.circle(cx, cy, r2 - 50*temp_r).attr({stroke: "#2D7EC3", "stroke-width": 1});
+            r.circle(cx, cy, r2 - 35*temp_r).attr({stroke: "#1C4F7A", "stroke-width": 1});
+            r.circle(cx, cy, r2 - 20*temp_r).attr({stroke: "#2D7EC3", "stroke-width": 1});
+            r.circle(cx, cy, r2).attr({stroke: "#1C4F7A", "stroke-width": 1});
+            
+            /*
+             * 绘制外圆外的刻度和底线，可以和下面的合在一起。
+             * */
+            for (var i = 0; i < sectorsCount; i++) {
+                var alpha = beta * i - Math.PI / 2,
+                    cos = Math.cos(alpha),
+                    sin = Math.sin(alpha);
+                // 绘线
+                //r.path([["M", cx + r1 * cos, cy + r1 * sin], ["L", cx + r2 * cos, cy + r2 * sin]]).attr({stroke: "#3c0", "stroke-width": 1, "stroke-linecap": "round"});
+                
+                r3 = r2 + 12;
+                if(i%2 == 0){
+                    if(i == 0){
+                        r.text(cx + r3 * cos, cy + r3 * sin, 24).attr({fill: "#7fd5f5", "font-size":12, "font-weight": "bold"});
+                    }
+                    else{
+                        r.text(cx + r3 * cos, cy + r3 * sin, i).attr({fill: "#7fd5f5", "font-size":12, "font-weight": "bold"});
+                    }
+                }
+            }
+            
+            
+            var max_data,//最大的数据。计算比例用
+                start_angle = 0,//起始角度
+                r_data,//花瓣的半径
+                //每个花瓣的角度
+                val = 360/sectorsCount;
+                // 不同数据不同颜色。
+                the_colors = ["rgb(132, 166, 233)", "rgb(117, 155, 231)", "rgb(116, 155, 231)", "rgb(112, 151, 230)", "rgb(128, 163, 233)","rgb(120, 157, 231)", 
+                    "rgb(188, 206, 243)", "rgb(192, 209, 244)", "rgb(188, 207, 243)", "rgb(185, 204, 243)", "rgb(187, 206, 243)", "rgb(185, 204, 243)", 
+                    "rgb(178, 199, 241)", "rgb(177, 199, 241)", "rgb(171, 194, 240)", "rgb(164, 189, 239)", "rgb(139, 171, 235)", "rgb(95, 139, 227)", 
+                    "rgb(113, 152, 230)", "rgb(136, 169, 234)", "rgb(138, 170, 234)", "rgb(148, 177, 236)", "rgb(151, 179, 237)", "rgb(143, 174, 235)"];
+            
+            //data = data.sort(function (a, b) { return b - a;});
+            
+            /*
+             * 循环一下最大值。
+             * */
+            max_data = 0;
+            for (var i = 0, ii = data.length; i < ii; i++) {
+                if (data[i] > max_data){
+                    max_data = data[i];
+                }
+            }
+            
+            /*
+             * 绘制花瓣。
+             * */
+            for (i = 0; i < sectorsCount; i++) {
+                (function (i, val) {
+                    if(data[i] != 0 || data[i] != undefined){
+                        r_data = data[i]/max_data*(r2 - r1) + r1;
+                    }
+                    else{
+                        r_data = r1;
+                    }
+                    var ttt = r.path().attr({draw_wind_rose: [cx, cy, r1, r_data, start_angle, start_angle + val, colour], stroke: colour, "stroke-width": 1.5, "stroke-opacity": 0.9,"opacity":0.5});
+                     paths.push(ttt);
+                })(i, val);
+                start_angle += val;
+            }
+            
+            var temp_int = 0;
+            
+            var show_tick;
+            function show_ticker() {
+                if(temp_int < sectorsCount){
+                    paths[temp_int].attr("opacity", 0.5);
+                    temp_int += 1;
+                    r.safari();
+                    show_tick = setTimeout(show_ticker, 800 / sectorsCount);
+                }
+            };
+            
+            var tick;
+            (function ticker() {
+                paths.attr("opacity", 0);
+                temp_int = 0;
+                show_ticker();
+                //tick = setTimeout(ticker, 4000 );
+            })();
+        }
+
+        (function(x,y){
+        	var column_param = {
+                stroke: "#ffffff",
+                fill:"#6b8eac",
+                "fill-opacity": 1,
+                "stroke-opacity": 0
+            }
+
+            raphael.image("image/barbg.png", x - 26, y - 54, 424, 261);
+
+            var textattr = {fill: "#ddd", "font-size":10, "text-anchor":"end"}
+
+            raphael.text(x + 190, y - 25, '恶意代码家族规模排行(Trojan)').attr({fill: "#ffffff", "font-size":14, "font-weight": "bold"});
+
+        	raphael.rect(x, y, 180, 6, 0).attr(column_param);
+            raphael.rect(x, y + 20, 65, 6, 0).attr(column_param);
+            raphael.rect(x, y + 40, 50, 6, 0).attr(column_param);
+            raphael.rect(x, y + 60, 40, 6, 0).attr(column_param);
+            raphael.rect(x, y + 80, 30, 6, 0).attr(column_param);
+            raphael.rect(x, y + 100, 25, 6, 0).attr(column_param);
+            raphael.rect(x, y + 120, 20, 6, 0).attr(column_param);
+            raphael.rect(x, y + 140, 18, 6, 0).attr(column_param);
+            raphael.rect(x, y + 160, 16, 6, 0).attr(column_param);
+            raphael.rect(x, y + 180, 14, 6, 0).attr(column_param);
+
+            raphael.text(x + 390, y+2, 'Trojan/Win32.Genome').attr(textattr);
+            raphael.text(x + 390, y+22, 'Trojan/Win32.Jorik').attr(textattr);
+            raphael.text(x + 390, y+42, 'Trojan/Win32.Hupigon[Backdoor]').attr(textattr);
+            raphael.text(x + 390, y+62, 'Trojan/Win32.FakeAV').attr(textattr);
+            raphael.text(x + 390, y+82, 'Trojan/Win32.VBKrypt').attr(textattr);
+            raphael.text(x + 390, y+102, 'Trojan/Win32.Agent').attr(textattr);
+            raphael.text(x + 390, y+122, 'Trojan/Win32.Injector[Dropper]').attr(textattr);
+            raphael.text(x + 390, y+142, 'Trojan/Win32.Zbot[Spy]').attr(textattr);
+            raphael.text(x + 390, y+162, 'Trojan/Win32.Agent[Downloader]').attr(textattr);
+            raphael.text(x + 390, y+182, 'Trojan/Win32.OnLineGames[GameThief]').attr(textattr);
+        })(1493,497);
+	});
+})
+
+
+</script>
+</html>

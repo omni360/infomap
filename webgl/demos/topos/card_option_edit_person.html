@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<!-- 编辑用户	 -->
+	<div class="modal-header" id="edit_person">
+		<button type="button" class="close" id="close_edit" data-dismiss="modal">×</button>
+		<h3>编辑用户</h3>
+	</div>
+	<div class="modal-body">
+		<label class="person_name">姓名</label>
+		<input type="text" id="edit_person_name" class="edit_person_name" style="width: 48%;" ></input>
+		<label class="sex" style="margin-top:3px">性别</label>
+		<select id="sex_select" name="country" tabindex="2" class="sex_select" rel="1" style="border-radius: 3px;">
+            <option value="0">男</option>
+            <option value="1">女</option>
+        </select>
+		<label class="department" style="margin-top:3px">部门</label>
+		<select id="depart_select" class="depart_select" name="country" tabindex="3" style="margin-top: 3px;border-radius: 3px;">
+        </select>
+	</div>
+	<div class="modal-footer">
+		<button id="alter_person_sure" class="btn btn-primary" data-dismiss="modal">确定</button>
+		<button id="alter_person_reset" class="btn btn-info">恢复</button>
+	</div>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<style type="text/css" media="screen">
+		@font-face {
+		  font-family: 'Wallpoet';
+		  font-style: normal;
+		  font-weight: 400;
+		  src: local('Wallpoet'), url(36uu2cNBs_030nkiOViRZ_esZW2xOQ-xsNqO47m55DA.woff) format('woff');
+		}
+	
+		body {
+			margin: 0px;
+			background-color: #333;
+			overflow: hidden;
+		}
+		#title{
+			background-color: #222;
+			color: green;
+			/*margin: 100px 0;*/
+			font-size: 34px;
+			font-family: 'Wallpoet', cursive;
+			line-height: 45px;
+			padding: 12px 12px;
+			visibility:hidden; 
+			position: absolute;
+			border-radius: 2px;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
+		#ctime{
+			background-color: #222;
+			color: green;
+			font-size: 25px;
+			font-family: 'Wallpoet', cursive;
+			padding: 8px;
+			visibility:hidden; 
+			line-height: 40px;
+			position: absolute;
+			border-radius: 2px;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
+		#tempC{
+			background-color: #222;
+			padding: 12px 8px;
+			visibility:hidden; 
+			position: absolute;
+			border-radius: 2px;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
+		.srcpoint{
+			width: 18px;
+			height: 18px;
+			background: #F6B7BA;
+			border-radius: 18px;
+			display: inline-block;
+			margin-bottom: -3px;
+		}
+		.dstpoint{
+			width: 18px;
+			height: 18px;
+			background: #CC1A21;
+			border-radius: 18px;
+			display: inline-block;
+			margin-top: -5px;
+		}
+		.srctext,.dsttext{
+			font-family: 'Wallpoet', '微软雅黑',cursive;
+			color: green;
+			font-size: 20px;
+			display: inline-block;
+			color: #F6B7BA;
+			font-weight: bold;
+		}
+		.dsttext{
+			color: #CC1A21;
+		}
+		#card,#tcard{
+			/*border: 1px solid #FFF;*/
+			position: relative;
+			visibility: hidden;
+		}
+		.cardtitle{
+			font-family: '微软雅黑';
+			font-size: 18px;
+			color: #FFF;
+			/*font-weight: bold;*/
+			position: absolute;
+			top: 0;
+			letter-spacing: 2px;
+			-webkit-transition: all 0.5s;
+       		-moz-transition: all 0.5s;
+            transition: all 0.5s;
+            transform: perspective(500px) rotateX(90deg) ;
+			-webkit-transform:  perspective(500px) rotateX(90deg); 
+			visibility: hidden;
+		}
+		.srctitle,.dsttitle,.virusname,.url_domain{
+			text-align: center;
+			font-family: '微软雅黑';
+			font-size: 14px;
+			color: #FFF;
+			position: absolute;
+			letter-spacing: 2px;
+			background: rgba(0,0,0,0.3);
+			padding: 4px 7px 4px 9px;
+		}
+		#showEevent{
+			z-index: 2;
+			position: absolute;
+			bottom: 15px;
+			right: 10px;
+			border: 0 solid;
+			background: rgba(0,0,0,0.5);
+			color: #FFF;
+			font-family: 'Wallpoet', '微软雅黑',cursive;
+			font-size: 18px;
+			padding: 10px;
+			border-radius: 2px;
+			outline: none;
+		}
+		#showEevent:hover{
+			background: rgba(0,0,0,0.9);
+			/*text-shadow: 0 0 7px #FFF;*/
+		}
+	</style>
+</head>
+<body>
+	<div id="title">
+		<span>ANTIY VDS DATA</span>
+	</div>
+	<div id="ctime">
+		<span>2013-09-03</span>
+	</div>
+	
+	<div id="tempC">
+	 	<div class='dstpoint'>&nbsp;</div>
+	 	<span class='srctext dsttext'>源</span>
+	 	<div class='srcpoint'></div>
+	 	<span class='srctext'>目的</span>
+	</div>
+	
+	<div id="card"></div>
+	<div id="tcard"></div>
+	<button id='showEevent'>Show Event</button>
+</body>
+<script src="../../libs/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="raphael.js" type="text/javascript" charset="utf-8"></script>
+<script src="html2canvas.js"></script>
+
+<script src="three.js" type="text/javascript" charset="utf-8"></script>
+<script src="TrackballControls.js"></script>
+<script src="CSS3DRenderer.js" type="text/javascript" charset="utf-8"></script>
+<script src="tween.min.js"></script>
+<script src="ConvolutionShader.js"></script>
+<script src="CopyShader.js"></script>
+<script src="FXAAShader.js"></script>
+
+<script src="EffectComposer.js"></script>
+<script src="MaskPass.js"></script>
+<script src="RenderPass.js"></script>
+<script src="ShaderPass.js"></script>
+<script src="BloomPass.js"></script>
+<script src="sdata.js"></script>
+<script src="MouseEvent.js"></script>
+<script src="w.js"></script>
+<!-- <script src="world.js" type="text/javascript" charset="utf-8"></script> -->
+<script type="text/javascript" charset="utf-8">
+var svgCard,tSvgCard;
+$(function(){
+	svgCard = new SvgCard();
+	tSvgCard = new TSvgCard();
+	
+	var world = new WorldMap(svgCard);
+
+	$('#showEevent').click(function(){
+		world.LineTransform(58);
+	});
+});
+
+var SvgCard = function(){
+	var me = this;
+	me.dom = $('#card');
+	me.width = 350;
+	me.height = 400;
+	
+	me.padding = 47;
+	
+	$('#card').css({
+		'width': me.width,
+		'height': me.height
+	})
+	
+	me.paper = Raphael('card',me.width,me.height);
+	
+	me.contentborder = me.paper.path('M'+me.padding+','+(me.padding-1)+'M'+me.padding+','+me.padding).attr({
+		'stroke-width': 3,
+		stroke: 'rgba(38,172,246,0.7)'
+	})
+
+	me.contentbg = me.paper.path('M'+me.padding+','+me.padding+'z').attr({
+		fill: 'rgba(0,0,0,0.4)',
+		stroke: 'none'
+	});
+
+	// me.dom.append('<div class="srctitle">源地址</div>');
+	// $('.srctitle').css({
+		// 'top' : me.padding+23,
+		// 'left': me.padding+17
+	// })
+// 	
+	// me.dom.append('<div class="dsttitle">目的地址</div>');
+	// $('.dsttitle').css({
+		// 'bottom' : 2*me.padding,
+		// 'right': 2*me.padding-10
+	// })	
+// 	
+	// me.dom.append('<div class="virusname">Trojan</div>');
+	// $('.virusname').css({
+		// 'width': 100,
+		// 'font-size': '20px',
+		// 'font-family': 'Wallpoet',
+		// 'top' : (me.padding+160),
+		// 'left': me.width/2 - 60
+	// })	
+
+	
+	me.dom.append('<div class="cardtitle">加利福尼亚州山景市</div>');
+	$('#card .cardtitle').css({
+		'top' : me.padding - 26,
+		'right': me.padding
+	})
+	
+	// me.paper.path(
+		// 'M'+(me.padding+50)+','+(me.padding+50)+'v15h'+(me.width/2 - me.padding - 50)+'v92'+
+		// // 'M'+me.width/2+','+(me.padding+120)+'v30'+
+		// 'M'+(me.width-55-me.padding)+','+(me.height-2*me.padding-28)+'v-15h'+(-me.width/2 + me.padding + 55)+'v-90'
+	// ).attr({
+		// stroke: '#666',
+		// 'stroke-width': 2
+	// })
+	
+	me.paper.text(me.width-me.padding-12,me.height-me.padding-22,('Trojan').toUpperCase()).attr({
+		fill: 'rgba(38,172,246,0.5)',
+		'font-size': '28px',
+		'font-family': 'Wallpoet',
+		'letter-spacing': '3px',
+		'text-anchor': 'end'
+	})
+	
+	
+	
+	var tGraphWidth = 5,
+		tGraphColor = '#26ACF6';
+	me.circleGraph = function(x,y){
+		
+		me.ccirle1 = me.paper.circle(x,y,tGraphWidth).attr({ fill: 'none','stroke-width': 1.5,stroke: tGraphColor,'opacity': 0 });
+		me.ccirle2 = me.paper.circle(x,y,tGraphWidth+1).attr({ fill: 'none','stroke-width': 3,stroke: tGraphColor,'opacity': 0  });
+		me.ccirle3 = me.paper.circle(x,y,tGraphWidth + 1).attr({ fill: 'none', 'stroke-width': 4, stroke: 'rgba(38,172,246,0.2)','opacity': 0 });
+		me.ccirle4 = me.paper.circle(x,y,tGraphWidth + 30).attr({ fill: 'none', 'stroke-width': 2, stroke: tGraphColor,'opacity': 0 });
+	}
+	
+	me.paper.customAttributes.dWindRose = function (cx, cy, r, R, d1, d2, type, angle) {
+        a1 = ((d1 + 90) % 360) * Math.PI / 180;
+        a2 = ((d2 + 90) % 360) * Math.PI / 180;
+
+        var tx1 = cx + r * Math.cos(a1);
+        var ty1 = cy + r * Math.sin(a1);
+        var tx2 = cx + R * Math.cos(a1);
+        var ty2 = cy + R * Math.sin(a1);
+        var tx3 = cx + R * Math.cos(a2);
+        var ty3 = cy + R * Math.sin(a2);
+        var tx4 = cx + r * Math.cos(a2);
+        var ty4 = cy + r * Math.sin(a2);
+        
+        angle <180 ? 
+        	(type == 1 ? 
+        		this.drowpath =  { 
+        			path: [
+	                    ["M", tx1, ty1], 
+	                    ["L", tx2, ty2], 
+	                    ["A", R, R, 1, 1, 1, tx3, ty3], 
+	                    ["L", tx4, ty4], 
+	                    ["A", r, r, 1, 1, 0, tx1, ty1], 
+	                    ["z"]
+	                   ] }
+			: this.drowpath = { 
+					path: [
+	                    ["M", tx1, ty1], 
+	                    ["L", tx2, ty2], 
+	                    ["A", R, R, 0, 0, 1, tx3, ty3], 
+	                    ["L", tx4, ty4], 
+	                    ["A", r, r, 0, 0, 0, tx1, ty1], 
+	                    ["z"]
+		               ] }
+			)
+        :
+        	(type == 0 ?
+                this.drowpath = {
+                	path: [
+                        ["M", tx1, ty1], 
+                        ["L", tx2, ty2], 
+                        ["A", R, R, 1, 1, 1, tx3, ty3], 
+                        ["L", tx4, ty4], 
+                        ["A", r, r, 1, 1, 0, tx1, ty1], 
+                        ["z"]
+                    ] }
+            : this.drowpath = { 
+            		path: [
+                        ["M", tx1, ty1], 
+                        ["L", tx2, ty2], 
+                        ["A", R, R, 0, 0, 1, tx3, ty3], 
+                        ["L", tx4, ty4], 
+                        ["A", r, r, 0, 0, 0, tx1, ty1], 
+                        ["z"]
+        			] }
+           )
+        return this.drowpath;
+    }
+
+	me.t = me.paper
+		.path()
+		.attr({dWindRose: [me.padding, me.padding, 37, 17, 0, 90, 1, 200]})
+		.attr({ 'stroke': 'none', fill: 'rgba(38,172,246,0.2)', 'opacity': 0 });
+	
+	me.r = me.paper.path()
+		.attr({dWindRose: [me.padding, me.padding, 43, 30, 60, 180, 1, 200]})
+		.attr({ 'stroke': 'none', fill: 'rgba(38,172,246,0.3)', 'opacity': 0 });
+
+	
+	
+	me.show = function(){
+		var anitime = 600,
+		anitime2 = 800;
+		me.ccirle1.animate({ 'opacity': 1 }, anitime, "elastic");
+		me.ccirle2.animate({ 'r': tGraphWidth+8 , 'opacity': 1 }, anitime, "elastic");
+		me.ccirle3.animate({ 'r': tGraphWidth+16 , 'opacity': 1 }, anitime, "bounce");
+		me.ccirle4.animate({ 'r': tGraphWidth+20 ,'opacity': 1 }, anitime, "elastic");
+		me.t.animate({dWindRose: [me.padding, me.padding, 40, 17, 180, 269, 1, 210],'opacity': 1}, anitime2, "bounce");
+		me.r.animate({dWindRose: [me.padding, me.padding, 43, 30, 1, 121, 1, 200],'opacity': 1}, anitime2, "bounce");
+		
+		me.contentborder.animate({
+			path : 'M'+me.padding+','+(me.padding-1)+'v'+(me.height-2*me.padding+1)+'M'+me.padding+','+me.padding+'h'+(me.width-2*me.padding)
+		},1000,'backOut',function(){
+			
+		});
+		
+		me.contentbg.animate({
+			path : 'M'+me.padding+','+me.padding+'v'+(me.height-2*me.padding)+'h'+(me.width-2*me.padding - 20)+
+						'L'+(me.width-me.padding)+','+(me.height-me.padding-20)+'v'+(-me.height+2*me.padding+20)+'z'
+		},1000,'backOut',function(){
+			$('#card .cardtitle').css({
+				'-webkit-transform': 'perspective(500px) rotateX(0deg)',
+				'visibility': 'visible'
+			})
+		});
+	}
+	
+	
+	me.circleGraph(me.padding,me.padding); 
+}
+
+
+var TSvgCard = function(){
+	var me = this;
+	me.dom = $('#tcard');
+	me.width = 350;
+	me.height = 400;
+	
+	me.padding = 47;
+	
+	$('#tcard').css({
+		'width': me.width,
+		'height': me.height
+	})
+	
+	me.paper = Raphael('tcard',me.width,me.height);
+	
+	me.contentborder = me.paper.path('M'+(me.width-me.padding)+','+(me.height-me.padding+1)+'M'+(me.width-me.padding)+','+me.padding).attr({
+		'stroke-width': 3,
+		stroke: 'rgba(38,172,246,0.7)'
+	})
+
+	me.contentbg = me.paper.path('M'+(me.width-me.padding)+','+(me.padding+1)+'z').attr({
+		fill: 'rgba(0,0,0,0.4)',
+		stroke: 'none'
+	});
+	
+	me.dom.append('<div class="cardtitle">加利福尼亚州山景市</div>');
+	$('#tcard .cardtitle').css({
+		'top' : me.padding - 26,
+		'left': me.padding
+	})
+	
+	me.paper.text(me.padding + 12,me.height-me.padding-22,('Trojan').toUpperCase()).attr({
+		fill: 'rgba(38,172,246,0.5)',
+		'font-size': '28px',
+		'font-family': 'Wallpoet',
+		'letter-spacing': '3px',
+		'text-anchor': 'start'
+	})
+	
+	var tGraphWidth = 5,
+		tGraphColor = '#26ACF6';
+	me.circleGraph = function(x,y){
+		
+		me.ccirle1 = me.paper.circle(x,y,tGraphWidth).attr({ fill: 'none','stroke-width': 1.5,stroke: tGraphColor,'opacity': 0 });
+		me.ccirle2 = me.paper.circle(x,y,tGraphWidth+1).attr({ fill: 'none','stroke-width': 3,stroke: tGraphColor,'opacity': 0  });
+		me.ccirle3 = me.paper.circle(x,y,tGraphWidth + 1).attr({ fill: 'none', 'stroke-width': 4, stroke: 'rgba(38,172,246,0.2)','opacity': 0 });
+		me.ccirle4 = me.paper.circle(x,y,tGraphWidth + 30).attr({ fill: 'none', 'stroke-width': 2, stroke: tGraphColor,'opacity': 0 });
+	}
+	
+	me.paper.customAttributes.dWindRose = function (cx, cy, r, R, d1, d2, type, angle) {
+        a1 = ((d1 + 90) % 360) * Math.PI / 180;
+        a2 = ((d2 + 90) % 360) * Math.PI / 180;
+
+        var tx1 = cx + r * Math.cos(a1);
+        var ty1 = cy + r * Math.sin(a1);
+        var tx2 = cx + R * Math.cos(a1);
+        var ty2 = cy + R * Math.sin(a1);
+        var tx3 = cx + R * Math.cos(a2);
+        var ty3 = cy + R * Math.sin(a2);
+        var tx4 = cx + r * Math.cos(a2);
+        var ty4 = cy + r * Math.sin(a2);
+        
+        angle <180 ? 
+        	(type == 1 ? 
+        		this.drowpath =  { 
+        			path: [
+	                    ["M", tx1, ty1], 
+	                    ["L", tx2, ty2], 
+	                    ["A", R, R, 1, 1, 1, tx3, ty3], 
+	                    ["L", tx4, ty4], 
+	                    ["A", r, r, 1, 1, 0, tx1, ty1], 
+	                    ["z"]
+	                   ] }
+			: this.drowpath = { 
+					path: [
+	                    ["M", tx1, ty1], 
+	                    ["L", tx2, ty2], 
+	                    ["A", R, R, 0, 0, 1, tx3, ty3], 
+	                    ["L", tx4, ty4], 
+	                    ["A", r, r, 0, 0, 0, tx1, ty1], 
+	                    ["z"]
+		               ] }
+			)
+        :
+        	(type == 0 ?
+                this.drowpath = {
+                	path: [
+                        ["M", tx1, ty1], 
+                        ["L", tx2, ty2], 
+                        ["A", R, R, 1, 1, 1, tx3, ty3], 
+                        ["L", tx4, ty4], 
+                        ["A", r, r, 1, 1, 0, tx1, ty1], 
+                        ["z"]
+                    ] }
+            : this.drowpath = { 
+            		path: [
+                        ["M", tx1, ty1], 
+                        ["L", tx2, ty2], 
+                        ["A", R, R, 0, 0, 1, tx3, ty3], 
+                        ["L", tx4, ty4], 
+                        ["A", r, r, 0, 0, 0, tx1, ty1], 
+                        ["z"]
+        			] }
+           )
+        return this.drowpath;
+    }
+
+	me.t = me.paper
+		.path()
+		.attr({dWindRose: [me.width - me.padding, me.padding, 37, 17, 0, 90, 1, 200]})
+		.attr({ 'stroke': 'none', fill: 'rgba(38,172,246,0.2)', 'opacity': 0 });
+	
+	me.r = me.paper.path()
+		.attr({dWindRose: [me.width - me.padding, me.padding, 43, 30, 60, 180, 1, 200]})
+		.attr({ 'stroke': 'none', fill: 'rgba(38,172,246,0.3)', 'opacity': 0 });
+
+	
+	
+	me.show = function(){
+		var anitime = 600,
+		anitime2 = 800;
+		me.ccirle1.animate({ 'opacity': 1 }, anitime, "elastic");
+		me.ccirle2.animate({ 'r': tGraphWidth+8 , 'opacity': 1 }, anitime, "elastic");
+		me.ccirle3.animate({ 'r': tGraphWidth+16 , 'opacity': 1 }, anitime, "bounce");
+		me.ccirle4.animate({ 'r': tGraphWidth+20 ,'opacity': 1 }, anitime, "elastic");
+		me.t.animate({dWindRose: [me.width - me.padding, me.padding, 40, 17, 90, 179, 1, 210],'opacity': 1}, anitime2, "bounce");
+		me.r.animate({dWindRose: [me.width - me.padding, me.padding, 43, 30, 240, 360, 1, 200],'opacity': 1}, anitime2, "bounce");
+		
+		me.contentborder.animate({
+			path : 'M'+(me.width-me.padding)+','+(me.height-me.padding)+'v'+(-me.height+2*me.padding)+'M'+(me.width-me.padding)+','+me.padding+'h'+(-me.width+2*me.padding)
+		},1000,'backOut',function(){
+			
+		});
+		
+		me.contentbg.animate({
+			path : 'M'+(me.width-me.padding)+','+(me.padding+1)+'h'+(-me.width + 2*me.padding)+'v'+(me.height-2*me.padding - 20) +
+						'L'+(me.padding+20)+','+(me.height-me.padding)+'h'+(me.width - 2*me.padding - 20)+'z'
+		},1000,'backOut',function(){
+			$('#tcard .cardtitle').css({
+				'-webkit-transform': 'perspective(500px) rotateX(0deg)',
+				'visibility': 'visible'
+			})
+		});
+	}
+	
+	
+	me.circleGraph(me.width - me.padding,me.padding); 
+}
+</script>
+</html>

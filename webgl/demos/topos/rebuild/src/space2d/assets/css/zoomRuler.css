@@ -1,0 +1,17 @@
+#zoomRuler{
+	width: 35px;
+	height: 280px;
+	position: absolute;
+	bottom: 203px;
+	right: -3px;
+	background: transparent;
+	/*border: 1px solid #FFF;*/
+	
+	/*transform: perspective(700px) rotateY(30deg);
+	-webkit-transform: perspective(700px) rotateY(30deg);*/
+}
+
+.zoomRuler{
+	left: 5px;
+}
+

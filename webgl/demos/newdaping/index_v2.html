@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>弧面</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html,body{
+				background: #000;
+				height: 100%;
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+			
+			#button_container{
+				position: absolute;
+				z-index: 100;
+				right: 10px;
+				top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/raphael.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/SvgPathLib.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/tween.min.js"></script>
+		<script src="js/lib/TrackballControls.js"></script>
+		
+		<script src="js/lib/THREEx.WindowResize.js"></script>
+		<script>
+			
+			var container;
+
+			var camera, scene, renderer, cube, map;
+			
+			var mapWidth = 360, 
+				mapHeight = 10, 
+				mapDepth = 180, 
+				radius = 120,
+				points = [], 
+				linepoints = [],
+				currentType = "cylinder",
+				animateTween,
+				translateVertices = [];	//{v: null, plane: null, cylinder: null, sphere: null}
+				
+				
+				
+			init();
+			animate();
+			
+			function init() {
+				
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.Fog( 0x000000, 30, 2000 );
+				
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 500;
+				
+				controls = new THREE.TrackballControls( camera );
+				
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				container.appendChild( renderer.domElement );
+				
+				createCamberCube(mapWidth, mapHeight, mapDepth);
+				createMap();
+				
+				var light = new THREE.PointLight(0xC0C0C0, 6);
+				light.position.y += 10;
+				light.position.z += 500;
+				scene.add(light);
+				
+				var light2 = light.clone();
+				light2.position.z -= 1000;
+				scene.add(light2);
+			}
+			
+			function createMap(){
+				
+				$.getJSON('data/world.json', function (result){
+					
+					checkArea(result);
+					
+					var particles_geometry = new THREE.Geometry();
+					
+					particles_geometry.dynamic = true;
+					particles_geometry.vertices = points;
+					
+					particles_material = new THREE.ParticleBasicMaterial({
+						size: 1, 
+						map: THREE.ImageUtils.loadTexture( "image/abc.png" ),
+						blending: THREE.CustomBlending,
+						blendSrc: THREE.OneFactor,
+						blendDst: THREE.OneFactor,
+						blendEquation: THREE.AddEquation,
+						opacity: .8,
+						side: THREE.DoubleSide,
+						transparent: true
+					});
+					
+					particles_geometry.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2 ) );
+					
+					map = new THREE.ParticleSystem( particles_geometry, particles_material);
+					
+					scene.add(map);
+
+					var extrudeSettings = { amount: 20 };
+
+					x = y = 0;
+
+					var californiaPts = [];
+
+					var geometry = new THREE.Geometry();
+					var colors = [];
+
+					for (var i = 0, area; area = linepoints[i]; i++) {
+					  	californiaPts = [];
+					  	for(var j = 0, point; point = area[j]; j++){
+							colors = new THREE.Color( 0xffffff );
+							colors.setHSL( 0.8, 1.0, Math.max( 0, ( 200 - point[0] ) / 400 ) * 0.5 + 0.5 );
+					  		if (j != 0){
+					  			geometry.vertices.push(new THREE.Vector3( point[0], point[1], 4));
+								geometry.colors.push(colors)
+					  		}
+					  		geometry.vertices.push(new THREE.Vector3( point[0], point[1], 4));
+							geometry.colors.push(colors)
+
+							californiaPts.push( new THREE.Vector2 ( point[0], point[1] ) );
+
+						}
+
+						geometry.vertices.push(new THREE.Vector3( area[(area.length-1)][0], area[(area.length-1)][1], 4));
+						geometry.colors.push(colors)
+
+						var californiaShape = new THREE.Shape( californiaPts );
+
+						// addShape( californiaShape, extrudeSettings, 0xffaa00, 0, 0, 0, 0, 0, 0, 4 );
+
+					}
+
+
+					var worldLine = new THREE.Line( 
+						geometry, 
+						new THREE.LineDashedMaterial( { color: '#f0f0f0', dashSize: 3, gapSize: 1, linewidth: 2 } ), 
+						THREE.LinePieces 
+					);
+					
+					// me.worldLine.scale.set(me.mapScale,me.mapScale,1);
+					scene.add(worldLine);
+
+					
+				})
+				
+			}
+			
+			function checkArea(params){
+				
+				if(params.length == 0) return false;
+				if(params[0] instanceof Array && params[0].length > 0){
+					if(params[0][0] instanceof Array){
+						$.each(params,function(i){
+							checkArea(params[i]);
+						});
+					}else{
+						var temp = [];
+						$.each(params,function(i){
+							
+							temp.push(params[i]);
+							params[i][0] *= mapWidth / 360;
+							params[i][1] *= mapDepth / 180;
+							
+							v = coordToPlaneVector(new THREE.Vector3(params[i][0], -7, params[i][1])),
+							//v = coordToPlaneVector(params[i])
+							points.push(v);
+							
+						});
+						linepoints.push(temp);
+					}	
+				}
+			}
+			
+			function createCamberCube(w,h,d){
+				
+				w = w !== undefined ? w : 360;
+				h = h !== undefined ? h : 10;
+				d = d !== undefined ? d : 180;
+				
+				var geometry = new THREE.CubeGeometry(w, h, d, 100, 1, 50);
+				
+				var material = new THREE.MeshPhongMaterial({
+					color: 0x0c0c0c, 
+					transparent: true, 
+					opacity: .1, 
+					side: THREE.DoubleSide,
+					wireframe: true, /*
+					blending: THREE.CustomBlending,
+					blendSrc: THREE.OneFactor,
+					blendDst: THREE.OneFactor,
+					blendEquation: THREE.AddEquation,*/
+				});
+				
+				vertices = geometry.vertices;
+				for (var i = 0; i < vertices.length; i++){
+					
+					var vector = coordToPlaneVector(vertices[i]);
+					geometry.vertices[i] = vector;
+					
+				}
+				
+				geometry.applyMatrix( new THREE.Matrix4().makeRotationX( -Math.PI / 2 ) );
+				geometry.dynamic = true;
+				cube = new THREE.Mesh(geometry, material);
+				scene.add(cube);
+				
+			}
+			
+			
+			function coordToPlaneVector(vector, radius){
+				
+				var translateVector = {};
+				
+				
+				//平面
+				translateVector.plane = new THREE.Vector3(vector.x, vector.z, -vector.y);
+				
+				//柱面
+				var point_axisx_len = vector.x,
+					radius = radius !== undefined ? (radius < mapWidth / 2 ? mapWidth / 2 : radius) : mapWidth,
+					
+					depth_y,
+				
+				depth_y = radius - Math.sin( Math.acos(point_axisx_len / radius ) ) * radius;
+				vector.y += depth_y;
+				
+				translateVector.cylinder = new THREE.Vector3(vector.x, vector.z, -vector.y);
+				
+				//球面
+				var sphere_v = coordToSphereVector(vector.x, vector.z, radius / 3);
+				translateVector.sphere = new THREE.Vector3(sphere_v.x, -sphere_v.z, sphere_v.y);
+				
+				translateVertices.push(translateVector);
+				
+				translateVector.v = vector;
+				
+				return vector;
+				
+			}
+			
+			function coordToSphereVector(x, y, r){
+					
+				r = r !== undefined ? r : radius;
+				
+				var phi = (180 - y) * Math.PI / 180;
+			    var theta = (180 - x) * Math.PI / 180;
+				
+				var v = new THREE.Vector3();
+			    v.x = r * Math.cos(phi) * Math.cos(theta);
+				v.y = r * Math.cos(phi) * Math.sin(theta);
+				v.z = r * -Math.sin(phi);
+				
+				return v;
+			}
+			
+			function worldToScreen(worldVectorObj, projectorObj, cameraObj ){
+				
+				//var projector = new THREE.Projector();
+				
+				//var world_vector = new THREE.Vector3(0,0,1);
+				
+				var vector = projectorObj.projectVector(worldVectorObj, cameraObj);
+				
+				var halfWidth = window.innerWidth / 2;
+				
+				var halfHeight = window.innerHeight / 2;
+				
+				return result = {
+				
+					x: Math.round(vector.x * halfWidth + halfWidth),
+					y: Math.round(-vector.y * halfHeight + halfHeight)
+				
+				}
+				
+			}
+			
+			function translateMap(type){
+				
+				if (currentType !== type){
+					animateTween !== undefined && (
+						animateTween.stop(),
+						TWEEN.remove(animateTween)
+					);
+					
+					type = type !== undefined ? type : 'plane';
+					
+					animateTween = new TWEEN.Tween({value: 0})
+					.to({value: 1}, 1000)
+					.easing(TWEEN.Easing.Quadratic.InOut)
+					.delay(0)
+					.onUpdate(function (){
+						for (var i = 0; i < translateVertices.length; i++){
+						
+							var vector = translateVertices[i];
+							
+							var path_at = new THREE.Line3(vector[currentType], vector[type]).at(this.value);
+							
+							vector['v'].set(path_at.x, path_at.y, path_at.z);
+							cube.geometry.verticesNeedUpdate = true;
+							map.geometry.verticesNeedUpdate = true;
+							
+						}
+						
+					})
+					.onComplete(function (){
+						
+						currentType = type;
+						
+					});
+					animateTween.start();
+				}
+			}
+			
+			function animate() {
+				
+				requestAnimationFrame( animate );
+			
+				render();
+			
+			}
+			
+			function render() {
+				
+				renderer.render( scene, camera );
+				
+				controls.update();
+				TWEEN.update();
+			}
+			
+		</script>
+		<!-- {v: null, plane: null, cylinder: null, sphere: null} -->
+		<div id="button_container">
+			<button onclick="translateMap('sphere')">球体</button>
+			<button onclick="translateMap('cylinder')">弧面</button>
+			<button onclick="translateMap('plane')">平面</button>
+		</div>
+	</body>
+</html>

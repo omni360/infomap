@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Unica+One' rel='stylesheet' type='text/css'>
+    <style>
+	    body{
+	    	background: #000;
+	    }
+.color-a{
+    background: #33B96C;
+}
+.color-b{
+    background: #8131B5;
+}
+.color-c{
+    background: #C8C837;
+}
+.color-d{
+    background: #83BC33;
+}
+.color-e{
+    background: #C8A237;
+}
+.color-f{
+    background: #BF357B;
+}
+.color-g{
+    background: #C87E37;
+}
+.color-h{
+    background: #C84D37;
+}
+.color-i{
+    background: #314AB7;
+}
+
+		.select-location table td:hover{
+		    cursor: default;
+		}
+		.location-label{
+			left: 10px;
+		}
+		.location-label{
+		    top: 5px;
+		}
+		.system-label label,.location-label label{
+		    color: #FFF;
+		    font-family: "微软雅黑";
+		    font-size: 16px;
+		    line-height: 18px;
+		    padding: 9px 10px 7px;
+		    display: block;
+		    background: rgba(0,0,0,0.4);
+		    letter-spacing: 2px;
+		}
+
+		.location-label,.system-label{
+		    position: absolute;
+		    width: 200px;
+		    padding: 0;
+		    z-index: 10;
+		    font-size: 12px;
+		    color: #7d9ca4;
+		    display: block;
+		    background-color:  rgba(9, 73, 107, 0.83);
+		    border-radius: 1px;
+		    left: 10px;
+		    transition: all 1s;
+		}
+		.select-system{
+    list-style: none;
+    margin: 0;
+    z-index: 10;
+    border-top: 1px solid #10555f;
+    background: url('../images/module-background.png') repeat 0 0;
+    text-align: center;
+    padding: 2px 0;
+}
+
+.select-system li{
+    /*background: rgba(19,66,82,0.8);*/
+    background-image: 
+        -webkit-gradient( linear, center top,center bottom, color-stop(0.11,rgba(255,255,255,0.1)), color-stop(0.1,transparent), to(transparent));
+    background-size: 100% 2px;
+    background-color: rgba(32,87,117,1);
+    /*text-align: right;*/
+    padding: 0;
+    margin: 4px 7px;
+    padding: 8px 6px 8px 10px;
+    line-height: 12px;
+    border-radius: 1px;
+    color: #FFF;
+    font-family: "微软雅黑";
+    font-size: 12px;
+    text-align: left;
+    /*color: transparent;*/
+    /*text-shadow: 0 0 3px #FFFFFF, 0 0 #FFFFFF;*/
+    letter-spacing: 1px;
+    position: relative;
+    border-radius: 0 1px 1px 0;
+    transition: all 0.2s;
+    opacity: 0.9;
+}
+
+.select-system li:hover{
+    cursor: default;
+}
+
+/*.select-system:hover li{
+    opacity: 0.3;
+}*/
+
+.select-system li.hide{
+    opacity: 0.5;
+}
+
+.select-system li.runtext{
+/*    padding: 8px 0 8px 16px;
+    background-color: rgba(24,65,87,1);*/
+    background: rgba(19,66,82,1);
+    -webkit-box-shadow: 0 0 10px #4BBBF3;
+    /*border: 1px solid rgba(65, 190, 255, 1);*/
+    background-color: rgba(3, 13, 26, 0.8);
+    color: #4BBBF3!important;
+}
+
+.select-system li div{
+    width: 1px;
+    padding: 14px 3px;
+    display: inline-block;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 1px 0 0 1px;
+}
+    </style>
+</head>
+<body>
+    <div class="system-label" title="">
+
+        <div class="line"></div>
+        <ul class="select-system" id="selectSystem">
+        </ul>
+    </div>
+
+</body>
+<script src="js/lib/jquery-1.7.1.min.js"></script>
+
+<script src="js/data.js"></script>
+<script src="js/system_data.js"></script>
+
+<script>
+    //屏蔽鼠标事件，防止右键移动3d场景时弹出右键菜单
+    document.oncontextmenu = function (){
+        return false;
+    }
+    
+    
+    $(document).ready(function(){
+        
+        _html = '';
+        for(var i = 0,s; s = sys_text_li[i]; i++ ){
+            _html += ('<li data="'+i+'" flag="0"><div class="color-'+String.fromCharCode(97+i)+'"></div>'+s[0]+'</li>');
+        }
+        $('#selectSystem').html(_html);
+    });
+</script>
+</html>

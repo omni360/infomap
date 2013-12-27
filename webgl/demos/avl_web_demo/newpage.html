@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>AVL SDK for Network Web Demo</title>
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="libs/Font-Awesome-master/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="text/javascript" src="libs/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="libs/raphael-min.js"></script>
+    <script type="text/javascript" src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="libs/RequestAnimationFrame.js"></script>
+    <script src="libs/jquery-ui.js"></script>
+    <script src="libs/highcharts.js"></script>
+    <script src="libs/highcharts-more.js"></script>
+    <script src="libs/jquery.mousewheel.min.js"></script>
+    <script src="libs/jquery.mCustomScrollbar.js"></script>
+    <script type="text/javascript" src="js/newpage.js"></script>
+    <script type="text/javascript" src="js/WaitIconClass.js"></script>
+</head>
+<body>
+<div class="warp">
+    <div class="toper">
+        <div class="pull-left logo">AVL SDK For Network Web Demo</div>
+        <button id="upload" class='btn btn-success pull-right mybtn'>
+            <i class="icon-cloud-upload icon-white"></i>
+        </button>
+        <button id="list" class='btn btn-success pull-right mybtn'>
+            <i class="icon-list-ul icon-white"></i>
+        </button>
+        <button id="list" class='btn btn-success pull-right mybtn'>
+            <i class="icon-repeat icon-white"></i>
+        </button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="content">
+        <div id="mainWindows"></div> 
+        <div class="pull-left area" id="star-area">
+            <div class="area-title">Start</div>
+            <div class="area-content">
+            </div>
+            <div class="area-foot">
+                &nbsp;
+            </div>
+        </div>
+        <div class="pull-left area" id="first-area">
+            <div class="area-title">Front Filter</div>
+            <div class="area-content">
+                <div class="area-content-detail">
+                    <div class="area-content-detail-describe">
+                        <label>Detect Buffer Size:</label>
+                        <label class='describe-value'>512 bytes</label>
+                        <label>Format Signature Number:</label>
+                        <label class='describe-value'> 182</label>
+                        <label>Detect Speed:</label>
+                        <label class='describe-value'>30,000 p/s</label>
+                    </div>
+                </div>
+            </div>
+            <div class="area-foot">
+                <i class="icon-chevron-up icon-white"></i>
+            </div>
+        </div>
+        <div class="pull-left area" id="second-area">
+            <div class="area-title">Rapid Detection</div>
+            <div class="area-content">
+                <div class="area-content-detail">
+                    <div class="area-content-detail-describe">
+                        <label>Detect Buffer Size:</label>
+                        <label class='describe-value'>32 kbytes</label>
+                        <label>Signature Number:</label>
+                        <label class='describe-value'>100,000</label>
+                        <label>Detect Speed:</label>
+                        <label class='describe-value'>> 1.5 GB/s</label>
+                    </div>
+                </div>
+            </div>
+            <div class="area-foot">
+                <i class="icon-chevron-up icon-white"></i>
+            </div>
+        </div>
+        <div class="pull-left area" id="third-area">
+            <div class="area-title">Complete Detection</div>
+            <div class="area-content">
+                <div class="area-content-detail">
+                    <div class="area-content-detail-describe">
+                        <label>Detect Buffer Size:</label>
+                        <label class='describe-value'>Complete File</label>
+                        <label>Signature Number:</label>
+                        <label class='describe-value'>9,000,000</label>
+                        <label>Gene Signature Number:</label>
+                        <label class='describe-value'>560</label>
+                        <label>Pack Signature Number:</label>
+                        <label class='describe-value'>1602</label>
+                        <label>Compiler Signature Number:</label>
+                        <label class='describe-value'>356</label>
+                        <label>Detect Speed:</label>
+                        <label class='describe-value'>> 1 GB/s</label>
+                    </div>
+                </div>
+            </div>
+            <div class="area-foot">
+                <i class="icon-chevron-up icon-white"></i>
+            </div>
+        </div>
+        <div class="pull-left area" id="fourth-area">
+            <div class="area-title">In-depth Detection</div>
+            <div class="area-content">
+                <div class="area-content-detail">
+                    <div class="area-content-detail-describe">
+                        <label>Detect Buffer Size:</label>
+                        <label class='describe-value'>Complete File</label>
+                        <label>Signature Number:</label>
+                        <label class='describe-value'>Massive</label>
+                        <label>VCS Signature Number:</label>
+                        <label class='describe-value'>37</label>
+                        <label>Archive Signature Number:</label>
+                        <label class='describe-value'>31</label>
+                    </div>
+                    <div id="gauge"></div>
+                </div>
+            </div>
+            <div class="area-foot">
+                <i class="icon-chevron-up icon-white"></i>
+            </div>
+        </div>
+        <div class="pull-left area" id="end-area">
+            <div class="area-title">End</div>
+            <div class="area-content">
+
+            </div>
+            <div class="area-foot">
+                &nbsp;
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="footer">
+        <div class="footer-toolbar">
+            <div class="pull-left footer-toolbar-title">
+                Console
+            </div> 
+            <button class="pull-right btn btn-mini btn-primary" type="button">
+                <i class="icon-resize-full icon-white"></i>
+            </button>
+        </div>
+        <div id="log" class="footer-content">
+            <ul>
+
+<!--                 <li>asd <span class='bluefont'>Lop</span> </li> -->
+                <li></li>
+            </ul>   
+        </div>
+    </div>
+</div>
+</body>
+</html>

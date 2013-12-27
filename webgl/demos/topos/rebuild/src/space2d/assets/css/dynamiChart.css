@@ -1,0 +1,36 @@
+#dynamiChart{
+    position: absolute;
+    left: 50px;
+    bottom: 60px;
+    width: 560px;  
+}
+
+#infec_target_num{
+    float: left;
+    width: 270px;
+}
+#infec_pack_num{
+    width: 270px;
+    float: right;
+}
+
+.title{
+	font-family: '微软雅黑';
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.titleleft{
+    padding: 0px 2px 0px 5px;
+    line-height: 30px;
+}
+
+.lefttest{
+	color: white !important;
+	font: 10px '微软雅黑';
+    border: 0px solid;
+    border-left: 4px solid rgba(0, 204, 255, 0.77);
+    background-color: rgba(2, 14, 27, 0.93);
+    -webkit-animation-name: bluePulse; 
+	-webkit-animation-duration: 1.5s;
+}

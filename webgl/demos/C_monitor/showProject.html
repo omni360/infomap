@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<myta charset="UTF-8">
+	<title>Documynt</title>
+	<style>
+	html,body{
+		overflow: hidden;
+		background: #222;
+	}
+	</style>
+    <script type="x-shader/x-vertex" id="vertexShader">
+
+        attribute vec4 center;
+        varying vec4 vCenter;
+
+        void main() {
+
+            vCenter = center;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentShader">
+
+        #extension GL_OES_standard_derivatives : enable
+
+        varying vec4 vCenter;
+
+        float edgeFactorTri() {
+
+            vec3 d = fwidth( vCenter.xyz );
+            vec3 a3 = smoothstep( vec3( 0.0 ), d * 1.5, vCenter.xyz );
+            return min( min( a3.x, a3.y ), a3.z );
+
+        }
+
+        float edgeFactorQuad1() {
+
+            vec2 d = fwidth( vCenter.xy );
+            vec2 a2 = smoothstep( vec2( 0.0 ), d * 1.5, vCenter.xy );
+
+            return min( a2.x, a2.y );
+
+        }
+
+        float edgeFactorQuad2() {
+
+            vec2 d = fwidth( 1.0 - vCenter.xy );
+            vec2 a2 = smoothstep( vec2( 0.0 ), d * 1.5, 1.0 - vCenter.xy );
+
+            return min( a2.x, a2.y );
+        }
+
+        void main() {
+            if ( vCenter.w == 0.0 ) {
+
+                //gl_FragColor.rgb = mix( vec3( 1,1,1 ), vec3( 1,1,1 ), edgeFactorTri() );
+                //gl_FragColor.rgb = vec3( 0.48,0.64,0.48 );
+                gl_FragColor.rgb = vec3( 0.4,0.81,0.4 );
+                gl_FragColor.rgb = vec3( 0.6,0.81,0.6 );
+                gl_FragColor.rgb = vec3( 0.258,0.725,0.95 );
+                gl_FragColor.a = 0.6;
+
+            } else {
+
+                //gl_FragColor.rgb = mix( vec3( 1,0,0 ), vec3( 1,0,0 ), min( edgeFactorQuad1(), edgeFactorQuad2() ) );
+                gl_FragColor.rgb = vec3( 0.48,0.48,0.48 );
+                gl_FragColor.rgb = vec3( 0.258,0.725,0.95 );
+                gl_FragColor.rgb = vec3( 0.6,0.8,1.0 );
+                gl_FragColor.a = 1.0;
+                
+            }
+            
+        }
+    </script>
+</head>
+<body>
+	<div id="webgl_div"></div>
+</body>
+<script src="js/lib/jquery-1.7.1.min.js"></script>
+<script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/TrackballControls.js"></script>
+<script src="js/lib/CrossCircle.js" type="text/javascript" charset="utf-8"></script>
+<script>
+$(function(){
+	var Map = new ClassTPlatform({
+        parentElementId: 'webgl_div'
+    });
+});
+
+var ClassTPlatform = function(settings){
+    var my = this;
+    my.settings = settings || {};
+
+
+    my.initClass = function(){
+        my.renderer = new THREE.WebGLRenderer();
+        my.renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( my.renderer.domElement );
+
+
+
+        window.addEventListener( 'resize', my.onWindowResize, false );
+        
+        my.initWebgl();
+    }
+
+    my.initWebgl = function(){
+        my.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 70000 );
+        my.camera.position.z = 10000;
+        my.scene = new THREE.Scene();
+
+
+        my.controls = new THREE.TrackballControls( my.camera, my.renderer.domElement);
+        my.controls.rotateSpeed = 0.5;
+
+        my.loadSenseObjects();
+    }
+
+    my.loadSenseObjects = function(){
+
+        new CrossCircle();
+
+        my.loadChinaModel();
+    }
+    /*
+        *加载地图
+    */
+    my.loadChinaModel = function(geometryQuads){
+        var loader = new THREE.JSONLoader();
+                
+        loader.load( 'js/china_model.js', function ( geometryQuads) {
+            var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+            var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+
+            var attributesQuads = { center: { type: 'v4', boundTo: 'faceVertices', value: [] } };
+            var valuesQuads = attributesQuads.center.value;
+
+            my.setupAttributes( geometryQuads, valuesQuads );
+
+            var materialQuads = new THREE.ShaderMaterial( { uniforms: {}, attributes: attributesQuads, vertexShader: vertexShader, fragmentShader: fragmentShader } );
+
+            var m = new THREE.MeshBasicMaterial( {color: 'red',transparent: true,opacity: 0.3} );
+
+            meshQuads = new THREE.Mesh( geometryQuads, m );
+            meshQuads.position.x = 0;
+            
+            
+            meshQuads.position = new THREE.Vector3(
+                0,200,0
+            );
+            meshQuads.scale.set( 1000, 1000, 120);
+            // meshQuads.rotation.x = - Math.PI / 2;
+            my.scene.add( meshQuads );
+        });
+
+        
+    }
+
+    my.setupAttributes = function( geometry, values ) {
+
+        for( var f = 0; f < geometry.faces.length; f ++ ) {
+
+            var face = geometry.faces[ f ];
+
+            if ( face instanceof THREE.Face3 ) {
+
+                values[ f ] = [ new THREE.Vector4( 1, 0, 0, 0 ), new THREE.Vector4( 0, 1, 0, 0 ), new THREE.Vector4( 0, 0, 1, 0 ) ];
+
+            } else {
+                //console.info(face.normal.z);
+                if(face.normal.z != 0){
+                    values[ f ] = [ new THREE.Vector4( 1, 0, 0, 0 ), new THREE.Vector4( 1, 1, 0, 0 ), new THREE.Vector4( 0, 1, 0, 0 ), new THREE.Vector4( 0, 0, 0, 0 ) ];
+                }
+                else{
+                    values[ f ] = [ new THREE.Vector4( 1, 0, 0, 1 ), new THREE.Vector4( 1, 1, 0, 1 ), new THREE.Vector4( 0, 1, 0, 1 ), new THREE.Vector4( 0, 0, 0, 1 ) ];
+                }
+                
+            }
+
+        }
+
+    }
+
+    my.onWindowResize = function() {
+
+        my.camera.aspect = window.innerWidth / window.innerHeight;
+        my.camera.updateProjectionMatrix();
+
+        my.renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+    my.animate = function() {
+
+        requestAnimationFrame( my.animate );
+
+        my.controls.update();
+        my.renderer.render( my.scene, my.camera );
+
+    }
+    my.initClass();
+    my.animate();
+}
+</script>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	
+</head>
+<body>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3 style="color: #FFFFFF">配置</h3>
+	</div>
+	<div class="modal-body">
+		<div class="tabbable tabs-left">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#department_page" data-toggle="tab">部门</a></li>
+				<li><a href="#role_page" data-toggle="tab">角色</a></li>
+				<li><a href="#function_page" data-toggle="tab">功能</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="department_page">
+					<div class="deprtment_tree_show" id="depart_tree">
+				    	<ul id="department_show" class="ztree pop"></ul>
+				    	<label id="click_warn" style="color: red"></label>
+						<div class="option_left">
+							<img id="depart_add_btn" src="/image/permission_img/sq_plus_white.png"></img>
+							<img id="depart_edit_btn" src="image/permission_img/pencil_white.png"></img>
+				   			<img id="depart_del_btn" style="margin-right: 5px;" src="image/permission_img/trash_white.png"></img>
+						</div>
+				    </div>
+					<div class="add_depart" style="border-left: 1px dotted #ccc">
+				        <!-- 修改部门名称弹出窗口		 -->
+						<div id="alter_department" title="修改部门名称" style="display: none">
+					    	<h3 class="set_title">修改部门</h3>
+						    <label class="dialog_label" style="float: left">部门名称</label>
+							<input type="text" id="alter_department_name" rel="0" style="float: left"/>
+							<label id="prompt_alter" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="alter_depart_btn" class="btn btn-primary">确定</button>
+							</div>
+						</div>
+						<!-- 		添加部门				 -->
+					    <div id="department_add_right">
+					    	<h3 class="set_title">添加部门</h3>
+					    	<label for="par_department">父级部门:</label>
+							<label type="text" name="par_department" id="add_department_name" rel="0">在左侧选择父级部门,没有则不用选</label>
+					        <br /><br />
+					        <label for="department">部门名称:</label>
+							<input type="text" name="department" id="department_name" required="required"  />
+							<br /><br />
+							<label id="department_warn" style="clear:both; color: red"></label>
+							<div class="option_btn">
+					   			<button id="add_depart_btn" class="btn btn-primary">确定</button>
+					   			<button id="add_depart_reset" class="btn btn-info">重置</button>
+							</div>
+					    </div>
+				        <!-- 删除部门名称弹出窗口		 -->
+						<div id="del_department" title="删除部门" style="display: none">
+					    	<h3 class="set_title">删除部门</h3>
+						    <label class="dialog_label" id="del_department_name" style="float: left"></label>
+							<label id="prompt_del" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="del_depart_btn" class="btn btn-primary">确定</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="role_page">
+					<div class="deprtment_tree_show" id="role_show">
+				    	<ul id="role_tree" class="ztree pop"></ul>
+				    	<label id="click_role_warn" style="color: red"></label>
+						<div class="option_left">
+							<img id="role_add_btn" src="image/permission_img/sq_plus_white.png"></img>
+							<img id="role_edit_btn" src="image/permission_img/pencil_white.png"></img>
+				   			<img id="role_del_btn" style="margin-right: 5px;" src="image/permission_img/trash_white.png"></img>
+						</div>
+				    </div>
+				    <div class="add_depart" style="border-left: 1px dotted #ccc">
+				        <!-- 修改角色名弹出窗口		 -->
+						<div id="alter_role"  style="display: none" >
+							<h3 class="set_title">修改角色名</h3>
+						    <label for="rol" style="color: #ccc">角色名</label>
+							<input type="text" name="rol" id="alter_role_name" class="required" rel="0" />
+					        <br />
+					        <label  style="color: #ccc">系统功能————>角色可用功能</label>
+					        <br />
+						  	<div id="left_tree" style="float:left">
+					        	<ul id="alter_fun_tree" class="ztree pop"></ul>
+					        </div>
+							<label id="prompt_alter_role" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="alter_role_btn" class="btn btn-primary">确定</button>
+					   			<button id="alter_role_reset" class="btn btn-info">重置</button>
+							</div>
+						</div>
+				        <!-- 新增角色弹出窗口		 -->
+						<div id="add_role">
+							<h3 class="set_title">添加角色</h3>
+						    <label for="rol" style="color: #ccc">角色名</label>
+							<input type="text" name="rol" id="add_role_name" class="required" rel="0" />
+					        <br />
+				        	<label style="color:#ccc">系统功能————>角色可用功能(勾选功能)</label>
+						  	<div id="left_tree" style="float:left">
+					        	<ul id="add_fun_tree" class="ztree pop"></ul>
+					        </div>
+							<label id="role_warn" style="clear:both;color: red"></label>
+							<div class="option_btn">
+					   			<button id="add_role_btn" class="btn btn-primary">确定</button>
+					   			<button id="add_role_reset" class="btn btn-info">重置</button>
+							</div>
+						</div>
+				        <!-- 删除角色弹出窗口		 -->
+						<div id="del_role" style="display: none">
+							<h3 class="set_title">删除角色</h3>
+						    <label class="dialog_label" id="del_role_name" style="float: left"></label>
+							<label id="prompt_del_role" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="del_role_btn" class="btn btn-primary">确定</button>
+							</div>
+						</div> 
+				    </div>
+				</div>
+				<div class="tab-pane" id="function_page">
+					<div class="deprtment_tree_show" id="function_tree">
+					  	<ul id="fun_tree" class="ztree"></ul>
+				    	<label id="click_fun_warn" style="color: red"></label>
+						<div class="option_left">
+							<img id="func_add_btn" src="image/permission_img/sq_plus_white.png"></img>
+							<img id="func_edit_btn" src="image/permission_img/pencil_white.png"></img>
+				   			<img id="func_del_btn" style="margin-right: 5px;" src="image/permission_img/trash_white.png"></img>
+						</div>
+					</div>
+					<div class="add_depart"  style="border-left: 1px dotted #ccc">
+						<!-- 修改功能弹出窗口		 -->
+						<div id="alter_function" style="display: none">
+							<h3 class="set_title">修改功能名称</h3>
+						    <label  style="color:#ccc;float: left">功能名称</label>
+							<input type="text" id="function_name_alter" rel="0" style="float: left"/>
+							<br /><br />
+						    <label class="dialog_label" style="float: left">功能URL</label>
+							<input type="text" id="function_url_alter" rel="0" style="float: left" disabled="true"/>
+							<label id="fun_prompt_alter" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="alter_func_btn" class="btn btn-primary">确定</button>
+							</div>
+						</div>
+				        <!-- 新增功能弹出窗口		 -->
+					    <div id="function_add_right">
+							<h3 class="set_title">添加功能</h3>
+					    	<label for="par_department">父级功能:</label>
+							<label type="text" id="parent_function_name" rel="0">在左侧选择父级功能,没有则不用选</label>
+					        <br /><br />
+					        <label >功能名称:</label>
+							<input type="text" id="function_name_add" required="required"  />
+							<br /><br />
+					        <label >功能URL:</label>
+							<input type="text" id="function_url_add" required="required" disabled="true" />
+							<br /><br />
+							<label id="fun_warn" style="color: red"></label>
+							<div class="option_btn">
+					   			<button id="add_func_btn" class="btn btn-primary">确定</button>
+					   			<button id="add_func_reset" class="btn btn-info">重置</button>
+							</div>
+					    </div>
+				        <!-- 删除功能弹出窗口		 -->
+						<div id="del_function" style="display: none">
+							<h3 class="set_title">删除功能</h3>
+						    <label class="dialog_label" id="del_function_name" style="float: left"></label>
+							<label id="fun_prompt_del" style="clear:both; color: green"></label>
+							<div class="option_btn">
+					   			<button id="del_func_btn" class="btn btn-primary">确定</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

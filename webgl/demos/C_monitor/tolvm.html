@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Unica+One' rel='stylesheet' type='text/css'>
+    <style>
+	    body{
+	    	background: #000;
+	    }
+
+		.select-location{
+		    background: rgba(0,0,0,0.4);
+		    text-align: center;
+		    padding: 2px;
+		}
+
+		.select-location table{
+		    padding: 0;
+		    margin: auto;
+		    width: 100%;
+		}
+
+		.select-location table td{
+		    padding: 2px;
+		    line-height: 12px;
+		    color: #FFF;
+		    font-family: "微软雅黑";
+		    font-size: 11px;
+		    text-align: left;
+		    letter-spacing: 2px;
+		    transition: all 0.2s;
+		    border: 1px solid transparent;
+		    border-radius: 1px;
+		    background-color: rgba(255, 255, 255, 0.06);
+		}
+
+		.select-location table td span.num{
+			font-size: 22px;
+			text-align: right;
+			/*background: #000;*/
+			display: block;
+			font-family: 'Unica One', cursive;
+			/*background: rgba(255,255,255,0.05);*/
+			border-radius: 1px;
+			/*color: rgba(255, 220, 34, 1);*/
+			padding: 1px;
+		}
+
+		.select-location table td span.disable{
+			color: rgba(105, 105, 105, 0.2);
+		}
+
+
+		.select-location table td span.text{
+			line-height: 16px;
+			display: block;
+			padding: 1px;
+			text-align: center;
+		}
+
+
+		.select-location table td.showborder{
+
+		    background: rgba(19,66,82,1);
+		    -webkit-box-shadow: 0 0 10px #4BBBF3;
+		    /*border: 1px solid rgba(65, 190, 255, 1);*/
+		    background-color: rgba(3, 13, 26, 0.8);
+		    color: #4BBBF3!important;
+
+		}
+
+
+		.select-location table td:hover{
+		    cursor: default;
+		}
+		.location-label{
+			left: 10px;
+		}
+		.location-label{
+		    top: 5px;
+		}
+		.system-label label,.location-label label{
+		    color: #FFF;
+		    font-family: "微软雅黑";
+		    font-size: 16px;
+		    line-height: 18px;
+		    padding: 9px 10px 7px;
+		    display: block;
+		    background: rgba(0,0,0,0.4);
+		    letter-spacing: 2px;
+		}
+
+		.location-label,.system-label{
+		    position: absolute;
+		    width: 180px;
+		    padding: 0;
+		    z-index: 10;
+		    font-size: 12px;
+		    color: #7d9ca4;
+		    display: block;
+		    background-color:  rgba(9, 73, 107, 0.83);
+		    border-radius: 1px;
+		    left: 10px;
+		    transition: all 1s;
+		}
+    </style>
+</head>
+<body>
+    <div class="location-label" title="">
+        <div class="select-location" id="selectLocation" >
+            <table cellspacing="2"></table>
+        </div>
+    </div>
+
+</body>
+<script src="js/lib/jquery-1.7.1.min.js"></script>
+
+<script src="js/data.js"></script>
+<script src="js/system_data.js"></script>
+
+<script>
+    //屏蔽鼠标事件，防止右键移动3d场景时弹出右键菜单
+    document.oncontextmenu = function (){
+        return false;
+    }
+    
+    
+    $(document).ready(function(){
+        
+        var _id = 0,_html = '';
+        while(_id < data_list.length){
+            _html += '<tr>';
+            for(var i = 0;i < 3; i++){ 
+                if(_id == data_list.length) break;
+                _html += ('<td colspan="'+(_id == 3 ? 2 : 1)+'" data="'+_id+'" flag="0"><span class="text">' + data_list[_id][0] +'</span><span class="num disable">000</span></td>');
+                _id++;
+                if(_id == 5) break;
+            }
+            _html += '</tr>';
+        }
+        $('#selectLocation table').html(_html);
+    });
+</script>
+</html>

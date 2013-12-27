@@ -1,0 +1,178 @@
+<html lang="en">
+	<head>
+		<title>three.js webgl - interactive particles</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+		</style>
+	</head>
+
+	<body>
+
+		<script src="libs/three.js"></script>
+		<!-- <script src="../build/Ray.js"></script> -->
+		<script src="libs/Collisions.js"></script>
+		<script src="libs/TrackballControls.js"></script>
+		<!-- <script src="../build/CollisionUtils.js"></script> -->
+		<script>
+
+		var renderer, scene, camera, stats, controler;
+		var particle_system;
+
+		var WIDTH = window.innerWidth,
+			HEIGHT = window.innerHeight;
+
+		var PARTICLE_SIZE = 20;
+
+		var projector, ray;
+		var mouse = { x: 0, y: 0 }, INTERSECTED;
+
+		var clock;
+
+		init();
+		animate();
+
+		function init() {
+
+			camera = new THREE.PerspectiveCamera( 45, WIDTH / HEIGHT, 1, 500000 );
+			camera.position.set(0,0,35000);
+			
+			projector = new THREE.Projector();
+			ray = new THREE.Ray()//camera.position, null);
+
+			scene = new THREE.Scene();
+
+			//scene.add( camera );
+
+			clock = new THREE.Clock();
+			
+			var img = THREE.ImageUtils.loadTexture( "src/textures/disc.png" );
+			var material = new THREE.ParticleBasicMaterial( {
+				color: 0xffffff, 
+				size: 200 ,
+				map: img ,
+				blending: THREE.AdditiveBlending, 
+				depthTest: true, 
+				transparent : true, 
+				vertexColors: true, 
+				opacity : 1  
+			});
+
+			var geometry = new THREE.Geometry();
+			
+			for (i = 0; i < 10000; i++){
+				var p = new THREE.Vector3((Math.random() * 2 - 1)*40000,(Math.random() * 2 - 1)*40000,(Math.random() * 2 - 1)*40000);
+				e = new THREE.SphereCollider(p.clone().subSelf(camera.position), material.size/ 6);
+				e.origCenter = p;
+				THREE.Collisions.colliders.push(e);
+				geometry.vertices.push(p);
+				geometry.colors.push(new THREE.Color(Math.random()*0xffffff));
+			}
+			
+			particle_system = new THREE.ParticleSystem( geometry, material );
+			
+			particle_system.dynamic = false;
+			particle_system.vertexColors = true;
+			//particle_system.sortParticles = true;
+
+			scene.add( particle_system );
+			
+			renderer = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1 } );
+			renderer.setSize( WIDTH, HEIGHT );
+			
+			controler = new THREE.TrackballControls(camera);
+			controler.target.set(0,0,1);
+		    controler.rotateSpeed = .1;
+			
+			console.log(camera.position);
+			
+			var container = document.body;
+			container.appendChild( renderer.domElement );
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+			window.addEventListener( 'resize', onWindowResize, false );
+		}
+
+		function onDocumentMouseMove( event ) {
+
+			event.preventDefault();
+
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			render();
+
+		}
+
+		function animate() {
+
+			requestAnimationFrame( animate );
+			render();
+
+		}
+
+		function render() {
+			
+			var rayVector,
+				distanceToCamera = -1;
+	        var vector = new THREE.Vector3(mouse.x, mouse.y, .5), 
+	        unproject_vector = projector.unprojectVector(vector, camera);
+	        ray.direction = unproject_vector.subSelf(camera.position).normalize();
+	        var intersects = THREE.Collisions.rayCastAll(ray);
+			if (intersects.length > 0) {
+	            for (i = 0; i < intersects.length; i++) {
+	                var intersect = intersects[i];
+	                disToCameraX = intersect.center.x - camera.position.x, 
+	                disToCameraY = intersect.center.y - camera.position.y, 
+	                disToCameraZ = intersect.center.z - camera.position.z, 
+	                distance = disToCameraX * disToCameraX + disToCameraY * disToCameraY + disToCameraZ * disToCameraZ;
+	                if (distanceToCamera == -1 || distance < distanceToCamera){
+	                    rayVector = intersects[i].center, distanceToCamera = distance;
+	                }
+	            }
+	            if (rayVector == undefined){
+	                return;
+	            }else{
+	            	console.log(rayVector)
+	            }
+	            
+			}
+			
+			
+			THREE.Collisions.update(camera);
+			controler.update();
+			renderer.render( scene, camera );
+		}
+
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+		<title>monior-assess</title>
+			<link rel="stylesheet" href="../../css/base.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	
+			<link href="../../otherlib/font-awesome/css/font-awesome.css" rel="stylesheet">
+			<link href="../../otherlib/customIcon/style.css" rel="stylesheet">
+			<link rel="stylesheet" href="../../css/models.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	
+			<link rel="stylesheet" href="../../css/monitor.css" type="text/css" media="screen" charset="utf-8"/>
+			<link rel="stylesheet" href="../../css/paginate.css" type="text/css" media="screen" charset="utf-8"/>
+		
+		<script src="../../js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/highcharts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/dark-green.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/jquery.paginate.js" type="text/javascript" charset="utf-8"></script>
+		
+        <script src="monitor.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script type="text/javascript" charset="utf-8">
+			function init(){
+				document.addEventListener( 'mousemove', window.parent.onDocumentMouseMove, false );
+			}
+	    </script>
+	</head>
+	<body onload="init()">
+		<div id="main">
+			<div class="container-fluid">
+				<div class="row-fluid" style="height: 900px">
+					<div id="center">
+						<div id="title" class="span12">
+							<div class="span1">
+							
+							</div>
+							<div class="span11">
+								<div class="span3">
+								    <h3>CPU使用率</h3>
+								    <div id="line" style="width: 100%; border: solid #999 2px;  margin: 0px 0 10px -3px;"></div>
+								</div>
+								<div class="span3">
+								    <h3>内存占用率</h3>
+								    <div id="line" style="width: 100%; border: solid #999 2px;  margin: 0px 0 10px -3px;"></div>
+								</div>
+								<div class="span3">
+								    <h3>磁盘占用率</h3>
+								    <div id="line" style="width: 100%; border: solid #999 2px;  margin: 0px 0 10px -3px;"></div>
+								</div>
+								<div class="span3">
+								    <h3 >网络流量</h3>
+								    <div id="line" style="width: 100%; border: solid #999 2px;  margin: 0px 0 10px -3px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="down" class="span12">
+						<br />
+						<div id="page"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

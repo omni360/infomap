@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>大屏</title>
+	<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+</head>
+<body>
+<div id="ThreeMap" class="three-map"></div>
+<div id="loadImg" class="load-scene">
+	<div class="load-box">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+
+<div id="loadFrame" class="load-frame">
+	sdf
+</div>
+
+</body>
+<script src="js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/raphael.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/SvgPathLib.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/TrackballControls.js"></script>
+<script src="js/world.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('#loadImg').css({
+		// 'top': (window.innerHeight - 120)/2,
+		'top' : 1,
+		'left' : 10
+		// 'bottom': '10px',
+		// 'left': (window.innerWidth - 120)/2
+	});
+
+	var world = new WorldMap();
+
+	new loadFrame();
+})
+
+var loadFrame = function(){
+	var me = this;
+	me.idstr = 'loadFrame';
+	me.width = window.innerWidth;
+	me.height = window.innerHeight;
+	me.paper = Raphael(me.idstr,me.width,me.height);
+
+	me.paper.customAttributes.drawWindRose = function (cx, cy, r, R, d1, d2, t, a) {
+	    return dWindRose(cx, cy, r, R, d1, d2, t, a);
+	}
+
+	R = 50;
+
+	var processBarH = 4;
+
+	me.sec = me.paper.path('M0,'+(me.height - processBarH/2)+'h0').attr({'stroke': 'rgba(101,101,101,1)','stroke-width': processBarH});
+
+	me.run = function(){
+		me.sec.animate({
+			path: ['M0,'+(me.height - processBarH/2)+'h' + window.innerWidth]
+		},5000)
+	}
+
+	me.run();
+}
+
+</script>
+</html>

@@ -1,0 +1,1528 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Virtual Network</title>
+		<link rel="stylesheet" href="../../css/base.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+		<link href="../../otherlib/font-awesome/css/font-awesome.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../css/models.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+		<link rel="stylesheet" href="../../rebuild/src/space2d/assets/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+
+		<style type="text/css">
+			body > #zoomRuler{
+				left: -webkit-calc(100% - 55px) ;
+				bottom: 20px;
+			}
+			
+			.slider_box {
+				z-index: 10;
+				margin-left: 15px;
+				margin-top: -10px;
+			}
+			
+			.slider_box:after{
+			  top: 10px;
+			  border: solid transparent;
+			  content: " ";
+			  height: 0;
+			  width: 0;
+			  position: absolute;
+			  pointer-events: none;
+			  /*border-right-color: rgba(0, 97, 134, 0.88);*/
+			  border-right-color: #FB9D15;
+			  border-width: 7px;
+			  left: -14px;
+			}
+			
+			.slider_box  header{
+			  color: #FB9D15;
+			  font-size: 16px;
+			  font-family: 'Maven Pro','微软雅黑', sans-serif;
+			  letter-spacing: 1px;
+			  /*font-weight: bold;*/
+			  padding: 10px 12px 8px;
+			  border-bottom: 1px solid;
+			  border-color: #0EA5CC;
+			  /*background: rgba(0, 0, 0, 0.95);*/
+			  background: rgba(0, 68, 94, 0.98);
+			  box-shadow: inset 0 0 30px rgba(2, 128, 175, 0.2);
+			  border-radius: 2px 2px 0 0;
+			}
+			.slider_box .contentbody{
+			  /*background: rgba(0, 0, 0, 0.95);*/
+			  background: rgba(0, 68, 94, 0.98);
+			  box-shadow: inset 0 0 30px rgba(2, 128, 175, 0.2);
+			  padding: 10px;
+			  border-radius: 0 0 2px 2px;
+			  transition: all ease-out 0.6s 0.1s;
+			}
+			
+			.close_img {
+				position: absolute;
+				right: 13px;
+				top: 9px;
+				font-size: 14px;
+				color: #FB9D15;
+			}
+			
+			.close_img:hover {
+				color: #FFF;
+			}
+						
+			.host_status_container{
+				
+				position: absolute;
+				top: 0px;
+				width: 5px;
+				/*background: #FF0000;*/
+				
+			}
+			
+			.host_status_container table{
+				width: 100%;
+				transition: all ease-in-out 0.2s 0s;
+			}
+			
+			.host_status_container div{
+				width: 100%;
+				height: 20%;
+			}
+			
+			.host_status_container img{
+				height: 100%;
+				width: 100%;
+			}
+			
+			.warning{
+				background: rgba(0,0,0,0) url("../../image/risk.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.disconnect{
+				background: rgba(0,0,0,0) url("../../image/link.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.add{
+				background: rgba(0,0,0,0) url("../../image/add.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.delete{
+				background: rgba(0,0,0,0) url("../../image/close.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.app{
+				background: rgba(0,0,0,0) url("../../image/app.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.config{
+				background: rgba(0,0,0,0) url("../../image/config.png") center no-repeat ;
+				background-size: contain;
+			}
+			
+			.display_none{
+				display: table-cell;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.host_status_container div:hover{
+				cursor: pointer;
+			}
+			
+			/*.status_flicker{
+				
+				box-shadow: 0 0 1px 1px rgba(118, 150, 200, 0.58);
+				-webkit-animation-name: tableShadow;
+                -webkit-animation-duration: 1s;
+                -webkit-animation-timing-function: linear;
+                -webkit-animation-delay: 1s;
+                -webkit-animation-direction: alternate;
+                -webkit-animation-iteration-count: infinite;
+                
+			}
+			
+			@-webkit-keyframes tableShadow {
+				  50%  {
+				    box-shadow: 0 0 12px 1px rgba(118, 150, 200, 0.58);
+				  }
+				  100% {
+				    box-shadow: 0 0 1px 1px rgba(118, 150, 200, 0.58);
+				  }
+			}*/
+			
+			#node_tip{
+				position: absolute;
+				display: none;
+				background: rgba(0,100,100,.5);
+				font-size: 30px;
+				width: 0px;
+				height: 0px;
+			}
+			
+			#node_tip div{
+				height: 100%;
+				/*padding: 10px;*/
+			}
+			
+			#legend_div{
+				position: absolute;
+				bottom: 0px;
+				left:0px;
+			}
+			
+			#legend_div img{
+				width: 32px;
+				height: 32px;
+			}
+			
+			#legend_div label{
+				font-size: 18px;
+				font-weight: bold;
+			}
+			
+			.config_box {
+				padding-left: 10px;
+			}
+			
+			#flow_risk_div{
+				padding: 0;
+				margin-left: 15px;
+				position: absolute;
+				top: 220px;
+				left: 0;
+				
+			}
+			
+			.risk_item{
+				
+				position: relative;
+				margin-top: 10px;
+				height: 80px;
+				
+			}
+			
+			.risk_item:hover{
+				/*cursor: pointer;*/
+			}
+			
+			#flow_tip{
+				position: absolute;
+			}
+			
+		</style>
+		
+		<!-- Libs-->
+		<script src="../../js/topoJson.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../../js/lib/css3d.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../../rebuild/src/libs/jquery.mousewheel.min.js"></script>
+		<script src="../../rebuild/src/libs/jquery.mCustomScrollbar.js"></script>
+		<script src="../../rebuild/src/libs/three.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/raphael.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="src/libs/effects/three.min.r52.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="../../rebuild/src/libs/Collisions.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/TrackballControls.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/Tween.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/highcharts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/libs/dark-green.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 主类、材质、动画库-->
+		<script src="../../rebuild/src/OOPTEST.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/textures/TexturesLibrary.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/animations/Animation.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 网关  -->
+		<script src="../../rebuild/src/gateways/Gateways.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/gateways/GatewayRequest.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 场景视口-->
+		<script src="../../rebuild/src/space3d/scenes/Scene.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/scenes/Viewport.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/scenes/Scene.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 模型-->
+		<script src="../../rebuild/src/space3d/models/Model.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/bases/Circle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/bases/Arrow.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/bases/Mark.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/bases/DashedLine.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/Gyroscope.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/Floor.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/Hexagon.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/Star.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/DiscAxis.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/CrossCircle.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../../rebuild/src/space2d/models/BaseSvgModel.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/models/ZoomRulerSvgModel.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/models/HostMenuSvgModel.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/models/MsgCardModel.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 区块 -->
+		<script src="../../rebuild/src/space2d/functionspan/topoinfo/topoInfo.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/mapstyle/mapStyle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/findNode/findNode.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/dynamichart/dynamiChart.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/showLog/replayLog.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/showLog/showLog.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/showLog/historyLog.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/menupanel/menuPanel.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/eventlist/eventList.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/replayBar/replayBar.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 主体拓扑	-->
+		<script src="../../rebuild/src/space3d/models/bases/NodeSystem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/models/TopoSystemPlatform.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 人机交互事件 -->
+		<script src="../../rebuild/src/space3d/events/Event.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/events/ResizeEvent.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/events/RayEvent.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 安全事件-->
+		<script src="../../rebuild/src/space3d/securevents/SecurEvent.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/securevents/FtpEventTween.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/securevents/MailEventTween.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space3d/securevents/WormEvent.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/showLog/MessageEvent.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/functionspan/showLog/historyMsgEvent.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 工具类 -->
+		<script src="../../rebuild/src/space3d/utils/Utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/utils/ImgUnitls.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../rebuild/src/space2d/utils/StringUtils.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 系统调度器-->
+		<script src="../../rebuild/src/system/AppConfigMain.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			
+			//window.parent && (window.parent.topo.isRenderer = false);
+			
+			document.onmousedown = function (e){
+				if (e.which == 2){
+					return false;
+				}
+			};
+			//屏蔽鼠标事件
+			document.oncontextmenu = function() {
+				return false;
+			};
+			
+			var system,
+				line,
+				currentSelectedNode,
+				currentSelectedIndex = 0,
+				flowTipTargetNode;
+			
+			var apps = [],
+				app_index = 0,
+				show_data = [],
+				pointsObj = {},
+				pointsList = [],
+				tip_type = ['主机告警', '主机无法访问', '软件异常', '配置异常'];
+
+			function init() {
+				
+				//system = new OOPTEST.System('ALL', 'current');
+				system = new OOPTEST.System('ALL', 'alarm', 6000, 6000);
+				system.update(topoJsonList[2]);
+				
+				// var s = new Space3D.CrossCircle();
+				// //s.position.y += 800;
+				// system.scene3d.add(s);
+				
+				show_data = generateMonitorData(system.topo.nodeVectorList);
+				createMonitorTip(show_data);
+				
+				system.topo.render = render;
+				
+				$('.host_status_container').mousedown(function (e){
+					mouseDownHandler(e);
+				}).mouseout(function (e){
+					mouseOutHandler(e);
+				}).mousewheel(function (e){
+					system.onMouseWheel(e);
+				});
+				
+				$(".warning,.disconnect,.app,.config").click(function (e){
+					
+					var tip = $(e.currentTarget),
+						tip_class = tip.attr('class'),
+						tip_title = '主机告警';
+					
+					switch(tip_class){
+						case 'warning':
+							tip_title = '主机告警';
+							break;
+						case 'disconnect':
+							tip_title = '主机无法访问';
+							break;
+						case 'app':
+							tip_title = '软件异常';
+							break;
+						case 'config':
+							tip_title = '配置异常';
+							break;
+					}
+					
+					$('#node_tip_title').text(tip_title);
+					
+					currentSelectedNode = tip.parent();
+					currentSelectedIndex = currentSelectedNode.children().index(tip);
+					show_tip(tip.attr('node_id'));
+				});
+				
+				$('#node_tip .close_img').click(function (){
+					hide_tip();
+				});
+				
+				function show_tip(node_id){
+					
+					$('#node_tip').css('display', 'block');
+					moveToNode(pointsObj[node_id], false);
+					$('#node_tip').css({
+						width: 0,
+						height: 0
+					}).animate({
+						width: 300
+					},200, function (){
+						$(this).animate({
+							height: 80
+						});
+					});
+				};
+				
+				function hide_tip(){
+					
+					currentSelectedNode = undefined;
+					
+					$('#node_tip').animate({
+						height: 0
+					}, 100, function (){
+						$(this).animate({
+							width: 0
+						}, 100, function (){
+							$(this).css('display', 'none');
+						});
+					});
+				};
+				
+				function mouseDownHandler(e){
+					system.onMouseDown(e);
+					e.currentTarget.addEventListener("mouseup", mouseUpHandler);
+					e.currentTarget.addEventListener("mousemove", mouseMoveHandler);
+				}
+				
+				function mouseUpHandler(e){
+					system.onMouseUp(e);
+					e.currentTarget.removeEventListener("mousemove", mouseMoveHandler);
+				}
+				
+				function mouseMoveHandler(e){
+					system.onMouseMove(e);
+				}
+				
+				function mouseOutHandler(e){
+					e.currentTarget.removeEventListener("mouseup", mouseUpHandler);
+					e.currentTarget.removeEventListener("mousemove", mouseMoveHandler);
+				}
+				
+				$(".legend_item").attr('switch', '1');
+				$(".legend_item").click(function (e){
+					
+					dom = $(e.currentTarget);
+					
+					legend_type = dom.attr('id').split('_legend')[0];
+					
+					if (dom.attr('switch') == '1'){
+						dom.css('color', 'gray');
+						dom.attr('switch', '0');
+						
+						//$('.' + legend_type).addClass('display_none');
+						$('.' + legend_type).css({
+							display: 'none',
+							widht: '100%',
+							height: '20%'
+						});
+						
+					}else if (dom.attr('switch') == '0'){
+						dom.css('color', 'white');
+						dom.attr('switch', '1');
+						
+						$('.' + legend_type).css({
+							display: 'block',
+							widht: '100%',
+							height: '20%'
+						});
+					}
+				});
+				
+				$('#flow_tip').attr('switch', '0');
+				
+				
+				$('#flow_tip .close_img').click(function (){
+					
+					$(this).parent().animate({
+						height: 0
+					}, 300, function (){
+						$(this).animate({
+							width: 0
+						}, 200, function (){
+							$('#flow_tip').attr('switch', '0');
+							$('#flow_tip').css('display', 'none');
+						});
+					});
+				});
+			}
+			
+			function moveToNode(vector){
+				
+				system.moveToNode(vector.uid, false);
+						
+				for (var i in system.multiObjs){
+					
+					system.scene3d.__removeObject(system.multiObjs[i]['mark']);
+					delete system.multiObjs[i]['mark'];
+					
+				}
+				
+				system.multiObjs = {};
+				
+				if (system.multiObjs[vector.uid] == undefined ){
+    				mark = new Space3D.Mark({map: Space3D.TexturesLibrary['MultiMark'], position: vector, color: 0xFFFF6F});
+	    			mark.visible = true;
+	    			system.scene3d.add(mark);
+    				system.multiObjs[vector.uid] = {'mark': mark};
+    			}
+			}
+			
+			function render(){
+				
+				for (var i in pointsObj){
+					
+					var world_vector = system.topo.localToWorld(pointsObj[i].clone());
+					var screen_coord = Space3D.Utils.worldToScreen(world_vector, system.mainViewport);
+					
+					var default_size = 40;
+					var default_basic_num = 100000;
+					var distance = pointsObj[i].distanceTo(system.mainViewport.position);
+					var size = Math.floor(default_basic_num / distance);
+					size < default_size && (size = default_size);
+					
+				    $(pointsObj[i]['dom']).css({
+				    	height: size,
+				    	width: size / 4,
+				    	left: Math.floor(screen_coord.x + size / 5),
+						top: Math.floor(screen_coord.y - size / 10)
+				    });
+				    
+				    if ($("#flow_tip").attr('switch') == '1'){
+				    	if (i == flowTipTargetNode.uid && $('#flow_tip').attr('switch') == '1'){
+							$('#flow_tip').css({
+								left: screen_coord.x,
+								top: screen_coord.y
+							});
+						}
+				    }
+				}
+				
+				if (currentSelectedNode) {
+					
+					$('#node_tip').css({
+						top: $(currentSelectedNode).css('top'),
+						left: parseInt($(currentSelectedNode).css('left').split('px')[0]) + $(currentSelectedNode).width(),
+					});
+				}
+				
+				line.geometry.verticesNeedUpdate = true;
+			}
+			
+			function createMonitorTip(data){
+				
+				for (var i in system.topo.nodeIdDict){
+					
+					if (system.topo.nodeIdDict[i].status){
+						
+						var status = [],
+							dom;
+						
+						for(var j in system.topo.nodeIdDict[i].status) {
+							
+							status.push(j);
+							
+							pointsObj[i] = system.topo.nodeIdDict[i];
+							pointsList.push(pointsObj[i]);
+							
+							pointsObj[i].dom || (
+								
+								dom = $(
+									"<div class='host_status_container'>" + 
+									"</div>"
+								),
+								
+								pointsObj[i].dom = dom,
+								$('body').append( dom )
+							);
+						}
+						for (var j = 0; j < status.length; j++){
+							
+							div = $("<div></div>");
+							div.attr('node_id', pointsObj[i]['uid']);
+							div.addClass(status[j]);
+							dom.append(div);
+						}
+					}
+				}
+				
+				function innerFun(){
+			    	//断开连接动画	
+	    			var line_base_color = new THREE.Color(0xffffff),
+	    				line_base_hsv = line_base_color.getHSV();
+	    			var line_tween_hsv = new THREE.Color(0xff0000).getHSV();
+	    			
+					new TWEEN.Tween(line_base_hsv)
+						.to(line_tween_hsv, 1000)
+				    	.easing(TWEEN.Easing.Linear.None)
+				    	.delay(0)
+				    	.onUpdate(function (){
+				    		
+							this.disconnect_nodes = data['disconnect_nodes'];
+				    		
+				    		if (!line){
+				    			line = new Space3D.DashedLine({color: line_base_color, opacity: 1, vertices: this.disconnect_nodes}); 
+				    			system.topo.add(line);
+				    		}
+				    		
+				    		line.material.color.setHSV(this.h, this.s, this.v);
+				    		
+				    		for (var j = 0; j < this.disconnect_nodes.length; j++){
+				    			this.disconnect_nodes[j].geometry.colors[this.disconnect_nodes[j].index].setHSV(this.h, this.s, this.v);
+				    			this.disconnect_nodes[j].geometry.colorsNeedUpdate = true;
+				    		}
+				    	})
+				    	.onComplete(function (){
+				    		
+				    		TWEEN.remove(this);
+				    		
+				    		var line_base_color = new THREE.Color(0xffffff),
+			    				line_base_hsv = line_base_color.getHSV();
+			    			var line_tween_hsv = new THREE.Color(0xff0000).getHSV();
+				    		
+							new TWEEN.Tween(line_tween_hsv)
+								.to(line_base_hsv, 1000)
+						    	.easing(TWEEN.Easing.Linear.None)
+						    	.delay(0)
+						    	.onUpdate(function (){
+				    				
+				    				line.material.color.setHSV(this.h, this.s, this.v);
+				    				
+				    				this.disconnect_nodes = data['disconnect_nodes'];
+				    				
+				    				for (var j = 0; j < this.disconnect_nodes.length; j++){
+						    			this.disconnect_nodes[j].geometry.colors[this.disconnect_nodes[j].index].setHSV(this.h, this.s, this.v);
+						    			this.disconnect_nodes[j].geometry.colorsNeedUpdate = true;
+						    		}
+						    		
+						    	})
+						    	.onComplete(function (){
+				    				TWEEN.remove(this);
+				    			})
+						    	.start();
+				    	})
+				    	.start();
+				}
+				innerFun();
+				setInterval(function (){
+					innerFun();
+				}, 2000);
+			}
+			
+			function generateMonitorData(){
+				
+				var node_dict = system.topo.nodeIdDict;
+				
+				var status_nodes = {
+					warning_nodes: [node_dict['144546'], node_dict['144595'] ], 
+					disconnect_nodes: [
+						node_dict['144594'], node_dict['144639'], 
+						node_dict['144644'], node_dict['144635'],
+						node_dict['144582'], node_dict['144638'],
+						node_dict['144642'], node_dict['144615'],
+					],
+					add_nodes: [], 
+					delete_nodes: [], 
+					app_nodes: [node_dict['144557'], node_dict['144627']], 
+					config_nodes: [node_dict['144585']], 
+				};
+				
+				for (var i in status_nodes){
+					
+					switch(i){
+						case 'warning_nodes':
+							
+							break;
+						case 'disconnect_nodes':
+							
+							break;
+						case 'app_nodes':
+							
+							break;
+						case 'config_nodes':
+							
+							break;
+					}
+					
+					var status = i.split('_nodes')[0];
+					
+					for (var j = 0; j < status_nodes[i].length; j++){
+						var node = status_nodes[i][j];
+	
+						node.status === undefined && ( node.status = {} );
+						node.status[status] = '';
+						
+					}
+				}
+				
+				return status_nodes;
+			}
+			
+			function generateMonitorData_bak(list){
+				
+				var status_nodes = {
+					warning_nodes: [], 
+					disconnect_nodes: [],
+					add_nodes: [], 
+					delete_nodes: [], 
+					app_nodes: [], 
+					config_nodes: [], 
+				};
+				
+				//warning
+				var warning_num = randomNum(10);
+				for (var i = 0; i < warning_num; i++){
+					
+					var randomNode = randomList(list);
+					randomNode.status === undefined && ( randomNode.status = {} );
+					randomNode.status['warning'] = '';
+					status_nodes.warning_nodes.push(randomNode);
+				}
+				
+				//disconnect
+				var disconnect_num = randomNum(10);
+				for (var i = 0; i < disconnect_num; i++){
+					
+					var source_node = randomList(list);
+					source_node.status === undefined && ( source_node.status = {} );
+					source_node.status['disconnect'] = '';
+					
+					var links = source_node['links'];
+					var target_node = system.topo.nodeIdDict[links[randomNum(links.length - 1)]];
+					target_node.status === undefined && ( target_node.status = {} );
+					target_node.status['disconnect'] = '';
+					
+					status_nodes.disconnect_nodes.push(source_node);
+					status_nodes.disconnect_nodes.push(target_node);
+				}
+				
+				/*
+				//add
+				var add_num = randomNum(10);
+				for (var i = 0; i < add_num; i++){
+					
+					var randomNode = randomList(list);
+					randomNode.status === undefined && ( randomNode.status = {} );
+					randomNode.status['add'] = '';
+					add_nodes.push(randomNode);
+					
+				}
+				
+				//delete
+				var delete_num = randomNum(10);
+				for (var i = 0; i < delete_num; i++){
+					
+					var randomNode = randomList(list);
+					randomNode.status === undefined && ( randomNode.status = {} );
+					randomNode.status['delete'] = '';
+					delete_nodes.push(randomNode);
+					
+				}
+				*/
+				//app
+				var app_num = randomNum(10);
+				for (var i = 0; i < app_num; i++){
+					
+					var randomNode = randomList(list);
+					randomNode.status === undefined && ( randomNode.status = {} );
+					randomNode.status['app'] = '';
+					status_nodes.app_nodes.push(randomNode);
+				}
+				
+				//config
+				var config_num = randomNum(10);
+				for (var i = 0; i < config_num; i++){
+					
+					var randomNode = randomList(list);
+					randomNode.status === undefined && ( randomNode.status = {} );
+					randomNode.status['config'] = '';
+					status_nodes.config_nodes.push(randomNode);
+				}
+				
+				return status_nodes;
+			}
+			
+			function randomNum(num){
+				//return Math.round( Math.random() * (num - 1) + 1 );
+				return Math.round( Math.random() * num );
+			}
+			
+			function randomList(list){
+				
+				var index = Math.round(Math.random()*(list.length - 1));
+				return list[index];
+				
+			}
+			
+			function openDialog(e,id){
+					
+				var node_id = id;
+				
+				var vector = pointsObj[node_id],
+					world_vector = system.topo.localToWorld(vector.clone());
+				var screen_coord = Space3D.Utils.worldToScreen(world_vector, system.mainViewport);
+				flowTipTargetNode = vector;
+				
+				var status = '';
+				
+				for (var i in vector.status){
+					status = i;
+					break;
+				}
+				
+				var tip_title = '';
+				
+				switch(status){
+					case 'warning':
+						tip_title = '主机告警';
+						break;
+					case 'disconnect':
+						tip_title = '主机无法访问';
+						break;
+					case 'app':
+						tip_title = '软件异常';
+						break;
+					case 'config':
+						tip_title = '配置异常';
+						break;
+					default:
+						tip_title = '主机告警';
+						break;
+				}
+				
+				$('#flow_tip_title').text(tip_title);
+				
+				if (screen_coord){
+					$('#flow_tip').attr('switch', '0').css({
+						left: e.clientX,
+						top: e.clientY,
+						height: 0,
+						width: 0,
+						display: 'block'
+					}).animate({
+						left: screen_coord.x,
+						top: screen_coord.y,
+						width: 300,
+						height: 'auto'
+					}, 600, function (){
+						
+						$(this).attr('switch', '1');
+						moveToNode(vector);
+					});
+				}
+			}
+			
+		</script>
+		
+		<script type="text/javascript" charset="utf-8">
+			$(function(){
+				
+				Raphael(0,0,320,180,function(){
+					var paper = this,
+						padding = [50,10,10,10];
+						
+					
+					// function RegularPolygon(x,y,r,num,fillet){
+						// if(num < 3) return false;
+						// var rp_points = [],
+							// rp_str = '',
+							// temp = 360/num;
+						// y -= r;
+						// for(var k=0;k<num;k++){
+							// var theat = Math.PI*temp*k/180;
+							// rp_points.push([x+r*Math.sin(theat),y+r*(1-Math.cos(theat))]);
+						// }
+						// if(fillet){
+// 							
+						// }else{
+							// for(var j in rp_points){
+								// rp_str += (j == 0) ? ('M'+rp_points[j][0]+','+rp_points[j][1]) : ('L'+rp_points[j][0]+','+rp_points[j][1]);
+							// }
+						// }
+						// return [rp_str,rp_points];
+					// }
+// 					
+					// var five = RegularPolygon(80,80,60,5);
+// 					
+					// paper.path(five[0]+'z')
+						// .attr({stroke: "rgba(14,165,204,0.9)", "stroke-width": 2});
+						
+
+					
+					paper.path('M10,0L22,12h280L312,0')
+						.attr({
+							stroke: "rgba(14,165,204,0.9)", 
+							"stroke-width": 2,
+							"fill-opacity": 0.2, 
+							fill: "#12C2F6"
+						});
+						
+					var circle_Attr = {
+						stroke: "#fff", 
+						"stroke-opacity": 1, 
+						"stroke-width": 2, 
+						"fill-opacity": 1, 
+						fill: "#12C2F6", 
+					}, text_Attr = {
+						fill: "#ddd", 
+						"font-size":11, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑", 
+						"text-anchor":"start"
+					},line_Attr = {
+						stroke: "rgba(14,165,204,1)", 
+						"stroke-width": 2
+					};
+					
+					function nodeChart(a,b,r,t,count,src,ir,theat,lr){
+						theat = 0, lr = 20;
+						var theat = Math.PI*theat/180;
+						// paper.path('M'+a+','+b+'L'+(a-Math.sin(theat)*lr)+','+(b+Math.cos(theat)*lr)).attr(line_Attr);
+						paper.text(a,b-r-10,t).attr({
+							fill: "#ddd", 
+							"font-size":11,
+							'letter-spacing': 2, 
+							"font-weight": "bold", 
+							"font-family": "微软雅黑", 
+							"text-anchor":"middle"
+						});	
+						
+						paper.text((a-Math.sin(theat)*lr),(b+Math.cos(theat)*lr)+6,count).attr({
+							fill: "#ddd", 
+							"font-size":11,
+							// "font-weight": "bold", 
+							"font-family": "FileFolderJNL,'微软雅黑'", 
+							'letter-spacing': '1px',
+							"text-anchor":"middle"
+						});	
+						
+						// paper.circle(a,b,r).attr(circle_Attr);	s
+						
+						paper.image(src,a-ir/2,b-ir/2,ir,ir);
+					}
+					
+					nodeChart(40,padding[0],15,'服务器',16,'../../rebuild/src/space3d/textures/images/topo_server.png',30);
+					nodeChart(100,padding[0],15,'主机',100,'../../rebuild/src/space3d/textures/images/topo_host.png',30); 				
+					nodeChart(160,padding[0],15,'路由器',14,'../../rebuild/src/space3d/textures/images/topo_router.png',30);			
+					nodeChart(220,padding[0],15,'交换机',17,'../../rebuild/src/space3d/textures/images/topo_switch.png',30);			
+					nodeChart(280,padding[0],15,'防火墙',4,'../../rebuild/src/space3d/textures/images/topo_firewall.png',30);
+					
+					// paper.setSize(348,192);
+
+					// paper.setViewBox(0,0,265,160);
+					
+				});
+			
+				Raphael('risk',70,70,function(){
+					var me = this,
+						time = 200;
+
+					var a = me.path('M29,3.2A32,32,0,1,0,41,3.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 1.7,  
+							"fill":"90-#00171E-#013E50"
+						}).transform('r45');
+					var b = me.path('M30.5,11.2A24,24,0,1,0,39.5,11.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5, 
+							fill: "rgba(0,0,0,0.1)", 
+						});
+					var c = me.circle(35,35,19).attr({
+							stroke: "rgba(14,165,204,0.5)", 
+							"stroke-width": 1.5,  
+					});
+					var g = me.text(59,10,'2').attr({
+						fill: "red", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "FileFolderJNL,'微软雅黑'", 
+					});
+					
+					var h = me.path('M35,67v0').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5
+						});
+						
+					
+					
+					
+						
+					var i = me.circle(35,95,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var q = me.text(45,94,'144546').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						i.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						i.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(ee,144546);
+						$('.risk_item').eq(0).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						j.animate(anim.delay(50));
+						p.animate(anim.delay(50));
+						i.animate(anim.delay(150));
+						q.animate(anim.delay(150));
+						e.data('r',0);
+					});
+					
+					var j = me.circle(35,135,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var p = me.text(45,134,'144595').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						j.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						j.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(ee,144595);
+						$('.risk_item').eq(0).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						j.animate(anim.delay(50));
+						p.animate(anim.delay(50));
+						i.animate(anim.delay(150));
+						q.animate(anim.delay(150));
+						e.data('r',0);
+					});
+					
+					var d = me.image('../../image/risk.png', 20, 18, 30,30);
+					var e = me.circle(35,35,32).attr({
+							stroke: "rgba(14,165,204,0)", 
+							"stroke-width": 1.7,  
+							"fill":"rgba(0,0,0,0)"
+						}).data('r', 0)
+						.hover(function(){
+							b.animate({"transform": "r-60"},time);
+							d.animate({"transform": "r60"},time);
+						},function(){
+							b.animate({"transform": "r0"},time);
+							d.animate({"transform": "r0"},time);
+						}).click(function(){
+							if(this.data('r') == 0){
+								$('.risk_item').eq(0).animate({
+									'height': 170
+								},300);
+								me.setSize(100,170);
+								var k = h.animate({path:'M35,67v100'},300);
+								
+								var anim = Raphael.animation({'opacity': 1}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								j.animate(anim.delay(150));
+								p.animate(anim.delay(150));
+								this.data('r',1);
+							}else{
+								$('.risk_item').eq(0).animate({
+									'height': 70
+								},300);
+								h.animate({path:'M35,67v0'},300,function(){
+									me.setSize(70,70);
+								});
+								var anim = Raphael.animation({'opacity': 0}, 100);
+								j.animate(anim.delay(50));
+								p.animate(anim.delay(50));
+								i.animate(anim.delay(150));
+								q.animate(anim.delay(150));
+								this.data('r',0);
+							}
+							
+						});
+
+				});
+				
+				Raphael('link',70,70,function(){
+					var me = this,
+						time = 200;
+					var a = me.path('M29,3.2A32,32,0,1,0,41,3.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 1.7,  
+							"fill":"90-#00171E-#013E50"
+						}).transform('r45');
+					var b = me.path('M30.5,11.2A24,24,0,1,0,39.5,11.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5, 
+							fill: "rgba(0,0,0,0.1)", 
+						});
+					var c = me.circle(35,35,19).attr({
+							stroke: "rgba(14,165,204,0.5)", 
+							"stroke-width": 1.5,  
+					});
+					var g = me.text(59,10,'1').attr({
+						fill: "red", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "FileFolderJNL,'微软雅黑'", 
+					});
+					
+					var h = me.path('M35,67v0').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5
+						});
+					
+					
+						
+					var i = me.circle(35,95,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var q = me.text(45,94,'144594').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						i.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						i.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(ee,144594);
+						$('.risk_item').eq(1).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						i.animate(anim.delay(50));
+						q.animate(anim.delay(50));
+						e.data('r',0);
+					});
+					
+					var d = me.image('../../image/link.png', 20, 18, 30,30);
+					var e = me.circle(35,35,32).attr({
+							stroke: "rgba(14,165,204,0)", 
+							"stroke-width": 1.7,  
+							"fill":"rgba(0,0,0,0)"
+						}).data('r', 0)
+						.hover(function(){
+							b.animate({"transform": "r-60"},time);
+							d.animate({"transform": "r60"},time);
+						},function(){
+							b.animate({"transform": "r0"},time);
+							d.animate({"transform": "r0"},time);
+						}).click(function(){
+							if(this.data('r') == 0){
+								$('.risk_item').eq(1).animate({
+									'height': 150
+								},300);
+								me.setSize(100,150);
+								var k = h.animate({path:'M35,67v65'},300);
+								
+								var anim = Raphael.animation({'opacity': 1}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								this.data('r',1);
+							}else{
+								$('.risk_item').eq(1).animate({
+									'height': 70
+								},300);
+								h.animate({path:'M35,67v0'},300,function(){
+									me.setSize(70,70);
+								});
+								var anim = Raphael.animation({'opacity': 0}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								this.data('r',0);
+							}
+							
+						});
+				});
+				
+				Raphael('app',70,70,function(){
+					var me = this,
+						time = 200;
+					// var a = me.circle(35,35,32).attr({
+							// stroke: "rgba(14,165,204,1)", 
+							// "stroke-width": 1.7,  
+							// "fill":"90-#00171E-#013E50"
+						// });
+						
+					var a = me.path('M29,3.2A32,32,0,1,0,41,3.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 1.7,  
+							"fill":"90-#00171E-#013E50"
+						}).transform('r45');
+					
+					var b = me.path('M30.5,11.2A24,24,0,1,0,39.5,11.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5, 
+							fill: "rgba(0,0,0,0.1)", 
+						});
+					var c = me.circle(35,35,19).attr({
+							stroke: "rgba(14,165,204,0.5)", 
+							"stroke-width": 1.5,  
+					});
+					// var f = me.circle(60,10,9).attr({
+						// fill: "rgba(14,165,204,1)", 
+						// stroke: "none" 
+					// });
+					var g = me.text(59,9,'2').attr({
+						fill: "red", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "FileFolderJNL,'微软雅黑'", 
+					});
+					
+					var h = me.path('M35,67v0').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5
+						});
+						
+					
+					
+					
+						
+					var i = me.circle(35,95,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var q = me.text(45,94,'144627').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						i.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						i.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(e,144627);
+						$('.risk_item').eq(2).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						j.animate(anim.delay(50));
+						p.animate(anim.delay(50));
+						i.animate(anim.delay(150));
+						q.animate(anim.delay(150));
+						e.data('r',0);
+					});
+					
+					var j = me.circle(35,135,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var p = me.text(45,134,'144557').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						j.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						j.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(ee,144557);
+						$('.risk_item').eq(2).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						j.animate(anim.delay(50));
+						i.animate(anim.delay(150));
+						e.data('r',0);
+					});
+					var d = me.image('../../image/app.png', 22, 21, 26,26);
+					var e = me.circle(35,35,32).attr({
+							stroke: "rgba(14,165,204,0)", 
+							"stroke-width": 1.7,  
+							"fill":"rgba(0,0,0,0)"
+						}).data('r', 0)
+						.hover(function(){
+							b.animate({"transform": "r-60"},time);
+							d.animate({"transform": "r60"},time);
+						},function(){
+							b.animate({"transform": "r0"},time);
+							d.animate({"transform": "r0"},time);
+						}).click(function(){
+							
+							if(this.data('r') == 0){
+								$('.risk_item').eq(2).animate({
+									'height': 170
+								},300);
+								me.setSize(100,170);
+								var k = h.animate({path:'M35,67v100'},300);
+								
+								var anim = Raphael.animation({'opacity': 1}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								j.animate(anim.delay(150));
+								p.animate(anim.delay(150));
+								this.data('r',1);
+							}else{
+								$('.risk_item').eq(2).animate({
+									'height': 70
+								},300);
+								h.animate({path:'M35,67v0'},300,function(){
+									me.setSize(70,70);
+								});
+								var anim = Raphael.animation({'opacity': 0}, 100);
+								j.animate(anim.delay(50));
+								p.animate(anim.delay(50));
+								i.animate(anim.delay(150));
+								q.animate(anim.delay(150));
+								this.data('r',0);
+							}
+							
+						});
+				});
+				
+				
+				Raphael('config',70,70,function(){
+					var me = this,
+						time = 200;
+					var a = me.path('M29,3.2A32,32,0,1,0,41,3.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 1.7,  
+							"fill":"90-#00171E-#013E50"
+						}).transform('r45');
+					var b = me.path('M30.5,11.2A24,24,0,1,0,39.5,11.2').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5, 
+							fill: "rgba(0,0,0,0.1)", 
+						});
+					var c = me.circle(35,35,19).attr({
+							stroke: "rgba(14,165,204,0.5)", 
+							"stroke-width": 1.5,  
+					});
+					var g = me.text(59,9,'1').attr({
+						fill: "red", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "FileFolderJNL,'微软雅黑'", 
+						
+					});
+					
+					var h = me.path('M35,67v0').attr({
+							stroke: "rgba(14,165,204,1)", 
+							"stroke-width": 2.5
+						});
+					
+					
+						
+					var i = me.circle(35,95,5).attr({
+						fill: "#BE1655", 
+						stroke: "#FFF" ,
+						"stroke-width": 1.5,
+						'opacity': 0
+					});
+					var q = me.text(45,94,'144585').attr({
+						fill: "#BE1655", 
+						"font-size":13, 
+						"font-weight": "bold", 
+						"font-family": "微软雅黑",
+						"text-anchor":"start" ,
+						'opacity': 0,
+						'cursor': 'pointer'
+					}).hover(function(){
+						i.attr({
+							"stroke-width": 2.5,
+						});
+					},function(){
+						i.attr({
+							"stroke-width": 1.5,
+						});
+					}).click(function(ee){
+						openDialog(ee,144585);
+						$('.risk_item').eq(3).animate({
+							'height': 70
+						},300);
+						h.animate({path:'M35,67v0'},300,function(){
+							me.setSize(70,70);
+						});
+						var anim = Raphael.animation({'opacity': 0}, 100);
+						i.animate(anim.delay(50));
+						q.animate(anim.delay(50));
+						e.data('r',0);
+					});
+					var d = me.image('../../image/config.png', 20, 20, 30,30);
+					var e = me.circle(35,35,32).attr({
+							stroke: "rgba(14,165,204,0)", 
+							"stroke-width": 1.7,  
+							"fill":"rgba(0,0,0,0)"
+						}).data('r', 0)
+						.hover(function(){
+							b.animate({"transform": "r-60"},time);
+							d.animate({"transform": "r60"},time);
+						},function(){
+							b.animate({"transform": "r0"},time);
+							d.animate({"transform": "r0"},time);
+						}).click(function(){
+							
+							if(this.data('r') == 0){
+								$('.risk_item').eq(3).animate({
+									'height': 150
+								},300);
+								me.setSize(100,150);
+								var k = h.animate({path:'M35,67v65'},300);
+								
+								var anim = Raphael.animation({'opacity': 1}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								this.data('r',1);
+							}else{
+								$('.risk_item').eq(3).animate({
+									'height': 70
+								},300);
+								h.animate({path:'M35,67v0'},300,function(){
+									me.setSize(70,70);
+								});
+								var anim = Raphael.animation({'opacity': 0}, 100);
+								i.animate(anim.delay(50));
+								q.animate(anim.delay(50));
+								this.data('r',0);
+							}
+							
+						});
+				});
+			});
+		</script>
+	</head>
+	<body onload="init()">
+
+		<!-- 实例主体 -->
+		<div id="topo" style="widht:100%; height: -webkit-calc(100% + 10px) ;">
+			
+		</div>
+		
+		
+		<div id="node_tip" class="status_flicker slider_box hover_app">
+			<header id="node_tip_title">主机告警</header>
+			<span class='close_img'><i class='icon-remove'></i></span>
+			<div class="contentbody">
+				 <table class='table'>
+				 	<tr>
+				 		<td>节点编号：</td>
+				 		<td>1001</td>
+				 	</tr>
+				 	<tr>
+				 		<td>告警详情：</td>
+				 		<td>.....................</td>
+				 	</tr>
+				 </table>
+			</div>
+		</div>
+		
+		<!-- 告警悬浮块 -->
+		<ul id="flow_risk_div">
+			<li id='risk' class="risk_item" node_id="144546"></li>
+			<li id='link' class="risk_item" node_id="144594"></li>
+			<li id='app' class="risk_item" node_id="144627"></li>
+			<li id='config' class="risk_item" node_id="144585"></li>
+		</ul>
+		
+		<!-- flow_tip -->
+		<div id="flow_tip" class="status_flicker slider_box hover_app">
+			<header id="flow_tip_title">主机告警</header>
+			<span class='close_img'><i class='icon-remove'></i></span>
+			<div class="contentbody">
+				 <table class='table'>
+				 	<tr>
+				 		<td>节点编号：</td>
+				 		<td>1001</td>
+				 	</tr>
+				 	<tr>
+				 		<td>告警详情：</td>
+				 		<td>.....................</td>
+				 	</tr>
+				 </table>
+			</div>
+		</div>
+	</body>
+</html>

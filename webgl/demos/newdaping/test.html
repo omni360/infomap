@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>弧面</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html,body{
+				background: #222;
+				height: 100%;
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+			
+			#button_container{
+				position: absolute;
+				z-index: 100;
+				right: 10px;
+				top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/raphael.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/SvgPathLib.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lib/tween.min.js"></script>
+		<script src="js/lib/TrackballControls.js"></script>
+		<script src="js/lib/ShapeMode.js"></script>
+		<script src="js/lib/THREEx.WindowResize.js"></script>
+		<script>
+			
+			var container;
+
+			var camera, scene, renderer, cube, map;
+			
+			var mapWidth = 360, 
+				mapHeight = 10, 
+				mapDepth = 180, 
+				radius = 120,
+				points = [], 
+				linepoints = [],
+				currentType = "cylinder",
+				animateTween,
+				translateVertices = [];	//{v: null, plane: null, cylinder: null, sphere: null}
+				
+			var w = 360,
+				h = 180;	
+				
+			init();
+			animate();
+			
+			function init() {
+				
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.Fog( 0x000000, 30, 2000 );
+				
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 300;
+				
+				controls = new THREE.TrackballControls( camera );
+				
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				container.appendChild( renderer.domElement );
+
+
+				var g = THREE.ShapeModel.Sector(0,0,20,40,0,60,100);
+
+				THREE.ShapeModel.RoundedRect(0, 0, 50, 50, 20);
+
+
+				var o = new THREE.Geometry();
+				for(var i = 0; i < g.length; i++){
+					o.vertices.push(new THREE.Vector3(g[i].x,g[i].y,0));
+				}
+				var californiaShape = new THREE.Shape( g );
+
+				// addShape( californiaShape, {}, 0xffaa00, 0, 0, 0, 0, 0, 0, 1 );
+
+				var points = californiaShape.createPointsGeometry();
+				var spacedPoints = californiaShape.createSpacedPointsGeometry( 600 );
+				var geometry = new THREE.ShapeGeometry( californiaShape );
+
+				var mesh = new THREE.Mesh( 
+					geometry,
+					new THREE.MeshBasicMaterial( { 
+						color: 'red',
+						side: THREE.DoubleSide 
+					} )
+				);
+
+
+				// mesh.position.set( x, y, -0.1 );
+				// mesh.scale.set( s, s, s );
+
+				// o.applyMatrix( new THREE.Matrix4().makeScale( 1.2 , 1.2, 1) );
+				var obj = new THREE.Object3D();
+
+				var t = new THREE.Line( 
+					o, 
+					new THREE.LineBasicMaterial({color: '#FFF'})
+					// new THREE.LineDashedMaterial( { color: '#666', dashSize: 3, gapSize: 1, linewidth: 2 } ), 
+					// THREE.LinePieces 
+				);
+
+				t.scale.set(1,1,1);
+
+				obj.add(mesh);
+
+				obj.add(t);
+
+				scene.add(obj);
+
+				// 
+				var ra = 0;
+				animateTween = new TWEEN.Tween({value: 0})
+					.to({value: 1}, 1000)
+					.easing(TWEEN.Easing.Linear.None)
+					.onUpdate(function (){
+						obj.rotation.set(0,0,(ra+=Math.PI/180*5));
+					})
+					.onComplete(function (){
+						
+						animateTween.start();
+						
+					})
+					.start();
+
+				var light = new THREE.PointLight(0xC0C0C0, 6);
+				light.position.y += 10;
+				light.position.z += 500;
+				scene.add(light);
+				
+				var light2 = light.clone();
+				light2.position.z -= 1000;
+				scene.add(light2);
+			}
+			
+			function worldToScreen(worldVectorObj, projectorObj, cameraObj ){
+				
+				//var projector = new THREE.Projector();
+				
+				//var world_vector = new THREE.Vector3(0,0,1);
+				
+				var vector = projectorObj.projectVector(worldVectorObj, cameraObj);
+				
+				var halfWidth = window.innerWidth / 2;
+				
+				var halfHeight = window.innerHeight / 2;
+				
+				return result = {
+				
+					x: Math.round(vector.x * halfWidth + halfWidth),
+					y: Math.round(-vector.y * halfHeight + halfHeight)
+				
+				}
+				
+			}
+			
+			function animate() {
+				
+				requestAnimationFrame( animate );
+			
+				render();
+			
+			}
+			
+			function render() {
+				
+				renderer.render( scene, camera );
+
+				// ddddd.rotation.set(1);
+				
+				controls.update();
+				TWEEN.update();
+			}
+			
+		</script>
+	</body>
+</html>

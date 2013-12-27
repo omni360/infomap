@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<style>
+	html,body{
+		padding: 0;
+		margin: 0;
+		overflow: hidden;
+		background: #2B2B2B;
+	}
+	#bgsvg{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.warp{
+		position: absolute;
+		top: 7px;
+		left: 5px;
+		/*z-index: 1;*/
+	}
+	.centerbar{
+		/*border: 1px solid #FFF;*/
+		/*z-index: 10;*/
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.worldMap{
+		width: 360px;
+		height: 180px;
+		position: absolute;
+		top: 40px;
+		right: 10px;
+/*		box-shadow: 0px 0px 10px rgba(113, 155, 245, 1);
+		border: 1px solid rgba(166, 195, 255, 1);
+		cursor: default;
+		margin: 5px 3px;
+		padding: 10px;
+		border-radius: 1px;
+		background: rgba(110, 162, 255, 0.15);*/
+		box-shadow: 0px 0px 10px rgba(139, 174, 250, 1);
+		border: 1px solid rgba(166, 195, 255, 1);
+		cursor: default;
+		margin: 5px 3px;
+		padding: 10px;
+		border-radius: 1px;
+		background: rgba(158, 193, 255, 0.15);
+	}
+	#charAName,#charBName,#mapName{
+		font-size: 14px;
+		font-weight: bold;
+		letter-spacing: 2px;
+		color: #FFF;
+		/*color: transparent;*/
+		font-family: '微软雅黑';
+		background: rgba(19, 56, 85, 0.87);
+		padding: 5px 6px 5px 8px;
+		border-radius: 1px;
+		/*box-shadow: 0px 0px 15px rgba(129,220,223,0.4);*/
+		/*text-shadow:0 0 6px #FFF, -1px -1px  #FFF;*/
+	}
+	#srcflag,#dstflag{
+		width: 30px;
+		height: 14px;
+		font-family: 'Exo','微软雅黑';
+		font-size: 10px;
+		letter-spacing: 0;
+		content: ' ';
+		background: rgba(192,23,0,0.7);
+		color: #ccc;
+		border-radius: 2px;
+		text-align: center;
+		padding-top: 1px;
+	}
+	#dstflag{
+		background: rgba(20,128,192,0.7);
+	}
+	#lotation table{
+		width: 746px;
+		background: rgba(0,0,0,0.1);
+		border-radius: 2px;
+		padding: 10px;
+	}
+	#lotation table tr th,#lotation table tr td{
+		font-family: 'Exo','微软雅黑';
+		font-weight: 300;
+		font-size: 14px;
+		letter-spacing: 3px;
+		padding: 4px 5px 4px 1px;
+		text-align: left;
+		color: rgba(50,180,255,0.8);
+
+	} 
+	#lotation table tr th{
+		font-weight: 400;
+		font-size: 11px;
+		color: rgba(255,255,255,0.9);
+		border-bottom: 1px solid rgba(155,155,155,0.1);
+	}
+	</style>
+</head>
+<body>
+<div id="bgsvg"></div>
+<div class="centerbar" id="CenterBar"></div>
+<!-- <div class="worldMap"></div> -->
+<div class="warp">
+	<!-- <div class="topbar">
+		<div id="loadImg" class="load-scene">
+			<div class="load-box">
+				<ul>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</div> -->
+</div>
+	<!-- <div class="footbar" id="FootBar"></div> -->
+<div id="lotation">
+	<table>
+		<thead>
+			<tr>
+				<th width="60">Flag</th>
+				<th>Area</th>
+				<th width="120">Longitude</th>
+				<th width="120">Latitude</th>
+				<th width="120">Ip Address</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><div id="srcflag">源</div></td>
+				<td>美国 圣安娜Krypt机房</td>
+				<td>-95.7128'910</td>
+				<td>37.0902'400</td>
+				<td>124.119.24.83</td>
+			</tr>
+			<tr>
+				<td><div id="dstflag">目的</div></td>
+				<td>北京市</td>
+				<td>116.4075'260</td>
+				<td>39.9040'300</td>
+				<td>67.198.247.183</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+<script src="js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/raphael.js" type="text/javascript" charset="utf-8"></script>
+<script src="data/vds_data.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/svg.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/SvgPathLib.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/three.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/TrackballControls.js"></script>
+<script src="js/lib/sdata.js"></script>
+<script>
+$(function(){
+	new DrawBgSvg();
+	new NewDpWorld();
+	
+});
+var NewDpWorld = function(){
+	var me = this;
+
+	me.points = [];
+	me.areas = [];
+
+	var htmlpaper = {
+		width: window.innerWidth,
+		height: window.innerHeight
+	}
+
+
+	//配置界面比例
+	me.configFrame = function(){
+		me.topHeight = 0;
+		me.footHeight = 0;
+		me.centerHeight = htmlpaper.height - me.topHeight - me.footHeight;
+		me.centerWidth = htmlpaper.width;
+		// $('.topbar').css({height: me.topHeight});
+		// $('.footbar').css({height: me.footHeight});
+		$('.centerbar').css({
+			width: me.centerHeight,
+			height: me.centerHeight
+		});
+	}
+
+	me.initThreeJs = function(){
+		container = document.createElement( 'div' );
+		document.getElementById('CenterBar').appendChild( container );
+
+		me.scene = new THREE.Scene();
+		
+		me.camera = new THREE.PerspectiveCamera( 45, me.centerWidth / me.centerHeight, 1, 10000 );
+		me.camera.position.z = 900;
+
+		me.renderer = new THREE.WebGLRenderer({antialias: true});
+		
+		// me.renderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
+
+		// me.renderer.autoClearColor = false;
+
+		me.renderer.setSize( me.centerWidth, me.centerHeight );
+
+
+
+		// container.appendChild( me.renderer.domElement );
+		document.getElementById('CenterBar').appendChild( me.renderer.domElement );
+
+		me.projector = new THREE.Projector();
+
+		// me.srcScene = new THREE.Scene();
+		// me.srcCamera = new THREE.PerspectiveCamera( 45, window.innerWidth / me.footHeight, 1, 10000 );
+		// me.srcCamera.setViewOffset( window.innerWidth, me.centerHeight, 0, 0, window.innerWidth, me.footHeight );
+		// me.srcCamera.position.z = 200;
+
+		// me.srcRenderer = new THREE.WebGLRenderer({antialias: true});
+		// me.srcRenderer.setSize( window.innerWidth, me.footHeight );
+		// document.getElementById('FootBar').appendChild( me.srcRenderer.domElement );
+		
+		me.controls = new THREE.TrackballControls( me.camera );
+		// me.controls = new THREE.TrackballControls( me.srcCamera );
+	}
+
+	me.animate = function() {	
+		requestAnimationFrame( me.animate );
+		me.render();
+	}
+	me.EearthRotation = 0.002;
+	me.render = function() {
+		me.renderer.render( me.scene, me.camera );
+		// me.srcRenderer.render( me.srcScene, me.srcCamera );
+		// me.EearthRotation += 0.002;
+
+		// me.earthObj && me.earthObj.rotation.y = me.EearthRotation;
+
+		me.earthObj && me.earthObj.rotateY(me.EearthRotation)
+
+		me.controls.update();
+	}
+
+	function worldToScreen(worldVectorObj, projectorObj, cameraObj ){
+		
+		var vector = projectorObj.projectVector(worldVectorObj, cameraObj);
+		
+		var halfWidth = window.innerWidth / 2;
+		
+		var halfHeight = window.innerHeight / 2;
+		
+		return result = {
+		
+			x: Math.round(vector.x * halfWidth + halfWidth),
+			y: Math.round(-vector.y * halfHeight + halfHeight)
+		
+		}
+		
+	}
+
+	me.drawEarthObj = function(){
+		me.earthObj = new THREE.Object3D();
+
+		var a = worldToScreen(new THREE.Vector3(220,0,0),me.projector,me.camera);
+		// console.info((-window.innerWidth/2 + a.x)*2);
+
+		new SvgWorld({
+			earthRadius: (a.x-window.innerWidth/2) ,
+		});
+		me.earthObj.position.set(0,-30,0);
+
+		me.earthObj.rotateX(Math.PI*10/180);
+		me.earthObj.rotateY(Math.PI*150/180);
+		me.earthObj.rotateZ(Math.PI*10.44/180);
+
+		me.scene.add(me.earthObj);
+
+		me.spherePlaneGeometry = new THREE.SphereGeometry(180,55,55);
+		me.mapPlane = new THREE.Mesh(
+			me.spherePlaneGeometry,
+			new THREE.MeshBasicMaterial({
+				color: '#222' , 
+				transparent: true, 
+				opacity: 1,
+				side: THREE.DoubleSide
+			})
+		)
+
+		me.earthObj.add(me.mapPlane);
+		// 赤道路径
+		var equatorPath = new THREE.EllipseCurve(0,0,220,220,0,Math.PI*2,false);
+
+		var equatorGeometry = new THREE.Geometry();
+		var latGeometry = new THREE.Geometry();
+
+		for(var i = 0 ; i <= 250 ; i++){
+			var p = equatorPath.getPoint(i/250);
+			equatorGeometry.vertices.push(new THREE.Vector3(p.x , 0 , p.y));
+			latGeometry.vertices.push(new THREE.Vector3(p.x , p.y, 0));
+		}
+
+		me.equatorLine = new THREE.Line( 
+			equatorGeometry, 
+			new THREE.LineDashedMaterial( { color: '#aaa', dashSize: 4, gapSize: 1, linewidth: 2 } ), 
+			THREE.LinePieces 
+		);
+
+		me.equatorParticle = new THREE.ParticleSystem(
+			latGeometry,
+			new THREE.ParticleBasicMaterial({
+				size: 1, 
+				map: THREE.ImageUtils.loadTexture( "image/abc.png" ),
+				blending: THREE.CustomBlending,
+				blendSrc: THREE.OneFactor,
+				blendDst: THREE.OneFactor,
+				blendEquation: THREE.AddEquation,
+				opacity: .8,
+				side: THREE.DoubleSide,
+				transparent: true
+			})
+		);
+		me.earthObj.add(me.equatorLine);
+		me.earthObj.add(me.equatorParticle);
+
+		// me.srcGeometry = new THREE.Geometry();
+		// me.dstGeometry = new THREE.Geometry();
+		me.srcMesAyrs = [];
+		me.dstMesAyrs = [];
+		// console.info(sdata.length);
+		for(var i=0;i<sdata.length;i++){
+			me.drawEventLines(i);
+		}
+
+		var texture1 = THREE.ImageUtils.loadTexture( "image/1.png" );
+
+		for(var i in me.srcMesAyrs){
+			me.earthObj.add(
+				new THREE.Mesh(
+					me.srcMesAyrs[i],
+					new THREE.MeshBasicMaterial({
+						// color: Math.random()*0xffffff,
+						map: texture1,
+						blending: THREE.CustomBlending,
+						blendSrc: THREE.OneFactor,
+						blendDst: THREE.OneFactor,
+						blendEquation: THREE.AddEquation,
+						opacity: .8,
+						side: THREE.DoubleSide,
+						transparent: true
+					})
+				)
+			);
+		}
+
+		
+	}
+
+	me.drawEarthPlane = function(){
+		me.earthPlaneObj = new THREE.Object3D();
+
+		me.earthPlaneObj.position.set(270,120,0);
+
+		me.earthPlaneObj.scale.set(1.4,1.4,1.4);
+
+		// me.earthPlaneObj.lookAt(me.camera.position);
+
+		var w = 500,h = 220, d = 20;
+
+		me.scene.add(me.earthPlaneObj);
+
+		var planeGeometry = new THREE.PlaneGeometry(w,h,10,10);
+
+		var mesh = new THREE.Mesh(
+			planeGeometry,
+			new THREE.MeshBasicMaterial({
+				color: '#000',
+				transparent: true,
+				opacity: 0.2,
+				side: THREE.DoubleSide,
+				wireframe: false,
+				wireframeLinecap: 'square'
+			})
+		);
+
+		mesh.position.set((w-360)/2-20,0,d/2-2);
+		me.earthPlaneObj.add(mesh);
+
+		// var cubeBorderPoints = [
+		// 	[-w/2,h/2,-d/2],
+		// 	[-w/2,h/2,d/2],
+
+		// 	[-w/2,h/2,d/2],
+		// 	[w/2,h/2,d/2],
+
+		// 	[w/2,h/2,d/2],
+		// 	[w/2,h/2,-d/2],
+		// 	[w/2,h/2,d/2],
+		// 	[w/2,-h/2,d/2],
+		// 	[w/2,-h/2,d/2],
+		// 	[w/2,-h/2,-d/2],
+		// 	[w/2,-h/2,d/2],
+		// 	[-w/2,-h/2,d/2],
+		// 	[-w/2,-h/2,d/2],
+		// 	[-w/2,-h/2,-d/2],
+		// 	[-w/2,-h/2,d/2],
+		// 	[-w/2,h/2,d/2]
+		// ];
+
+		// var g = new THREE.Geometry();
+
+		// for(var i = 0, p; p = cubeBorderPoints[i]; i++){
+		// 	g.vertices.push(new THREE.Vector3(p[0],p[1],p[2]));
+		// }
+
+		// var Line = new THREE.Line( 
+		// 	g, 
+		// 	new THREE.LineDashedMaterial( { color: '#f0f0f0',  linewidth: 2 } )
+		// );
+
+		// me.earthPlaneObj.add(Line);
+
+		// var r = new THREE.Geometry();
+		// for(var i = 0; i < 3; i++){	
+
+		// }
+
+	}
+
+	function createDot(color) {
+	
+		var canvas = document.createElement('canvas');
+		canvas.width = 40;
+		canvas.height = 40;
+
+		var context = canvas.getContext('2d');
+		context.globalAlpha = 1;
+		
+		context.fillStyle = color;
+		context.beginPath();
+		context.arc(canvas.width / 2,canvas.height / 2,15,0,Math.PI*2,false);
+		context.closePath();
+		context.fill();
+		
+		context.strokeStyle = '#000000';
+		context.lineWidth = 1.3;
+		context.beginPath();
+		context.arc(canvas.width / 2,canvas.height / 2,12,0,Math.PI*2,false);
+		context.stroke();
+		
+		context.globalAlpha = 1;
+		var texture = new THREE.Texture(canvas);
+		texture.needsUpdate = true;
+
+		return texture;
+	}
+
+
+
+
+	me.drawEventLines = function(i){
+		me.EventData = sdata;
+
+		me.currented = me.EventData[i];
+		
+		me.eventLineGeometry = new THREE.Geometry();
+
+		// for(var j in me.currentEventData){
+		// 	me.eventLineGeometry.vertices.push(
+		// 		coordToSphereVector(me.currentEventData[j][0], me.currentEventData[j][1])
+		// 	);
+		// }
+
+		var s = coordToSphereVector(me.currented[0][0], me.currented[0][1]);
+		var e = coordToSphereVector(me.currented[1][0], me.currented[1][1]);
+		var l = s.distanceTo(e)/2 + 180;
+
+		// var mesh = new THREE.PlaneGeometry(4, 4, 10, 10);
+
+		var arcShape = new THREE.Shape();
+		arcShape.absarc( 0, 0, 0.8, 0, Math.PI*2, true );
+
+		var holePath = new THREE.Path();
+		holePath.absarc( 0, 0, 0.66, 0, Math.PI*2, true );
+		arcShape.holes.push( holePath );
+
+		addShape( arcShape, '#0E94BC', me.currented[0][0], me.currented[0][1], 1, 1 );
+
+		var arcShape = new THREE.Shape();
+		arcShape.absarc( 0, 0, 0.3, 0, Math.PI*2, true );
+
+		// var holePath = new THREE.Path();
+		// holePath.absarc( 0, 0, 0, 0, Math.PI*2, true );
+		// arcShape.holes.push( holePath );
+
+		addShape( arcShape, '#CC1826', me.currented[1][0], me.currented[1][1], 1, 1 );
+
+		var arcShape = new THREE.Shape();
+		arcShape.absarc( 0, 0, 2, 0, Math.PI*2, true );
+
+		var holePath = new THREE.Path();
+		holePath.absarc( 0, 0, 2.1, 0, Math.PI*2, true );
+		arcShape.holes.push( holePath );
+		addShape( arcShape, '#0E94BC', me.currented[0][0], me.currented[0][1], 1, 1 , 0.2);
+
+		var arcShape = new THREE.Shape();
+		arcShape.absarc( 0, 0, 1.9, 0, Math.PI*2, true );
+
+		var holePath = new THREE.Path();
+		holePath.absarc( 0, 0, 2, 0, Math.PI*2, true );
+		arcShape.holes.push( holePath );
+		addShape( arcShape, '#CC1826', me.currented[1][0], me.currented[1][1], 1, 1 , 0.2);
+
+
+		
+
+		// me.srcGeometry.vertices.push(coordToSphereVector(me.currented[0][0], me.currented[0][1]),200);
+		// me.dstGeometry.vertices.push(coordToSphereVector(me.currented[1][0], me.currented[1][1]),200);
+
+		var c1 = new THREE.Vector3().subVectors(s,e).multiplyScalar(2/3).add(e).normalize().multiplyScalar(l);
+		var c2 = new THREE.Vector3().subVectors(s,e).multiplyScalar(1/3).add(e).normalize().multiplyScalar(l);
+
+		me.aline = new THREE.CubicBezierCurve3(s,c1,c2,e);
+
+		for(var i = 0 ; i<= 100; i++){
+			me.eventLineGeometry.vertices.push(me.aline.getPoint(i/100));
+		}
+
+		me.eventLine = new THREE.Line( 
+			me.eventLineGeometry, 
+			new THREE.LineDashedMaterial( { 
+				color: '#4DA4CC',
+				transparent: true, 
+				opacity: 0.4,
+				linewidth: 2
+			} )
+		);
+
+		me.earthObj.add(me.eventLine);
+	}
+
+	function coordToSphereVector(x, y, r){	
+		// r = r !== undefined ? r : radius;
+		r = 180;
+		mapWidth = 360;
+		mapHeight = 180;
+		var phi = y * Math.PI / 180;
+	    var theta = -x * Math.PI / 180;
+		
+		var v = new THREE.Vector3();
+	    v.x = r * Math.cos(phi) * Math.cos(theta);
+		v.z = r * Math.cos(phi) * Math.sin(theta);
+		v.y = r * Math.sin(phi);
+		
+		return v;
+	}
+
+	function addShape( shape, color, x, y, z, s ,o) {
+		o = o ? o : 0.6;
+
+		var points = shape.createPointsGeometry();
+		var spacedPoints = shape.createSpacedPointsGeometry( 100 );
+
+		// flat shape
+
+		var geometry = new THREE.ShapeGeometry( shape );
+
+		geometry.applyMatrix( new THREE.Matrix4().makeTranslation( x, y, z) );
+
+		for(var i in geometry.vertices){
+			geometry.vertices[i] = coordToSphereVector(geometry.vertices[i].x, geometry.vertices[i].y,350);
+		}
+
+		var mesh = THREE.SceneUtils.createMultiMaterialObject( 
+			geometry, 
+			[ 
+				new THREE.MeshBasicMaterial( { 
+					color: color, wireframe: false, transparent: true, side: THREE.DoubleSide ,
+					opacity: o
+				} ) 
+			] );
+		// mesh.position.set( x, y, z );
+		// mesh.rotation.set( rx, ry, rz );
+		mesh.scale.set( s, s, s );
+		me.earthObj.add( mesh );
+
+	}
+
+	me.WorldMapData = function(data){
+		$.getJSON('data/world.txt',function(data){
+			function checkArea(params){
+				if(params.length == 0) return false;
+				if(params[0] instanceof Array && params[0].length > 0){
+					if(params[0][0] instanceof Array){
+						$.each(params,function(i){
+							checkArea(params[i]);
+						});
+					}else{
+						var temp = [];
+						$.each(params,function(i){
+							temp.push(params[i]);
+						});
+						me.areas.push(temp);
+					}	
+				}
+				
+			}
+			checkArea(data);
+
+			function checkpoint(params,ary){
+				if(params.length == 0) return false;
+				if(params[0] instanceof Array){
+					$.each(params,function(i){
+						checkpoint(params[i],ary);
+					});
+				}else{
+					ary && ary.push(params);
+				}
+			}
+			checkpoint(data,me.points);
+			
+			
+			me.drawMapParticleSystem();
+		});
+	}
+
+	me.drawMapParticleSystem = function(){
+
+		var geometry = new THREE.Geometry();
+		
+		for(var i in me.points){
+			var v = new THREE.Vector3( me.points[i][0], me.points[i][1], 1);
+			geometry.vertices.push(coordToSphereVector(me.points[i][0],me.points[i][1],1));
+		}
+		me.worldPoint = new THREE.ParticleSystem(
+			geometry,
+			new THREE.ParticleBasicMaterial({
+				size: 1, 
+				color: '#888',
+				// map: THREE.ImageUtils.loadTexture( "image/abc.png" ),
+				// blending: THREE.CustomBlending,
+				// blendSrc: THREE.OneFactor,
+				// blendDst: THREE.OneFactor,
+				// blendEquation: THREE.AddEquation,
+				opacity: .8,
+				side: THREE.DoubleSide,
+				transparent: true
+			})
+		);
+		// me.worldPoint.scale.set(2,2,1);
+		me.earthObj.add(me.worldPoint);
+
+		// var planegeometry = new THREE.Geometry();
+		// var colors = [];
+		// for (var i = 0, area; area = me.areas[i]; i++) {
+		//   	californiaPts = [];
+		//   	for(var j = 0, point; point = area[j]; j++){
+		// 		colors = new THREE.Color( 0xffffff );
+		// 		colors.setHSL( 0.8, 1.0, Math.max( 0, ( 200 - point[0] ) / 400 ) * 0.5 + 0.5 );
+		//   		if (j != 0){
+		//   			planegeometry.vertices.push(new THREE.Vector3( point[0], point[1], 10));
+		// 			planegeometry.colors.push(colors)
+		//   		}
+		//   		planegeometry.vertices.push(new THREE.Vector3( point[0], point[1], 10));
+		// 		planegeometry.colors.push(colors)
+
+		// 		californiaPts.push( new THREE.Vector2 ( point[0], point[1] ) );
+
+		// 	}
+
+		// 	planegeometry.vertices.push(new THREE.Vector3( area[(area.length-1)][0], area[(area.length-1)][1], 10));
+		// 	planegeometry.colors.push(colors)
+
+		// 	var californiaShape = new THREE.Shape( californiaPts );
+
+		// 	addPlaneShape( californiaShape, 0xffaa00, 0, 0, 0, 0.4 );
+
+		// }
+
+		// me.worldLine = new THREE.Line( 
+		// 	planegeometry, 
+		// 	new THREE.LineDashedMaterial( { color: '#f0f0f0', dashSize: 3, gapSize: 1, linewidth: 1 } ), 
+		// 	THREE.LinePieces 
+		// );
+
+		// me.worldLine.scale.set( 0.99, 0.99, 0.99 );
+
+		// me.earthPlaneObj.add(me.worldLine);
+	}
+
+	function addPlaneShape( shape, color, x, y, z, s ) {
+
+		var points = shape.createPointsGeometry();
+		var spacedPoints = shape.createSpacedPointsGeometry( 100 );
+
+		var geometry = new THREE.ShapeGeometry( shape );
+
+		var mesh = THREE.SceneUtils.createMultiMaterialObject( 
+			geometry, 
+			[ 
+				new THREE.MeshBasicMaterial( { 
+					color: '#000', 
+					opacity: 0.1,
+					wireframe: false, 
+					transparent: true, 
+					side: THREE.DoubleSide 
+				} ) 
+			] );
+		mesh.position.set( x, y, 9 );
+		// mesh.rotation.set( rx, ry, rz );
+		mesh.scale.set( 0.99, 0.99, 0.99 );
+		me.earthPlaneObj.add( mesh );
+
+	}
+
+	me.configFrame();
+	me.initThreeJs();
+	me.animate();
+	me.drawEarthObj();
+	// me.drawEarthPlane();
+	me.WorldMapData();
+}
+</script>
+</html>

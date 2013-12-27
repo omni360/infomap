@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>ANTIY LABS</title>
+        <link href="css/china_style.css" rel="stylesheet">
+        <link href="css/china_table.css" rel="stylesheet">
+        
+        
+
+        <script src="scripts/libs/jquery-1.9.1.js"></script>
+        <script src="js/lib/kinetic-v4.7.4.min.js"></script>
+        <script type="text/javascript" src="js/lib/highcharts.js"></script>
+        <script src="scripts/libs/jquery.mCustomScrollbar.js"></script>
+        <script src="scripts/libs/jquery.mousewheel.js"></script>
+        <script src="scripts/libs/raphael-min.js"></script>
+        <script src="scripts/libs/three.min.r58.js"></script>
+        <script src="scripts/libs/ParallaxBarrierEffect.r58.js"></script>
+        <script src="scripts/libs/tween.min.js"></script>
+        <script src="scripts/libs/THREEx.WindowResize.js"></script>
+        <script src="scripts/shaders/vertexshader.js"></script>
+        <script src="scripts/shaders/fragmentshader.js"></script>
+        <script src="scripts/main.js"></script>
+
+        <script type="text/javascript" src="js/china_dark-green.js"></script>
+        <script type="text/javascript" src="js/china_1200_960.js"></script>
+        <script type="text/javascript" src="js/china_ready.js"></script>
+        <script type="text/javascript" src="js/china_alarm.js"></script>
+        <script type="text/javascript" src="js/china_data.js"></script>
+        <script type="text/javascript" src="js/statis_data.js"></script>
+        <script src="js/data2.js"></script>
+        
+        <script>
+            function getAlarmData() {
+                // for(var i = 0; i < alarm_list.length; i++){
+                    // alert(alarm_list[i]);
+                // }
+                for (x in alarm_list) {
+                    monitor_data = alarm_list[x];
+                    /*
+                    lon = monitor_data[2];
+                    lat = monitor_data[3];
+                    
+                    monitor_location = getXY(parseFloat(lon), parseFloat(lat));
+                    monitor_data.push(monitor_location['cx']);
+                    monitor_data.push(monitor_location['cy']);
+                    */
+                    alarm_data.push(monitor_data);
+                }
+            }
+            
+            getXY = function (lon, lat) {
+                // 中国地图实际大小，1125*941
+                //北53.69
+                //南18.15
+                //西39.43
+                //东134.63
+                return {
+                    cx: ((lon-39.43)*(1125)/95.2) - 45,//左侧多30
+                    cy: ((53.69-lat)*(941)/35.54) + 18//上侧多10
+                };
+                
+            };
+            
+            // 捕获数据列表   
+            var alarm_data = [];
+            getAlarmData();
+            
+            var world_width = 1900;
+            var world_height = 1100;
+            var raphael,raphael1,raphael2;
+            
+            Raphael(10, 10, world_width, 40, function () {
+                // 定义整体空间
+                raphael1 = this;
+                raphael1.rect(0, 0, world_width, world_height, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                });
+
+                raphael1.text(900, 18, '拢 态 势 于 眼 底').attr({fill: "#ff0000", "font-family":"微软雅黑", "font-size":36, "font-weight": "bold", "opacity": 0.8, "text-anchor":"end"});
+                raphael1.text(1000, 18, '挫 威 胁 于 指 尖').attr({fill: "#ff0000", "font-family":"微软雅黑", "font-size":36, "font-weight": "bold", "opacity": 0.8, "text-anchor":"start"});
+            });
+            
+            Raphael(10, 60, world_width, world_height, function () {
+                // 定义整体空间
+                raphael = this;
+                raphael.rect(0, 0, 1900, 960, 0).attr({
+                    stroke: "#11567D",
+                    "stroke-width": 10,
+                    "stroke-linejoin": "round",
+                    fill: "#80f8eb",
+                    //fill:"11567D",
+                    "fill-opacity": 0.0,
+                    "stroke-opacity": 0
+                });
+                
+                raphael.rect(0, 0, 1900, 10, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                });
+                
+                raphael.rect(0, 1000, 1900, 10, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                });
+                
+                raphael.text(20, 35, '告警图例').attr({fill: "#ffffff", "font-size":13, "font-weight": "bold", "text-anchor":"start"});
+                
+                raphael.rect(20, 50, 200, 2, 0).attr({
+                    "stroke-width": 0,
+                    fill:"#ffffff",
+                    "fill-opacity": 0.8
+                });
+                
+                raphael.circle(60, 80, 16).attr({
+                    "stroke-width": 0,
+                    fill:"#AA393D",
+                    "fill-opacity": 1
+                });
+                raphael.text(90, 80, '放马源告警').attr({fill: "#ffffff", "font-size":12, "font-weight": "bold", "text-anchor":"start"});
+                
+                raphael.circle(60, 120, 16).attr({
+                    "stroke-width": 0,
+                    fill:"#D9B04C",
+                    "fill-opacity": 1
+                });
+                raphael.text(90, 120, '被感染目标告警').attr({fill: "#ffffff", "font-size":12, "font-weight": "bold", "text-anchor":"start"});
+                
+                
+                /*
+                 * 左侧地图小模块
+                 */
+                var map_param = {
+                    /*
+                    //fill:"#11567D",
+                    "fill-opacity": 0.3,
+                    //stroke: "#888",
+                    //"stroke-width": 0.5,
+                    //"stroke-linejoin": "round",
+                    fill: "#11567D",
+                    //fill:"0-#408988-#80f8eb",
+                    //"fill-opacity": 0.1,
+                    //"stroke-opacity": 0.0
+                    */
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"#11567D",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                };
+                // raphael.rect(0, 0, 120, 110, 0).attr(map_param);
+                // raphael.rect(0, 120, 120, 110, 0).attr(map_param);
+                // raphael.rect(0, 240, 120, 110, 0).attr(map_param);
+                // raphael.rect(0, 360, 120, 110, 0).attr(map_param);
+                // raphael.rect(0, 480, 120, 110, 0).attr(map_param);
+                // raphael.rect(0, 600, 120, 110, 0).attr(map_param);
+                
+                // loop_param = {stroke: "#fff", "stroke-width": 30};
+                
+                // draw_loop(raphael, 60, 60, 30, 42, "#ff0000", "#2FBFBF", 234);
+                // raphael.text(60, 50, 'Trojan').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 70, '65%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                // //raphael.circle(1380, 60, 48).attr({stroke: "#80f8eb", "stroke-width": 2, "stroke-opacity": 0.8});
+                
+                // draw_loop(raphael, 60, 180, 30, 42, "#ff0000", "#2FBFBF", 61);
+                // raphael.text(60, 170, 'Virus').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 190, '17%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                // //raphael.circle(1380, 180, 48).attr({stroke: "#80f8eb", "stroke-width": 2, "stroke-opacity": 0.8});
+                
+                // draw_loop(raphael, 60, 300, 30, 42, "#ff0000", "#2FBFBF", 32);
+                // raphael.text(60, 290, 'Worm').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 310, '9%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                // //raphael.circle(1380, 300, 48).attr({stroke: "#ffffff", "stroke-width": 2, "stroke-opacity": 0.8});
+                
+                // draw_loop(raphael, 60, 420, 30, 42, "#ff0000", "#2FBFBF", 14);
+                // raphael.text(60, 410, 'Spyware').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 430, '4%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                
+                // draw_loop(raphael, 60, 540, 30, 42, "#ff0000", "#2FBFBF", 4);
+                // raphael.text(60, 530, 'Hacktool').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 550, '1%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                
+                // draw_loop(raphael, 60, 660, 30, 42, "#ff0000", "#2FBFBF", 4);
+                // raphael.text(60, 650, 'X-Files').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                // raphael.text(60, 670, '1%').attr({fill: "#80f8eb", "font-size":10, "font-weight": "bold"});
+                
+                
+                //============================= 地图 ===========================
+
+                
+                
+                //>============================= 地图雷达刷新告警 ===========================
+                // 捕获数据列表   
+                
+
+                //<============================= 地图雷达刷新告警 ===========================
+                
+                
+                
+                //============================= 右侧信息区 =================================
+                var info_param = {
+                    /*
+                    //fill:"#11567D",
+                    "fill-opacity": 0.3,
+                    //stroke: "#888",
+                    //"stroke-width": 0.5,
+                    //"stroke-linejoin": "round",
+                    fill: "#11567D",
+                    //fill:"0-#408988-#80f8eb",
+                    //"fill-opacity": 0.1,
+                    //"stroke-opacity": 0.0
+                    */
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"#2FBFBF",
+                    //fill:"#11567D",
+                    "fill-opacity": 0.15,
+                    "stroke-opacity": 0.0
+                };
+                
+                
+                /*
+                 * 右侧统计模块
+                 */
+                raphael.rect(1470, 5, 430, 220, 0).attr(info_param);
+                draw_statistics_div(raphael, china_statis);
+                
+                
+                /*
+                 * 套圈图
+                 */
+                raphael.rect(1470, 235, 215, 195, 0).attr(info_param);
+                raphael.circle(1575, 330, 70).attr({stroke: "#ae442e", "stroke-width": 1, fill:"#ae442e","fill-opacity": 0.5, "stroke-opacity": 0.9});
+                raphael.text(1575, 295, '本年').attr({fill: "#ffffff", "font-size":12, "font-weight": "bold"});
+                raphael.circle(1575, 360, 40).attr({stroke: "#ae442e", "stroke-width": 1, fill:"#ae442e","fill-opacity": 0.7, "stroke-opacity": 0.9});
+                raphael.text(1575, 340, '本月').attr({fill: "#ffffff", "font-size":11, "font-weight": "bold"});
+                raphael.circle(1575, 380, 20).attr({stroke: "#b03317", "stroke-width": 1, fill:"#b03317","fill-opacity": 1, "stroke-opacity": 0.9});
+                raphael.text(1575, 380, '本周').attr({fill: "#ffffff", "font-size":10, "font-weight": "bold"});
+                
+                raphael.path("M1590,295L1620,295,L1625,290").attr({stroke: "#ffffff", "stroke-width": 1, "stroke-dasharray":"- ", "stroke-opacity": 1});
+                raphael.rect(1620, 270, 60, 20, 0).attr({fill:"#ae442e","fill-opacity": 0.5, "stroke-opacity": 0.0});
+                raphael.text(1650, 280, '8,768,901').attr({fill: "#ffffff", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+                
+                raphael.path("M1590,340L1620,340,L1625,335").attr({stroke: "#ffffff", "stroke-width": 1, "stroke-dasharray":"- ", "stroke-opacity": 1});
+                raphael.rect(1620, 315, 60, 20, 0).attr({fill:"#ae442e","fill-opacity": 0.7, "stroke-opacity": 0.0});
+                raphael.text(1650, 325, '95,616').attr({fill: "#ffffff", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+                
+                raphael.path("M1590,380L1620,380,L1625,375").attr({stroke: "#ffffff", "stroke-width": 1, "stroke-dasharray":"- ", "stroke-opacity": 1});
+                raphael.rect(1620, 355, 60, 20, 0).attr({fill:"#b03317","fill-opacity": 1, "stroke-opacity": 0.0});
+                raphael.text(1650, 365, '50,855').attr({fill: "#ffffff", "font-size":10, "font-weight": "bold", "text-anchor":"middle"});
+                
+                /*
+                 * 花瓣图
+                 */
+                //wind_rose("",1500,300, 10, 70, 24, 1, "#357B5A");
+                raphael.rect(1695, 235, 205, 195, 0).attr(info_param);
+                //var data_1 = [10, 12, 13, 24, 25, 36, 37, 48, 49, 50, 50, 62, 63, 74, 75, 86, 87, 98, 99, 20, 21, 22, 23, 24];
+                var data_1 = [1350
+                    ,903
+                    ,751
+                    ,771
+                    ,495
+                    ,371
+                    ,373
+                    ,372
+                    ,568
+                    ,767
+                    ,1111
+                    ,1387
+                    ,1461
+                    ,1318
+                    ,1446
+                    ,1360
+                    ,1388
+                    ,1417
+                    ,1953
+                    ,1861
+                    ,2115
+                    ,2267
+                    ,1780
+                    ,1475
+                ];//2012年10月31日放马事件真实数据
+                wind_rose("",1720,300, 10, 70, 24, 1, "#80f8eb", data_1);
+                
+                
+                /*
+                 * 排行
+                 */
+                raphael.rect(1470, 440, 430, 240, 0).attr(info_param);
+                var box_param = {
+                    stroke: "#ffffff",
+                    "stroke-width": 1,
+                    "stroke-linejoin": "round",
+                    "fill-opacity": 0,
+                }
+                
+                raphael.text(1700, 455, '恶意代码家族规模排行(Trojan)').attr({fill: "#ffffff", "font-size":14, "font-weight": "bold"});
+
+                raphael.text(1670, 482, 'Trojan/Win32.Genome').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 502, 'Trojan/Win32.Jorik').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 522, 'Trojan/Win32.Hupigon[Backdoor]').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 542, 'Trojan/Win32.FakeAV').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 562, 'Trojan/Win32.VBKrypt').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 582, 'Trojan/Win32.Agent').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 602, 'Trojan/Win32.Injector[Dropper]').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 622, 'Trojan/Win32.Zbot[Spy]').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 642, 'Trojan/Win32.Agent[Downloader]').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                raphael.text(1670, 662, 'Trojan/Win32.OnLineGames[GameThief]').attr({fill: "#ffffff", "font-size":10, "text-anchor":"end"});
+                
+                
+                var column_param = {
+                    stroke: "#ffffff",
+                    fill:"#b03317",
+                    "fill-opacity": 1,
+                    "stroke-opacity": 0
+                }
+                
+                //raphael.rect(1530, 450, 85, 8, 0).attr(column_param);
+                raphael.rect(1680, 475, 180, 6, 0).attr(column_param);
+                raphael.rect(1680, 495, 65, 6, 0).attr(column_param);
+                raphael.rect(1680, 515, 50, 6, 0).attr(column_param);
+                raphael.rect(1680, 535, 40, 6, 0).attr(column_param);
+                raphael.rect(1680, 555, 30, 6, 0).attr(column_param);
+                raphael.rect(1680, 575, 25, 6, 0).attr(column_param);
+                raphael.rect(1680, 595, 20, 6, 0).attr(column_param);
+                raphael.rect(1680, 615, 18, 6, 0).attr(column_param);
+                raphael.rect(1680, 635, 16, 6, 0).attr(column_param);
+                raphael.rect(1680, 655, 14, 6, 0).attr(column_param);
+                
+            });
+            
+            /*
+             * 底部边框
+             */
+            /*
+             * 绘制花瓣图
+             */
+            function wind_rose(holderid, x, y, r1, r2, count, stroke_width, colour, data) {
+                var sectorsCount = count || 12,
+                    color = colour || "#fff",
+                    width = stroke_width || 15,
+                    cx = r2 + width + 20,//中心点横坐标
+                    cy = r2 + width + 20,//中心点纵坐标
+                    beta = 2 * Math.PI / sectorsCount;
+                    
+                
+                // 兼容两种定位方法
+                if(holderid != ""){
+                    r = Raphael(holderid, r2 * 2 + width * 2 + 35, r2 * 2 + width * 2 + 35);//周围有数字，所以加上30的偏移量
+                }
+                else{
+                    r = Raphael(x, y, r2 * 2 + width * 2 + 35, r2 * 2 + width * 2 + 35);//周围有数字，所以加上30的偏移量
+                }                    
+                    
+                var paths = r.set();
+                    
+                // 绘制每个wind_rose花瓣的函数
+                r.customAttributes.draw_wind_rose = function (cx, cy, r, R, d1, d2, the_color) {
+                    /* 
+                     * cx, cy为中心点坐标
+                     * r为内圆半径。R为wind_rose花瓣的半径，注意，不是圆的半径
+                     * d1起点角度
+                     * d2终点角度
+                     * the_color为wind_rose的颜色。默认为统一的 */
+                    d1 = d1 + 270;
+                    d2 = d2 + 270;
+                    a1 = (d1 % 360) * Math.PI / 180;
+                    a2 = (d2 % 360) * Math.PI / 180;
+                    
+                    /*
+                     * 计算四个点的坐标
+                     * */
+                    var tx1 = cx + r * Math.cos(a1);
+                    var ty1 = cy + r * Math.sin(a1);
+                    var tx2 = cx + R * Math.cos(a1);
+                    var ty2 = cy + R * Math.sin(a1);
+                    var tx3 = cx + R * Math.cos(a2);
+                    var ty3 = cy + R * Math.sin(a2);
+                    var tx4 = cx + r * Math.cos(a2);
+                    var ty4 = cy + r * Math.sin(a2);
+                    
+                    return {
+                        path: [["M", tx1, ty1], ["L", tx2, ty2], ["A", R, R, 0, 0, 1, tx3, ty3], ["L", tx4, ty4], ["z"]],
+                        fill: the_color
+                    };
+                }
+                
+                /*
+                 * 绘制底色圆
+                 * */
+                var temp_r = (r2 - r1)/100;
+                r.circle(cx, cy, r1).attr({stroke: "#507973", "stroke-width": 1});
+                r.circle(cx, cy, r2 - 65*temp_r).attr({stroke: "#80f8eb", "stroke-width": 1});
+                r.circle(cx, cy, r2 - 50*temp_r).attr({stroke: "#507973", "stroke-width": 1});
+                r.circle(cx, cy, r2 - 35*temp_r).attr({stroke: "#80f8eb", "stroke-width": 1});
+                r.circle(cx, cy, r2 - 20*temp_r).attr({stroke: "#507973", "stroke-width": 1});
+                r.circle(cx, cy, r2).attr({stroke: "#80f8eb", "stroke-width": 1});
+                
+                /*
+                 * 绘制外圆外的刻度和底线，可以和下面的合在一起。
+                 * */
+                for (var i = 0; i < sectorsCount; i++) {
+                    var alpha = beta * i - Math.PI / 2,
+                        cos = Math.cos(alpha),
+                        sin = Math.sin(alpha);
+                    // 绘线
+                    //r.path([["M", cx + r1 * cos, cy + r1 * sin], ["L", cx + r2 * cos, cy + r2 * sin]]).attr({stroke: "#3c0", "stroke-width": 1, "stroke-linecap": "round"});
+                    
+                    r3 = r2 + 8;
+                    if(i%2 == 0){
+                        if(i == 0){
+                            r.text(cx + r3 * cos, cy + r3 * sin, 24).attr({fill: "#80f8eb", "font-size":12, "font-weight": "bold"});
+                        }
+                        else{
+                            r.text(cx + r3 * cos, cy + r3 * sin, i).attr({fill: "#80f8eb", "font-size":12, "font-weight": "bold"});
+                        }
+                    }
+                }
+                
+                
+                var max_data,//最大的数据。计算比例用
+                    start_angle = 0,//起始角度
+                    r_data,//花瓣的半径
+                    //每个花瓣的角度
+                    val = 360/sectorsCount;
+                    // 不同数据不同颜色。
+                    the_colors = ["rgb(132, 166, 233)", "rgb(117, 155, 231)", "rgb(116, 155, 231)", "rgb(112, 151, 230)", "rgb(128, 163, 233)","rgb(120, 157, 231)", 
+                        "rgb(188, 206, 243)", "rgb(192, 209, 244)", "rgb(188, 207, 243)", "rgb(185, 204, 243)", "rgb(187, 206, 243)", "rgb(185, 204, 243)", 
+                        "rgb(178, 199, 241)", "rgb(177, 199, 241)", "rgb(171, 194, 240)", "rgb(164, 189, 239)", "rgb(139, 171, 235)", "rgb(95, 139, 227)", 
+                        "rgb(113, 152, 230)", "rgb(136, 169, 234)", "rgb(138, 170, 234)", "rgb(148, 177, 236)", "rgb(151, 179, 237)", "rgb(143, 174, 235)"];
+                
+                //data = data.sort(function (a, b) { return b - a;});
+                
+                /*
+                 * 循环一下最大值。
+                 * */
+                max_data = 0;
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    if (data[i] > max_data){
+                        max_data = data[i];
+                    }
+                }
+                
+                /*
+                 * 绘制花瓣。
+                 * */
+                for (i = 0; i < sectorsCount; i++) {
+                    (function (i, val) {
+                        if(data[i] != 0 || data[i] != undefined){
+                            r_data = data[i]/max_data*(r2 - r1) + r1;
+                        }
+                        else{
+                            r_data = r1;
+                        }
+                        var ttt = r.path().attr({draw_wind_rose: [cx, cy, r1, r_data, start_angle, start_angle + val, colour], stroke: colour, "stroke-width": 1.5, "stroke-opacity": 0.9,"opacity":0.5});
+                         paths.push(ttt);
+                    })(i, val);
+                    start_angle += val;
+                }
+                
+                var temp_int = 0;
+                
+                var show_tick;
+                function show_ticker() {
+                    if(temp_int < sectorsCount){
+                        paths[temp_int].attr("opacity", 0.5);
+                        temp_int += 1;
+                        r.safari();
+                        show_tick = setTimeout(show_ticker, 800 / sectorsCount);
+                    }
+                };
+                
+                var tick;
+                (function ticker() {
+                    paths.attr("opacity", 0);
+                    temp_int = 0;
+                    show_ticker();
+                    //tick = setTimeout(ticker, 4000 );
+                })();
+            }
+
+            var SvgBg = function(){
+                //svg绘制屏幕背景
+                var me = this;
+
+                var width = 1900,
+                    height = 990,
+                    centerpoint = [width/2,height/2];
+
+                me.domid = 'grid';
+                me.paper = Raphael(me.domid,width,height);
+
+                var options = {
+                    gird: 154
+                }
+
+
+                me.draw = function(){
+                    var path = '';
+                    var point = '';
+                    var p = 3;
+
+                    var _tempx = _tempy = 0;
+                    for(var i = (centerpoint[0] + options.gird/2); i < width; i += options.gird ){
+                        path += ('M'+ (i + 0.5) +',0v'+ height);
+                        path += ('M'+ (i + 0.5 - (i - centerpoint[0])*2) +',0v'+ height);
+                        _tempx = (i - (i - centerpoint[0])*2);
+                    }
+                    for(var i = (centerpoint[1] + options.gird/2); i < height; i += options.gird ){
+                        path += ('M0,'+(i + 0.5)+'h'+ width);
+                        path += ('M0,'+(i + 0.5 - (i - centerpoint[1])*2) +'h'+ width);
+                        _tempy = (i - (i - centerpoint[1])*2);
+                    }
+
+                    for(var i = (centerpoint[0] + options.gird/2); i < width; i += options.gird ){
+                        for(var j = (centerpoint[1] + options.gird/2); j < height; j += options.gird ){
+                            _p = [
+                                [(i + 0.5),(j + 0.5)],
+                                [(i + 0.5 - (i - centerpoint[0])*2),(j + 0.5)],
+                                [(i + 0.5),(j + 0.5 - (j - centerpoint[1])*2)],
+                                [(i + 0.5 - (i - centerpoint[0])*2),(j + 0.5 - (j - centerpoint[1])*2)]
+                            ];
+                            for(var m in _p){
+                                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'v' + p;
+                                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'v-' + p;
+                                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'h-' + p;
+                                point += 'M' + _p[m][0] + ',' + _p[m][1] + 'h' + p;
+                            }
+                            
+                        }
+                    }
+
+                    paddtop = _tempy;
+                    paddleft = _tempx;
+
+
+                    me.paper.path(path).attr({
+                        stroke: 'rgba(205,205,205,0.10)',
+                        opacity: 0.4
+                    })
+
+                    me.paper.path(point).attr({
+                        stroke: 'rgba(205,205,205,0.2)',
+                        opacity: 0.6
+                    })
+                }
+                me.draw();
+            }
+
+            $(function(){
+                new SvgBg();
+            });
+        </script>
+    </head>
+    
+    <body>
+        <div id="container"></div>
+        
+        <div id="login_div_2" class="login_div_2">
+            <div id="text_div" class="text_div">Trojan/Win32.Powp.dey</div>
+        </div>
+        
+        <div id="login_div_3" class="login_div_3"></div>
+        
+        
+        <div id="canvascontainer"></div>
+
+        <div id="grid"></div>
+
+        <div class="console" id="consoleDom">
+            <div class="info">console : virus name is <span class="infored">undefined</span></div>
+            <div class="info">console : virus name is <span class="infored">undefined</span></div>
+            <div class="info">console : virus name is <span class="infored">undefined</span></div>
+            <div class="info">console : virus name is <span class="infored">undefined</span></div>
+            <div class="info">console : 1023,344,56,</div>
+        </div>
+    </body>
+    <script src="js/canvas.js"></script>
+</html>

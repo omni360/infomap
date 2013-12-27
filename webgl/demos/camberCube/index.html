@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>全球疫情预警</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html,body{
+				background: #000;
+				height: 100%;
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+			
+			#button_container{
+				position: absolute;
+				z-index: 100;
+				right: 10px;
+				top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="scripts/libs/jquery-1.9.1.js"></script>
+		<script src="data/world.js"></script>
+		<script src="scripts/libs/three.r60.js"></script>
+		<script src="scripts/libs/tween.min.js"></script>
+		<script src="scripts/libs/THREEx.WindowResize.js"></script>
+		<script src="scripts/libs/TrackballControls.js"></script>
+		<script src="scripts/main.min.js"></script>
+		<div id="button_container">
+			<button onclick="transformMap('sphere')">球体</button>
+			<button onclick="transformMap('cylinder')">弧面</button>
+			<button onclick="transformMap('plane')">平面</button>
+		</div>
+	</body>
+</html>

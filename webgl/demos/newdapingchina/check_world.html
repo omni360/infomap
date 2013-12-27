@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>ANTIY LABS</title>
+        <link href="css/world_table.css" rel="stylesheet">
+        <link href="css/world_style.css" rel="stylesheet">
+        
+        <script type="text/javascript" src="js/lib/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="js/lib/raphael.js"></script>
+        <script type="text/javascript" src="js/world_1900_760.js"></script>
+        <script type="text/javascript" src="js/world_raphael.js"></script>
+        <script type="text/javascript" src="js/world_alarm.js"></script>
+        <script type="text/javascript" src="js/check_data.js"></script>
+        
+        <script>
+            function getAlarmData() {
+                // for(var i = 0; i < alarm_list.length; i++){
+                    // alert(alarm_list[i]);
+                // }
+                for (x in alarm_list) {
+                    monitor_data = alarm_list[x];
+                    lon = monitor_data[2];
+                    lat = monitor_data[3];
+                    
+                    monitor_location = getXY(parseFloat(lon), parseFloat(lat));
+                    //monitor_data['cx'] = monitor_location['cx'];
+                    //monitor_data['cy'] = monitor_location['cy'];
+                    monitor_data.push(monitor_location['cx']);
+                    monitor_data.push(monitor_location['cy']);
+                    
+                    // console.info(alarm_list[x][6])
+                    // console.info(alarm_list[x][2])
+                    // console.info(monitor_location['cx'])
+                    //console.info(typeof(monitor_data));
+                    //console.info(monitor_data['cx']);
+                    //console.info(monitor_data);
+                    alarm_data.push(monitor_data);
+                }
+            }
+            
+            getXY = function (lon, lat) {
+                return {
+                    cx: (lon+169)*(1900 - 50)/349,
+                    cy: (84-lat)*(760 - 20)/140
+                };
+                
+            };
+            
+            // 捕获数据列表   
+            var alarm_data = [];
+            getAlarmData();
+            
+            var world_width = 1900;
+            var world_height = 1050;
+            var raphael;
+            
+            Raphael(10, 3, world_width, 5, function () {
+                // 定义整体空间
+                raphael1 = this;
+                var rect_11 = raphael1.rect(0, 0, world_width, 5, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    fill: "#80f8eb",
+                    //fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.9,
+                    "stroke-opacity": 0.0
+                });
+            });
+            
+            Raphael(10, 1065, world_width, 10, function () {
+                // 定义整体空间
+                raphael1 = this;
+                var rect_12 = raphael1.rect(0, 0, world_width, 5, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    fill: "#80f8eb",
+                    //fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.9,
+                    "stroke-opacity": 0.0
+                });
+            });
+            
+            Raphael(10, 10, world_width, world_height, function () {
+                
+                // 定义整体空间
+                raphael = this;
+                raphael.rect(0, 0, world_width, world_height, 10).attr({
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    fill: "#333",
+                    "fill-opacity": 0.0,
+                    "stroke-opacity": 0.0
+                });
+                
+                var rect_1 = raphael.rect(0, 0, world_width, 10, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                });
+                
+                //rect_1.glow({color:"#ffffff",opacity:0.6});
+                
+                var rect_2 = raphael.rect(0, 750, world_width, 10, 0).attr({
+                    //fill:"#11567D",
+                    //"fill-opacity": 1,
+                    stroke: "#888",
+                    "stroke-width": 0.5,
+                    "stroke-linejoin": "round",
+                    //fill: "#80f8eb",
+                    fill:"0-#408988-#80f8eb",
+                    "fill-opacity": 0.2,
+                    "stroke-opacity": 0.0
+                });
+                
+                //rect_2.glow({color:"#80f8eb",opacity:0.6});
+                
+                //============================= 地图 ===========================
+                /*
+                 * 绘制地图
+                 */
+                raphael.setStart();
+                for (var country in worldmap.shapes) {
+                    raphael.path(worldmap.shapes[country]).attr({"stroke-linejoin": "round", stroke: "#80f8eb", fill: "#408988", "stroke-opacity": 1, "stroke-width": 1.0, "fill-opacity": 0.3}).data("name", worldmap.names[country]);
+                }
+                var world = raphael.setFinish();
+                
+                /*
+                 * 底格横线
+                 */ 
+                for (var h = 20,i = 0; h <= 760; h += 40, i++ ) {
+                    if(i%3==0 && i!=0 && i!= 18){
+                        raphael.path("M0," + h + "L1900," + h).attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"", "stroke-opacity": 0.8});
+                    }
+                    else{
+                        raphael.path("M0," + h + "L1900," + h).attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"- ", "stroke-opacity": 0.6});
+                    }
+                }
+                
+                /*
+                 * 底格纵线
+                 */
+                //raphael.path("M0,0L0,760").attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"", "stroke-opacity": 0.8});
+                for (var w = 0,i = 0; w <= 1900; w += 40, i++ ) {
+                    if(i%3==0 && i !=0 && i!= 39){
+                        raphael.path("M" + w + ",0L" + w + ",760").attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"", "stroke-opacity": 0.8});
+                    }
+                    else{
+                        if(i != 0){
+                            raphael.path("M" + w + ",0L" + w + ",760").attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"- ", "stroke-opacity": 0.6});
+                        }
+                        
+                    }
+                }
+                //raphael.path("M1600,0L1600,600").attr({stroke: "#4B8F88", "stroke-width": 1, "stroke-dasharray":"", "stroke-opacity": 0.8});
+                
+                /*
+                 * 底格十字光晕
+                 */
+                
+                var d_x = 0,
+                    d_y = 0;
+                for (var w = 120; w < 1830; w += 120) {
+                    for (var h = 20; h < 760; h += 120) {
+                        raphael.path("M" + w + "," + (h-5) + "L" + w + "," + (h+5)).attr({stroke: "#80f8eb", "stroke-width": 1, "stroke-opacity": 0.5}).glow({color:"#80f8eb", width:8,opacity:0.25});
+                        raphael.path("M" + (w-5) + "," + h + "L" + (w+5) + "," + h).attr({stroke: "#80f8eb", "stroke-width": 1, "stroke-opacity": 0.5}).glow({color:"#80f8eb", width:8,opacity:0.25});
+                    }
+                }
+                
+                
+                //============================= 地图 ===========================
+                
+                function start_alarm(){
+                    for(var w = 0; w < alarm_data.length; w += 1){
+                        static_source_alarm(raphael, alarm_data[w][11], alarm_data[w][12], 1, 3, 4, 6, 9);
+                        
+                    }
+                }
+                start_alarm();
+            });
+            
+            
+            
+        </script>
+        
+    </head>
+    
+    <body>
+        
+    </body>
+</html>

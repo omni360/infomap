@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="stylesheet" href="css/base.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	
+	<link href="otherlib/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link href="otherlib/customIcon/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/models.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="css/isotope_css.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/new_permission.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="css/zTreeStyle.css" type="text/css"/>
+	
+	<script src="js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="otherlib/jqueryui/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.isotope.js"></script>
+	
+	
+	<script src="js/jquery.ztree.core-3.2.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.ztree.excheck-3.2.js" type="text/javascript" charset="utf-8"></script>	
+	<script src="js/jquery.ztree.exedit-3.2.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript" src="js/config_url.js"></script>
+	<script type="text/javascript" src="js/new_permission.js"></script>
+	<script type="text/javascript" src="js/card_option.js"></script>
+	<script type="text/javascript" src="js/new_permission_add_person.js"></script>
+	<script type="text/javascript" src="js/new_permission_set.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		function init(){
+			document.addEventListener( 'mousemove', window.parent.onDocumentMouseMove, false );
+		}
+	</script>
+	
+</head>
+<body onload="init()" >
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner" style="background: rgba(0,0,0,0)">
+			<div id="nav" class="container-fluid">
+				<a href="#" class="brand"></a>
+				<ul class="nav option-set">
+					<li><a href="#" data-option-value="department">部门</a></li>
+					<li class="active"><a href="#" data-option-value="role">角色</a></li>
+				</ul>
+				<input id="search_text" type="text" class="search-query" placeholder="Search" style="border-radius: 14px;margin-bottom: 2px;">
+				<button id="search_btn" class="btn">确定</button>
+				<ul class="nav pull-right">
+					<li><a href="#add_person" data-toggle="modal">添加用户</a></li>
+					<li><a href="#set_other" data-toggle="modal">设置</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid content">
+		<div class="row-fluid">
+			<div id="left_color_nav" class="span1 back_box">
+				
+			</div>
+			<div class="span11">
+				<div id="container" class="clickable variable-sizes clearfix" >
+					
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 	添加用户 -->
+	<div id="add_person" class="modal hide fade">
+	</div>
+<!-- 配置其它项	 -->
+	<div id="set_other" class="modal hide fade">
+		
+	</div>
+<!-- 添加账号	 -->
+	<div id="add_user" class="modal hide fade">
+		
+	</div>
+<!-- 编辑用户	 -->
+	<div id="edit_person" class="modal hide fade">
+		
+	</div>
+<!-- 删除用户	 -->
+	<div id="del_person" class="modal hide fade">
+		
+	</div>
+<!-- 编辑账号	 -->
+	<div id="edit_user" class="modal hide fade">
+		
+	</div>
+</body>
+</html>

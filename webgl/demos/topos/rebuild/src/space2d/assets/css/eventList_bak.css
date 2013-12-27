@@ -1,0 +1,99 @@
+#eventlist{
+    color: white !important;
+    font-family: "微软雅黑";
+    font-size: 10px;
+    position: absolute;
+    left: 2px;
+    bottom: 88px;
+    width: 180px;
+    color: #FFFFFF;
+    overflow: auto;
+    overflow: hidden;
+    background: rgba(0,0,0,0.8);
+}
+/*
+#eventlist{
+    color: white !important;
+    font-family: "微软雅黑";
+    font-size: 10px;
+    position: absolute;
+    left: 10px;
+    top: 205px;
+    width: 160px;
+    color: #FFFFFF;
+    overflow: auto;
+    overflow: hidden;
+}
+#openflag{
+    position: absolute;
+    right: 160px;
+    top: 50px;
+}
+#eventtable{
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#eventtable table{
+    margin-left: 10px;
+    width: 150px;
+}
+#eventtable tr{
+    border-bottom: 1px solid #FFFFFF;
+    line-height: 25px;
+}
+ .fousetr{
+    background-color: rgba(16, 111, 253, 0.68);
+    cursor: pointer;
+ }
+#infec_target_ip_title{
+    padding-left: 10px;
+}
+#infec_target_ip_title table{
+    width: 155px;
+    
+}
+#infec_target_ip_title table th{
+}
+#infec_target_ip table{
+    margin-left: 10px;
+    width: 160px;
+}
+.td_serial{
+    width: 45px;
+    text-align: center;
+    line-height: 25px;   
+}
+.td_ip{
+    padding-left: 15px;
+    text-align: left;
+}
+table tr.odd { 
+    
+}
+table tr.even { 
+    background-color: rgba(0, 136, 204, 0.2);
+}
+table tr:hover { 
+    background-color: rgba(0, 136, 204, 0.4);
+    cursor: pointer;
+}
+
+#relist{
+    padding: 2px 0px;
+    width: 100%;
+    text-align: center;
+    line-height: 25px;
+    background-color: rgba(14, 39, 65, 0.9);
+    border-top: 1px solid rgba(0, 136, 204, 0.5);
+}
+#relist .rlimg{
+     background: url('../img/view-refresh.png');
+     background-size:contain;
+     width: 25px;
+     height: 25px;
+     margin: 0 auto;
+     opacity: 0.8;
+}
+#relist .rlimg:hover{
+     opacity: 1;
+}*/

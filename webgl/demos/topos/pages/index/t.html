@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+	<link rel="stylesheet" href="../../css/base.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			overflow: auto;
+		}
+		#trule-scene{
+			-webkit-perspective: 0px;
+		     -moz-perspective: 0px;
+		          perspective: 0px;
+		    position: absolute;
+		    right: 100px;      
+		}
+		
+		.trule-container{
+			-webkit-transition: -webkit-transform linear 1.9s 0;
+		   -moz-transition: -moz-transform linear 1.9s 0;
+		        transition: transform linear 1.9s 0;
+			-moz-user-select: none;
+		  -webkit-user-select: none;
+		  -ms-user-select: none;
+		  position: absolute;
+			right: 0;
+			left: 0;
+		  -webkit-transform-style: preserve-3d;
+	      -moz-transform-style: preserve-3d;
+	           transform-style: preserve-3d;
+	   		backface-visibility:hidden; 
+		}
+		.trule-container li{
+			height: 16px;
+			line-height: 14px;
+			/*position: absolute;
+			right: 0;
+			left: 0;*/
+			transition: all ease-in-out 0.6s 0.2s;
+		}
+		li .rlnum{
+			width: 40px;
+			height: 16px;
+			float:right;
+			text-align: right;
+			font-family: FileFolderJNL,'微软雅黑';
+			font-size: 12px;
+			letter-spacing: 1px;
+			font-weight: bold;
+		}
+		li .rlline-long{
+			height:9px;
+			border-bottom:1px solid #000;
+			float:right;
+			width: 11px;
+		}
+		li .rlline-stort{
+			height:9px;
+			border-bottom:1px solid #000;
+			float:right;
+			width: 7px;
+		}
+	</style>
+	<script src="../../js/lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/lib/css3d.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/lib/raphael.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/lib/css3d.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		var trule = function(params){
+			
+			var options = {
+					parent:{
+						id: 'body',
+						width: window.innerWidth,
+						height: window.innerHeight
+					},
+					scene:{
+						swidth : 400,
+						sheight: 400,
+						style:{
+							
+						}
+					},
+					rule: {
+						num: 30,
+						style: {
+							width: 20,
+							height: 20,
+							background: '#000'
+						}
+					}
+					
+				},
+				me = this;
+			
+			$.extend(options, params);
+			me.parentDom = $(options.parent.id);
+			me.sceneDom = $('<div id="trule-scene"></div>');
+			me.containerDom = $('<ul class="trule-container"></ul><ul class="trule-container"></ul><ul class="trule-container"></ul>');
+			me.parentDom.html(me.sceneDom)
+			me.sceneDom.append(me.containerDom);
+			
+			me.containerDom = $('.trule-container');
+			
+			var theat = Math.PI*0.5/180;
+			var r = 8/Math.sin(theat);
+			me.sceneDom.css({
+				'-webkit-perspective': r+'px',
+				'-moz-perspective': r+'px',
+				'perspective': r+'px',
+				'width': 100
+			});
+			
+			var strs = '';
+			for(var i = 0 ; i < 360; i++){
+				strs+='<li>';
+				strs+='<div class="rlline-'+((i%10==0) ? 'long' : 'stort')+'"></div>';
+				if(i==0){
+					strs+='<span class="rlnum">±180</span>';
+				}else{
+					strs+='<span class="rlnum">'+((i%10==0) ? i-180 : '')+'</span>';
+				}
+				
+				strs+='</li>';
+			}
+			
+			var sss = [0,0,0];
+			
+			$('.trule-container').each(function(i){
+				sss[i] = (i-1)*16*360;
+				$(this).html(strs);
+				transformFun(
+					$(this),
+					{},
+					['translate3d(0,'+sss[i]+'px,0px)']
+				);
+			})
+			
+			var nowt = -200;
+			
+			setInterval(function(){
+				console.info(sss);
+				for(var k in sss){
+					if(sss[k] < (-540*16)) {
+						sss[k] += 16*360*3;
+						$('.trule-container').eq(k).css({
+							'opacity': 0
+						})
+					}else if(sss[k] > (540*16)){
+						sss[k] -= 16*360*3;
+						$('.trule-container').eq(k).css({
+							'opacity': 0
+						})
+					}
+				}
+				
+				$('.trule-container').each(function(i){
+					
+					sss[i] += nowt;
+					
+					transformFun(
+						$(this),
+						{},
+						['translate3d(0,'+sss[i]+'px,0px)']
+					);
+					setTimeout(function(){
+						$('.trule-container').css({
+							'opacity': 1
+						})
+					},19000);
+				});
+			},1900)
+			
+		}
+		$(function(){
+			new trule();
+		})
+		
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
+
+
+
