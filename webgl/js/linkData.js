@@ -66,10 +66,12 @@ var linkDatas = [
         'group-data': [
             {'name' : '部署分布', 'href': 'demos/C_monitor/index.html', 'images': 'c_monitor.png','color': '','card': 'double'},
             {'name' : '数据来源', 'href': 'demos/newdaping/world.html', 'images': 'newdpworld.png','color': '','card': 'double'},
-            {'name' : '实时安全事件模拟', 'href': 'demos/newdapingchina/blue.html', 'images': 'newdpchina.png','color': '','card': 'double'},
+            {'name' : '实时安全事件模拟3D', 'href': 'demos/newdapingchina/blue.html', 'images': 'newdpchina.png','color': '','card': 'double'},
+            {'name' : '实时安全事件模拟2D', 'href': 'demos/newdapingchina/world.html ', 'images': 'dpworld.png','color': '','card': 'double'},
             {'name' : 'Hack分布', 'href': 'demos/virus_globe/index.html', 'images': 'globl.jpg','color': '','card': 'double'},
             {'name' : '虚拟网络', 'href': 'demos/topos/pages/platform_topo/platform_topo.html', 'images': 'platform_topo.png','color': '','card': 'double'},
             {'name' : '网络拓扑图', 'href': 'demos/topos/pages/index/index.html', 'images': 'topos_index.png','color': '','card': 'double'},
+           
 			
         ]
     },
