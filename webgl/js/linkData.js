@@ -71,8 +71,7 @@ var linkDatas = [
             {'name' : 'Hack分布', 'href': 'demos/virus_globe/index.html', 'images': 'globl.jpg','color': '','card': 'double'},
             {'name' : '虚拟网络', 'href': 'demos/topos/pages/platform_topo/platform_topo.html', 'images': 'platform_topo.png','color': '','card': 'double'},
             {'name' : '网络拓扑图', 'href': 'demos/topos/pages/index/index.html', 'images': 'topos_index.png','color': '','card': 'double'},
-           
-			
+            {'name' : '流程图', 'href': 'demos/avl_web_demo/index.html', 'images': '','color': '','card': 'double'},
         ]
     },
     {
@@ -82,7 +81,7 @@ var linkDatas = [
             
             {'name' : '僵尸网络', 'href': 'demos/earthgf_min/', 'images': 'earthgf_min.png','color': '','card': 'double'},
             {'name' : '沙盘', 'href': 'demos/xietong_scene_min/', 'images': 'shapan.png','color': '','card': 'double'},
-            {'name' : '数据流向', 'href': 'demos/earth/index.html', 'images': 'earth.png','color': '','card': 'double'},
+            {'name' : '数据流向', 'href': 'demos/earth/index.html', 'images': 'earth.png','color': '','card': 'double double-vertical'},
 			
         ]
     },
