@@ -65,7 +65,7 @@ var linkDatas = [
         'group-info': '',
         'group-data': [
             {'name' : 'DNS', 'href': 'demos/dns_project/index.html', 'images': 'dns_project.png','color': '','card': 'quadro double-vertical'},
-            {'name' : '部署分布', 'href': 'demos/C_monitor/index.html', 'images': 'c_monitor.png','color': '','card': 'double'},
+            //{'name' : '部署分布', 'href': 'demos/C_monitor/index.html', 'images': 'c_monitor.png','color': '','card': 'double'},
             {'name' : '数据来源', 'href': 'demos/newdaping/world.html', 'images': 'newdpworld.png','color': '','card': 'double'},
             {'name' : '实时安全事件模拟3D', 'href': 'demos/newdapingchina/blue.html', 'images': 'newdpchina.png','color': '','card': 'double'},
             //{'name' : '实时安全事件模拟2D', 'href': 'demos/newdapingchina/world.html', 'images': 'dpworld.png','color': '','card': 'double'},
