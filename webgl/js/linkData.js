@@ -64,34 +64,27 @@ var linkDatas = [
         'group-name': '可视化项目',
         'group-info': '',
         'group-data': [
+            {'name' : 'DNS', 'href': 'demos/dns_project/index.html', 'images': 'dns_project.png','color': '','card': 'quadro double-vertical'},
             {'name' : '部署分布', 'href': 'demos/C_monitor/index.html', 'images': 'c_monitor.png','color': '','card': 'double'},
             {'name' : '数据来源', 'href': 'demos/newdaping/world.html', 'images': 'newdpworld.png','color': '','card': 'double'},
             {'name' : '实时安全事件模拟3D', 'href': 'demos/newdapingchina/blue.html', 'images': 'newdpchina.png','color': '','card': 'double'},
-            {'name' : '实时安全事件模拟2D', 'href': 'demos/newdapingchina/world.html', 'images': 'dpworld.png','color': '','card': 'double'},
+            //{'name' : '实时安全事件模拟2D', 'href': 'demos/newdapingchina/world.html', 'images': 'dpworld.png','color': '','card': 'double'},
             {'name' : 'Hack分布', 'href': 'demos/virus_globe/index.html', 'images': 'globl.jpg','color': '','card': 'double'},
-            {'name' : '虚拟网络', 'href': 'demos/topos/pages/platform_topo/platform_topo.html', 'images': 'platform_topo.png','color': '','card': 'double'},
-            {'name' : '网络拓扑图', 'href': 'demos/topos/pages/index/index.html', 'images': 'topos_index.png','color': '','card': 'double'},
-            {'name' : '流程图', 'href': 'demos/avl_web_demo/index.html', 'images': '','color': '','card': 'double'},
-        ]
-    },
-    {
-        'group-name': '尝试',
-        'group-info': '',
-        'group-data': [
-            
+            //{'name' : '虚拟网络', 'href': 'demos/topos/pages/platform_topo/platform_topo.html', 'images': 'platform_topo.png','color': '','card': 'double'},
+            //{'name' : '网络拓扑图', 'href': 'demos/topos/pages/index/index.html', 'images': 'topos_index.png','color': '','card': 'double'},
+            //{'name' : '流程图', 'href': 'demos/avl_web_demo/index.html', 'images': '','color': '','card': 'double'},
             {'name' : '僵尸网络', 'href': 'demos/earthgf_min/', 'images': 'earthgf_min.png','color': '','card': 'double'},
-            {'name' : '沙盘', 'href': 'demos/xietong_scene_min/', 'images': 'shapan.png','color': '','card': 'double'},
-            {'name' : '数据流向', 'href': 'demos/earth/index.html', 'images': 'earth.png','color': '','card': 'double double-vertical'},
-			
         ]
     },
     {
         'group-name': '实验',
         'group-info': '',
         'group-data': [
-			{'name' : '疫情预警', 'href': 'demos/camberCube/', 'images': 'globe_warning.png','color': '','card': 'double'},
-            {'name' : '粒子系统火焰', 'href': 'demos/sparks/', 'images': 'sparks.png','color': '','card': 'double'},
+			{'name' : '疫情', 'href': 'demos/camberCube/', 'images': 'globe_warning.png','color': '','card': 'double'},
+            {'name' : 'Fire', 'href': 'demos/sparks/index.html', 'images': 'sparks.png','color': '','card': 'double'},
             {'name' : '球面轨迹', 'href': 'demos/globe_path/', 'images': 'globe_path.png','color': '','card': 'double'},
+            {'name' : '沙盘', 'href': 'demos/xietong_scene_min/', 'images': 'shapan.png','color': '','card': 'double'},
+            {'name' : '数据流向', 'href': 'demos/earth/index.html', 'images': 'earth.png','color': '','card': 'double double-vertical'},
             
         ]
     },

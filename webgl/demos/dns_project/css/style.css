@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'FileFolderJNL';
+  src: url('font/20CBD7_0_0.woff') format('woff');
+}
+html,body {
+    background-color: #11181E;
+    padding:0;
+    margin:0;
+	height: 100%;
+	width: 100%;
+    overflow:hidden;
+}
