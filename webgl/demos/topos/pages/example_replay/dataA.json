@@ -1,1 +1,0 @@
-{'topological_id': '182', 'detect_type': 'ftp-mail', 'detect_list': [{'type': 'ftp', 'id': '5001', 'start_event_id': '0'}, {'type': 'mail', 'id': '5002', 'start_event_id': '0'}], 'log': {'timer_log': '5003', 'replay_ii': '5004', 'replay_i': '5005'}}
